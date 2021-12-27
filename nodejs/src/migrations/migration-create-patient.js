@@ -12,7 +12,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       medicareNo: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
       },
       dob: {
         type: Sequelize.DATE,
