@@ -13,8 +13,9 @@ module.exports = (sequelize, DataTypes) => {
   }
   Prescription.init(
     {
-      recordNo: DataTypes.INTEGER,
-      note: DataTypes.TEXT,
+      patientId: DataTypes.INTEGER,
+      doctorId: DataTypes.INTEGER,
+      file: DataTypes.TEXT,
     },
     {
       sequelize,

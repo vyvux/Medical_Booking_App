@@ -17,8 +17,11 @@ module.exports = {
       time: {
         type: Sequelize.STRING,
       },
-      status: {
-        type: Sequelize.BOOLEAN,
+      currentNumber: {
+        type: Sequelize.INTEGER,
+      },
+      maxNumber: {
+        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,

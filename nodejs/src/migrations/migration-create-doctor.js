@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      doctorId: {
+      userId: {
         type: Sequelize.INTEGER,
       },
       about: {
@@ -19,6 +19,15 @@ module.exports = {
       },
       branchId: {
         type: Sequelize.INTEGER,
+      },
+      firstName: {
+        type: Sequelize.STRING,
+      },
+      lastName: {
+        type: Sequelize.STRING,
+      },
+      gender: {
+        type: Sequelize.BOOLEAN,
       },
       createdAt: {
         allowNull: false,

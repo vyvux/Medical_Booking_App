@@ -13,10 +13,13 @@ module.exports = (sequelize, DataTypes) => {
   }
   Doctor.init(
     {
-      doctorId: DataTypes.INTEGER,
+      userId: DataTypes.INTEGER,
       about: DataTypes.TEXT,
       serviceId: DataTypes.INTEGER,
       branchId: DataTypes.INTEGER,
+      firstName: DataTypes.STRING,
+      lastName: DataTypes.STRING,
+      gender: DataTypes.BOOLEAN,
     },
     {
       sequelize,

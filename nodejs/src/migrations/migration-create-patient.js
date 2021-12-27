@@ -2,16 +2,10 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("patients", {
-      id: {
+      patientId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
-      patientId: {
-        type: Sequelize.INTEGER,
-      },
-      medicareNo: {
         type: Sequelize.INTEGER,
       },
       dob: {
@@ -25,6 +19,18 @@ module.exports = {
       },
       allergy: {
         type: Sequelize.STRING,
+      },
+      firstName: {
+        type: Sequelize.STRING,
+      },
+      lastName: {
+        type: Sequelize.STRING,
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+      },
+      gender: {
+        type: Sequelize.BOOLEAN,
       },
       createdAt: {
         allowNull: false,
