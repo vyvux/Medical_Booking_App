@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
   }
   Patient.init(
     {
-      patientId: DataTypes.INTEGER,
       dob: DataTypes.DATE,
       phoneNumber: DataTypes.INTEGER,
       address: DataTypes.STRING,
