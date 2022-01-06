@@ -138,7 +138,8 @@ let createNewUser = (data, password) => {
         password: password,
         image: data.image,
         roleId: data.roleId,
-        fullName: data.fullName,
+        firstName: data.firstName,
+        lastName: data.lastName,
       });
 
       resolve(newUser);
