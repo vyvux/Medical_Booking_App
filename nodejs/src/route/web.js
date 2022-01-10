@@ -21,6 +21,8 @@ let initWebRoutes = (app) => {
     userController.createNewUserExistingPatient
   );
 
+  router.post("/api/login", userController.handleLogin);
+
   return app.use("/", router);
 };
 

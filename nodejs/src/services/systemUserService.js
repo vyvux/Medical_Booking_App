@@ -1,14 +1,56 @@
 import bcrypt from "bcryptjs";
+import e from "express";
 import db from "../models/index";
 
 const salt = bcrypt.genSaltSync(10);
+
+let handleUserLogin = (email, password) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let userData = {};
+      let isExist = await checkUserEmail(email);
+      if (isExist) {
+        // User exist
+        let user = await db.User.findOne({
+          attributes: ["email", "roleId", "password"],
+          where: { email: email },
+          raw: true, // return only object
+        });
+
+        if (user) {
+          // compare password
+          let check = await bcrypt.compareSync(password, user.password);
+          if (check) {
+            userData.errCode = 0;
+            userData.errMessage = "Ok";
+            delete user.password; // delete password key from object
+            userData.user = user;
+          } else {
+            (userData.errCode = 3), (userData.errMessage = "Wrong password");
+          }
+        } else {
+          // cannot find user
+          (userData.errCode = 2), (userData.errMessage = "User not found");
+        }
+        resolve(userData);
+      } else {
+        // return error
+        userData.errCode = 1;
+        userData.errMessage = `Your's Email doesn't exist in our system. Please try other email!`;
+        resolve(userData);
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 
 // function to create new system user, performed by Admin
 let createNewUserByAdmin = async (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       // check unique email
-      let isExistingEmail = await checkUserEmail(data);
+      let isExistingEmail = await checkUserEmail(data.email);
       if (isExistingEmail === false) {
         // Email hasn't been registered
         let hashPasswordFromBcrypt = await hashUserPassword(data.password);
@@ -28,7 +70,7 @@ let createNewUserByAdmin = async (data) => {
 let registerNewUserWithNewPatient = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let isExistingEmail = await checkUserEmail(data);
+      let isExistingEmail = await checkUserEmail(data.email);
       if (isExistingEmail === false) {
         // Email hasn't been registered
         let hashPasswordFromBcrypt = await hashUserPassword(data.password);
@@ -55,7 +97,7 @@ let registerNewUserWithExistingPatient = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       // check unique email
-      let isExistingEmail = await checkUserEmail(data);
+      let isExistingEmail = await checkUserEmail(data.email);
 
       if (!isExistingEmail) {
         // Email hasn't been registered
@@ -111,11 +153,11 @@ let hashUserPassword = (password) => {
 };
 
 // function to check if the email has been registered before
-let checkUserEmail = (data) => {
+let checkUserEmail = (userEmail) => {
   return new Promise(async (resolve, reject) => {
     try {
       let user = await db.User.findOne({
-        where: { email: data.email },
+        where: { email: userEmail },
       });
 
       if (user) {
@@ -197,6 +239,7 @@ let checkValidPatientId = (patientId) => {
 };
 
 module.exports = {
+  handleUserLogin: handleUserLogin,
   createNewUserByAdmin: createNewUserByAdmin,
   registerNewUserWithExistingPatient: registerNewUserWithExistingPatient,
   registerNewUserWithNewPatient: registerNewUserWithNewPatient,
