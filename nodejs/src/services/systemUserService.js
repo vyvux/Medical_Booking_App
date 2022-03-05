@@ -191,7 +191,7 @@ let createNewUser = (data, password) => {
   });
 };
 
-// function create new patient in DB
+// function create new patient profile in DB
 let createNewPatient = (data, userId) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -238,9 +238,37 @@ let checkValidPatientId = (patientId) => {
   });
 };
 
+let getAllUsers = (userId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let users = "";
+      if (userId === "ALL") {
+        users = await db.User.findAll({
+          attributes: {
+            exclude: ["password"],
+          },
+        });
+      }
+
+      if (userId && userId !== "ALL") {
+        users = await db.User.findOne({
+          where: { id: userId },
+          attributes: {
+            exclude: ["password"],
+          },
+        });
+      }
+      resolve(users);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   handleUserLogin: handleUserLogin,
   createNewUserByAdmin: createNewUserByAdmin,
   registerNewUserWithExistingPatient: registerNewUserWithExistingPatient,
   registerNewUserWithNewPatient: registerNewUserWithNewPatient,
+  getAllUsers: getAllUsers,
 };

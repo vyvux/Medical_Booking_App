@@ -9,8 +9,7 @@ let initWebRoutes = (app) => {
 
   router.get("/about", homeController.getAboutPage);
 
-  router.post("/api/create-system-user", userController.createNewUserByAdmin);
-
+  /** Patient */
   router.post(
     "/api/create-user-patient",
     userController.createNewUserNewPatient
@@ -20,6 +19,13 @@ let initWebRoutes = (app) => {
     "/api/create-user-existing-patient",
     userController.createNewUserExistingPatient
   );
+
+  /** Admin */
+  router.post("/api/create-system-user", userController.createNewUserByAdmin);
+  router.get("/api/get-all-users", userController.handleGetAllUsers);
+
+  /** Doctor */
+  /** Medical staff */
 
   router.post("/api/login", userController.handleLogin);
 
