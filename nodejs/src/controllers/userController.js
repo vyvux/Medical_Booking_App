@@ -48,7 +48,7 @@ let createNewUserExistingPatient = async (req, res) => {
 };
 
 let handleGetAllUsers = async (req, res) => {
-  let id = req.body.id; //ALL ,or id
+  let id = req.query.id; //ALL ,or id
 
   if (!id) {
     return res.status(200).json({
