@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import e from "express";
-import db from "../models/index";
+import db, { sequelize } from "../models/index";
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -245,7 +245,23 @@ let getAllUsers = (userId) => {
       if (userId === "ALL") {
         users = await db.User.findAll({
           attributes: {
-            exclude: ["password"],
+            // exclude: ["password"],
+            include: [
+              "id",
+              "email",
+              "firstName",
+              "lastName",
+              "roleId",
+              [
+                sequelize.fn(
+                  "DATE_FORMAT",
+                  sequelize.col("createdAt"),
+                  "%d-%m-%Y %H:%i:%s"
+                ),
+                "createdAt",
+              ],
+              "updatedAt",
+            ],
           },
         });
       }
@@ -254,7 +270,23 @@ let getAllUsers = (userId) => {
         users = await db.User.findOne({
           where: { id: userId },
           attributes: {
-            exclude: ["password"],
+            // exclude: ["password"],
+            include: [
+              "id",
+              "email",
+              "firstName",
+              "lastName",
+              "roleId",
+              [
+                sequelize.fn(
+                  "DATE_FORMAT",
+                  sequelize.col("createdAt"),
+                  "%d-%m-%Y %H:%i:%s"
+                ),
+                "createdAt",
+              ],
+              "updatedAt",
+            ],
           },
         });
       }
