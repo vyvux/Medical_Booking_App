@@ -56,9 +56,134 @@ let createNewUserByAdmin = async (data) => {
         let hashPasswordFromBcrypt = await hashUserPassword(data.password);
         let newUser = await createNewUser(data, hashPasswordFromBcrypt);
 
-        resolve("Create user successfully by admin");
+        resolve({
+          errCode: 0,
+          message: "OK. New user created",
+        });
       } else {
-        resolve("Email has already been registered");
+        resolve({
+          errCode: 1,
+          message: "Email has already been registered",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let getAllUsers = (userId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let users = "";
+      if (userId === "ALL") {
+        users = await db.User.findAll({
+          attributes: {
+            // exclude: ["password"],
+            include: [
+              "id",
+              "email",
+              "firstName",
+              "lastName",
+              "roleId",
+              [
+                sequelize.fn(
+                  "DATE_FORMAT",
+                  sequelize.col("createdAt"),
+                  "%d-%m-%Y %H:%i:%s"
+                ),
+                "createdAt",
+              ],
+              "updatedAt",
+            ],
+          },
+        });
+      }
+
+      if (userId && userId !== "ALL") {
+        users = await db.User.findOne({
+          where: { id: userId },
+          attributes: {
+            // exclude: ["password"],
+            include: [
+              "id",
+              "email",
+              "firstName",
+              "lastName",
+              "roleId",
+              [
+                sequelize.fn(
+                  "DATE_FORMAT",
+                  sequelize.col("createdAt"),
+                  "%d-%m-%Y %H:%i:%s"
+                ),
+                "createdAt",
+              ],
+              "updatedAt",
+            ],
+          },
+        });
+      }
+      resolve(users);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let deleteUserByAdmin = async (userId) => {
+  return new Promise(async (resolve, reject) => {
+    let user = await db.User.findOne({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      resolve({
+        errCode: 2,
+        errMessage: "User not found",
+      });
+    }
+
+    await db.User.destroy({
+      where: { id: userId },
+    });
+
+    resolve({
+      errCode: 0,
+      message: "User is deleted",
+    });
+  });
+};
+
+let editSystemUserByAdmin = async (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.id) {
+        resolve({
+          errCode: 2,
+          errMessage: "Missing required parameters!",
+        });
+      }
+
+      let user = await db.User.findOne({
+        where: { id: data.id },
+        raw: false,
+      });
+      if (user) {
+        user.firstName = data.firstName;
+        user.lastName = data.lastName;
+        user.roleId = data.roleId;
+
+        await user.save();
+        resolve({
+          errCode: 0,
+          message: "Update user information successfully!",
+        });
+      } else {
+        resolve({
+          errCode: 1,
+          errMessage: "User not found",
+        });
       }
     } catch (e) {
       reject(e);
@@ -238,69 +363,14 @@ let checkValidPatientId = (patientId) => {
   });
 };
 
-let getAllUsers = (userId) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let users = "";
-      if (userId === "ALL") {
-        users = await db.User.findAll({
-          attributes: {
-            // exclude: ["password"],
-            include: [
-              "id",
-              "email",
-              "firstName",
-              "lastName",
-              "roleId",
-              [
-                sequelize.fn(
-                  "DATE_FORMAT",
-                  sequelize.col("createdAt"),
-                  "%d-%m-%Y %H:%i:%s"
-                ),
-                "createdAt",
-              ],
-              "updatedAt",
-            ],
-          },
-        });
-      }
-
-      if (userId && userId !== "ALL") {
-        users = await db.User.findOne({
-          where: { id: userId },
-          attributes: {
-            // exclude: ["password"],
-            include: [
-              "id",
-              "email",
-              "firstName",
-              "lastName",
-              "roleId",
-              [
-                sequelize.fn(
-                  "DATE_FORMAT",
-                  sequelize.col("createdAt"),
-                  "%d-%m-%Y %H:%i:%s"
-                ),
-                "createdAt",
-              ],
-              "updatedAt",
-            ],
-          },
-        });
-      }
-      resolve(users);
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
-
 module.exports = {
   handleUserLogin: handleUserLogin,
+
   createNewUserByAdmin: createNewUserByAdmin,
+  getAllUsers: getAllUsers,
+  deleteUserByAdmin: deleteUserByAdmin,
+  editSystemUserByAdmin: editSystemUserByAdmin,
+
   registerNewUserWithExistingPatient: registerNewUserWithExistingPatient,
   registerNewUserWithNewPatient: registerNewUserWithNewPatient,
-  getAllUsers: getAllUsers,
 };

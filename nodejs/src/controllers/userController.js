@@ -21,30 +21,10 @@ let handleLogin = async (req, res) => {
   });
 };
 
-// unfinshed in return
+/** ADMIN functions*/
 let createNewUserByAdmin = async (req, res) => {
-  console.log(req.body);
   let message = await systemUserService.createNewUserByAdmin(req.body);
-  console.log(message);
-  return res.send("create new user by admin");
-};
-
-// unfinished in return
-let createNewUserNewPatient = async (req, res) => {
-  console.log(req.body);
-  let message = await systemUserService.registerNewUserWithNewPatient(req.body);
-  console.log(message);
-  return res.send("test create user and patient");
-};
-
-// unfinished in return
-let createNewUserExistingPatient = async (req, res) => {
-  console.log(req.body);
-  let message = await systemUserService.registerNewUserWithExistingPatient(
-    req.body
-  );
-  console.log(message);
-  return res.send("test create user with existing patient");
+  return res.status(200).json(message);
 };
 
 let handleGetAllUsers = async (req, res) => {
@@ -67,10 +47,48 @@ let handleGetAllUsers = async (req, res) => {
   });
 };
 
+let editSystemUser = async (req, res) => {
+  let data = req.body;
+  let message = await systemUserService.editSystemUserByAdmin(data);
+  return res.status(200).json(message);
+};
+
+let deleteSystemUser = async (req, res) => {
+  if (!req.body.id) {
+    return res.status(200).json({
+      errCode: 1,
+      errMessage: "Missing required parameters!",
+    });
+  }
+  let message = await systemUserService.deleteUserByAdmin(req.body.id);
+  return res.status(200).json(message);
+};
+
+/** PATIENT functions*/
+// unfinished in return
+let createNewUserNewPatient = async (req, res) => {
+  console.log(req.body);
+  let message = await systemUserService.registerNewUserWithNewPatient(req.body);
+  console.log(message);
+  return res.send("test create user and patient");
+};
+
+// unfinished in return
+let createNewUserExistingPatient = async (req, res) => {
+  console.log(req.body);
+  let message = await systemUserService.registerNewUserWithExistingPatient(
+    req.body
+  );
+  console.log(message);
+  return res.send("test create user with existing patient");
+};
+
 module.exports = {
   handleLogin: handleLogin,
   createNewUserByAdmin: createNewUserByAdmin,
   createNewUserNewPatient: createNewUserNewPatient,
   createNewUserExistingPatient: createNewUserExistingPatient,
   handleGetAllUsers: handleGetAllUsers,
+  editSystemUser: editSystemUser,
+  deleteSystemUser: deleteSystemUser,
 };
