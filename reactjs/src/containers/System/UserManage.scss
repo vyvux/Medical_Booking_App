@@ -26,6 +26,7 @@
   color: white;
 }
 
+// edit delete user buttons
 .btn-edit {
   width: 50px;
   border: none;
@@ -49,5 +50,43 @@
   &:hover {
     background-color: transparent !important;
     color: rgb(255, 0, 64) !important;
+  }
+}
+
+// Add new user button
+.users-container {
+  button {
+    height: auto;
+  }
+}
+
+// toggle modal
+.modal-user-container {
+  .modal-user-body {
+    .input-container {
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 15px;
+      input {
+        border-radius: 3px;
+        height: 30px;
+        border: 1px solid grey;
+        outline: none;
+        padding: 0 15px;
+      }
+    }
+  }
+
+  .modal-header {
+    button {
+      background-color: transparent;
+      border: none;
+      color: white;
+      font-size: 25px;
+    }
+  }
+
+  #floatingPassword {
+    margin-bottom: 15px;
   }
 }
