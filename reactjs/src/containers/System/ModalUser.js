@@ -150,7 +150,7 @@ class ModalUser extends Component {
             </div>
 
             {/* 3rd row in modal: role selection*/}
-            <div class="col-6">
+            <div class="col-md-6 col-sm-12">
               <div class="input-group mb-3">
                 <label class="input-group-text" for="role">
                   Role
