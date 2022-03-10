@@ -5,13 +5,58 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 class ModalUser extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      email: "",
+      password: "",
+      firstName: "",
+      lastName: "",
+      roleId: "",
+    };
   }
 
   componentDidMount() {}
 
   toggle = () => {
     this.props.toggleModalFromParent();
+  };
+
+  handleOnChangeInput = (event, id) => {
+    let copyState = { ...this.state };
+    copyState[id] = event.target.value;
+    this.setState({
+      ...copyState,
+    });
+  };
+
+  validateInputs = () => {
+    let isValid = true;
+    let arrInputs = ["email", "password", "firstName", "lastName", "roleId"];
+    for (let i = 0; i < arrInputs.length; i++) {
+      if (!this.state[arrInputs[i]]) {
+        isValid = false;
+        alert("Missing parameter: " + arrInputs[i]);
+        break;
+      }
+    }
+    return isValid;
+  };
+
+  handleAddNewUser = async () => {
+    let isValid = this.validateInputs();
+    if (isValid === true) {
+      // call api
+      let success = await this.props.createNewUser(this.state);
+      console.log("success is ", success);
+      if (success) {
+        this.setState({
+          email: "",
+          password: "",
+          firstName: "",
+          lastName: "",
+          roleId: "",
+        });
+      }
+    }
   };
 
   render() {
@@ -34,22 +79,7 @@ class ModalUser extends Component {
         </ModalHeader>
         <ModalBody>
           <div className="modal-user-body">
-            {/* <div className="col-10 offset-1 input-container">
-              <label>Email</label>
-              <input type="text" />
-            </div>
-            <div className="col-10 offset-1  input-container">
-              <label>Password</label>
-              <input type="password" />
-            </div>
-            <div className="col-10 offset-1  input-container">
-              <label>First Name</label>
-              <input type="text" />
-            </div>
-            <div className="col-10 offset-1  input-container">
-              <label>Last Name</label>
-              <input type="text" />
-            </div> */}
+            {/* first row in modal: email password*/}
             <div class="row g-2">
               <div class="col-md">
                 <div class="form-floating mb-3">
@@ -57,7 +87,11 @@ class ModalUser extends Component {
                     type="email"
                     class="form-control"
                     id="floatingInput"
-                    placeholder="name@example.com"
+                    placeholder="Email adress"
+                    onChange={(event) => {
+                      this.handleOnChangeInput(event, "email");
+                    }}
+                    value={this.state.email}
                   />
                   <label for="floatingInput">Email address</label>
                 </div>
@@ -70,12 +104,17 @@ class ModalUser extends Component {
                     class="form-control"
                     id="floatingPassword"
                     placeholder="Password"
+                    onChange={(event) => {
+                      this.handleOnChangeInput(event, "password");
+                    }}
+                    value={this.state.password}
                   />
                   <label for="floatingPassword">Password</label>
                 </div>
               </div>
             </div>
 
+            {/* 2nd row in modal: first + last name*/}
             <div class="row g-2">
               <div class="col-md">
                 <div class="form-floating mb-3">
@@ -84,6 +123,10 @@ class ModalUser extends Component {
                     class="form-control"
                     id="floatingInput"
                     placeholder="First Name"
+                    onChange={(event) => {
+                      this.handleOnChangeInput(event, "firstName");
+                    }}
+                    value={this.state.firstName}
                   />
                   <label for="floatingInput">First Name</label>
                 </div>
@@ -96,19 +139,33 @@ class ModalUser extends Component {
                     class="form-control"
                     id="floatingInput"
                     placeholder="Last Name"
+                    onChange={(event) => {
+                      this.handleOnChangeInput(event, "lastName");
+                    }}
+                    value={this.state.lastName}
                   />
                   <label for="floatingInput">Last Name</label>
                 </div>
               </div>
             </div>
 
+            {/* 3rd row in modal: role selection*/}
             <div class="col-6">
               <div class="input-group mb-3">
                 <label class="input-group-text" for="role">
                   Role
                 </label>
-                <select class="form-select" id="role">
-                  <option selected>Choose...</option>
+                <select
+                  class="form-select"
+                  id="role"
+                  onChange={(event) => {
+                    this.handleOnChangeInput(event, "roleId");
+                  }}
+                  value={this.state.roleId}
+                >
+                  <option selected value="">
+                    Choose...
+                  </option>
                   <option value="R1">Admin</option>
                   <option value="R2">Doctor</option>
                   <option value="R4">Medical Staff</option>
@@ -122,7 +179,7 @@ class ModalUser extends Component {
             className="px-3"
             color="primary"
             onClick={() => {
-              this.toggle();
+              this.handleAddNewUser();
             }}
           >
             Submit User

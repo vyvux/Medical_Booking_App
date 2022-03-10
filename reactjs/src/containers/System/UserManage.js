@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
 import "./UserManage.scss";
-import { getAllUsers } from "../../services/userService";
+import { getAllUsers, createNewUserByAdmin } from "../../services/userService";
 import ModalUser from "./ModalUser";
 
 class UserManage extends Component {
@@ -16,13 +16,17 @@ class UserManage extends Component {
   }
 
   async componentDidMount() {
+    this.getAllUsersFromDB();
+  }
+
+  getAllUsersFromDB = async () => {
     let response = await getAllUsers("ALL");
     if (response && response.errCode === 0) {
       this.setState({
         arrUsers: response.users,
       });
     }
-  }
+  };
 
   handleAddNewUser = () => {
     this.setState({
@@ -34,6 +38,26 @@ class UserManage extends Component {
     this.setState({
       isOpenModalUser: !this.state.isOpenModalUser,
     });
+  };
+
+  createNewUser = async (data) => {
+    let success = false;
+    try {
+      let response = await createNewUserByAdmin(data);
+      if (response && response.errCode !== 0) {
+        alert(response.errMessage);
+      } else {
+        await this.getAllUsersFromDB();
+        this.setState({
+          isOpenModalUser: false,
+        });
+        success = true;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    console.log("success: ", success);
+    return success;
   };
 
   render() {
@@ -53,24 +77,17 @@ class UserManage extends Component {
     };
 
     return (
-      <div className="users-container">
-        <ModalUser
-          isOpen={this.state.isOpenModalUser}
-          test={"abc"}
-          toggleModalFromParent={this.toggleUserModal}
-        />
+      <div className="users-container mx-1">
+        <ModalUser isOpen={this.state.isOpenModalUser} test={"abc"} toggleModalFromParent={this.toggleUserModal} createNewUser={this.createNewUser} />
         <div className="title text-center">Manage users</div>
 
         <div className="mx-1">
-          <button
-            className="btn btn-primary px-3 py-1"
-            onClick={() => this.handleAddNewUser()}
-          >
+          <button className="btn btn-primary px-3 py-1" onClick={() => this.handleAddNewUser()}>
             <i class="fas fa-plus"></i> Add new user
           </button>
         </div>
 
-        <div className="users-table mt-4 mx-1">
+        <div className="users-table mt-4 mx-1 mb-5">
           <table id="customers">
             <tr>
               <th>Email</th>

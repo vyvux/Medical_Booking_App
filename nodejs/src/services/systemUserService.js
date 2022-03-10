@@ -63,7 +63,7 @@ let createNewUserByAdmin = async (data) => {
       } else {
         resolve({
           errCode: 1,
-          message: "Email has already been registered",
+          errMessage: "Email has already been registered. Please use another email.",
         });
       }
     } catch (e) {
@@ -80,22 +80,7 @@ let getAllUsers = (userId) => {
         users = await db.User.findAll({
           attributes: {
             // exclude: ["password"],
-            include: [
-              "id",
-              "email",
-              "firstName",
-              "lastName",
-              "roleId",
-              [
-                sequelize.fn(
-                  "DATE_FORMAT",
-                  sequelize.col("createdAt"),
-                  "%d-%m-%Y %H:%i:%s"
-                ),
-                "createdAt",
-              ],
-              "updatedAt",
-            ],
+            include: ["id", "email", "firstName", "lastName", "roleId", [sequelize.fn("DATE_FORMAT", sequelize.col("createdAt"), "%d-%m-%Y %H:%i:%s"), "createdAt"], "updatedAt"],
           },
         });
       }
@@ -105,22 +90,7 @@ let getAllUsers = (userId) => {
           where: { id: userId },
           attributes: {
             // exclude: ["password"],
-            include: [
-              "id",
-              "email",
-              "firstName",
-              "lastName",
-              "roleId",
-              [
-                sequelize.fn(
-                  "DATE_FORMAT",
-                  sequelize.col("createdAt"),
-                  "%d-%m-%Y %H:%i:%s"
-                ),
-                "createdAt",
-              ],
-              "updatedAt",
-            ],
+            include: ["id", "email", "firstName", "lastName", "roleId", [sequelize.fn("DATE_FORMAT", sequelize.col("createdAt"), "%d-%m-%Y %H:%i:%s"), "createdAt"], "updatedAt"],
           },
         });
       }
@@ -248,9 +218,7 @@ let registerNewUserWithExistingPatient = (data) => {
             }
           } else {
             // patientID was associated with another user
-            resolve(
-              "Patient ID was incorrect or was registered by another user."
-            );
+            resolve("Patient ID was incorrect or was registered by another user.");
           }
         } else {
           resolve("not receive patientID");
