@@ -76,9 +76,7 @@ let createNewUserNewPatient = async (req, res) => {
 // unfinished in return
 let createNewUserExistingPatient = async (req, res) => {
   console.log(req.body);
-  let message = await systemUserService.registerNewUserWithExistingPatient(
-    req.body
-  );
+  let message = await systemUserService.registerNewUserWithExistingPatient(req.body);
   console.log(message);
   return res.send("test create user with existing patient");
 };

@@ -46,7 +46,6 @@ class ModalUser extends Component {
     if (isValid === true) {
       // call api
       let success = await this.props.createNewUser(this.state);
-      console.log("success is ", success);
       if (success) {
         this.setState({
           email: "",

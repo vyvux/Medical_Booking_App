@@ -79,7 +79,7 @@ let getAllUsers = (userId) => {
       if (userId === "ALL") {
         users = await db.User.findAll({
           attributes: {
-            // exclude: ["password"],
+            exclude: ["password"],
             include: ["id", "email", "firstName", "lastName", "roleId", [sequelize.fn("DATE_FORMAT", sequelize.col("createdAt"), "%d-%m-%Y %H:%i:%s"), "createdAt"], "updatedAt"],
           },
         });

@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
 import "./UserManage.scss";
-import { getAllUsers, createNewUserByAdmin } from "../../services/userService";
+import { getAllUsers, createNewUserByAdmin, deleteUserByAdmin } from "../../services/userService";
 import ModalUser from "./ModalUser";
+import ModalDeleteUserConfirm from "./ModalDeleteUserConfirm";
 
 class UserManage extends Component {
   // state = {};
@@ -12,6 +13,8 @@ class UserManage extends Component {
     this.state = {
       arrUsers: [],
       isOpenModalUser: false,
+      isOpenModalDeleteUserConfirm: false,
+      userToBeDeleted: {},
     };
   }
 
@@ -56,8 +59,32 @@ class UserManage extends Component {
     } catch (e) {
       console.log(e);
     }
-    console.log("success: ", success);
     return success;
+  };
+
+  toggleModalDeleteUserConfirm = () => {
+    this.setState({
+      isOpenModalDeleteUserConfirm: !this.state.isOpenModalDeleteUserConfirm,
+    });
+  };
+
+  openDeleteConfirmModal = (user) => {
+    this.setState({
+      isOpenModalDeleteUserConfirm: true,
+      userToBeDeleted: user,
+    });
+  };
+
+  handleDeleteUser = async (user) => {
+    try {
+      await deleteUserByAdmin(user.id);
+      await this.getAllUsersFromDB();
+      this.setState({
+        isOpenModalDeleteUserConfirm: false,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   render() {
@@ -79,6 +106,14 @@ class UserManage extends Component {
     return (
       <div className="users-container mx-1">
         <ModalUser isOpen={this.state.isOpenModalUser} test={"abc"} toggleModalFromParent={this.toggleUserModal} createNewUser={this.createNewUser} />
+
+        <ModalDeleteUserConfirm
+          isOpen={this.state.isOpenModalDeleteUserConfirm}
+          toggleModalFromParent={this.toggleModalDeleteUserConfirm}
+          deleteUserByAdmin={this.handleDeleteUser}
+          user={this.state.userToBeDeleted}
+        />
+
         <div className="title text-center">Manage users</div>
 
         <div className="mx-1">
@@ -114,7 +149,10 @@ class UserManage extends Component {
                         <button className="btn-edit">
                           <i class="fas fa-pencil-alt fa-lg"></i>
                         </button>
-                        <button className="btn-delete">
+                        {/* <button className="btn-delete" onClick={() => this.handleDeleteUser(item)}>
+                          <i class="fas fa-trash-alt fa-lg"></i>
+                        </button> */}
+                        <button className="btn-delete" onClick={() => this.openDeleteConfirmModal(item)}>
                           <i class="fas fa-trash-alt fa-lg"></i>
                         </button>
                       </td>

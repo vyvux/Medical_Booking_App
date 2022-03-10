@@ -13,4 +13,8 @@ const createNewUserByAdmin = (data) => {
   return axios.post("/api/create-system-user", data);
 };
 
-export { handleLoginApi, getAllUsers, createNewUserByAdmin };
+const deleteUserByAdmin = (userId) => {
+  return axios.delete("/api/delete-system-user", { data: { id: userId } });
+};
+
+export { handleLoginApi, getAllUsers, createNewUserByAdmin, deleteUserByAdmin };

@@ -93,6 +93,17 @@
     .input-group {
       height: 45px;
     }
+
+    .warning-message {
+      color: rgb(221, 78, 78);
+      margin-bottom: 15px;
+
+      h2 {
+        font-size: medium;
+        font-weight: bold;
+        margin-top: 5px;
+      }
+    }
   }
 
   .modal-header {
