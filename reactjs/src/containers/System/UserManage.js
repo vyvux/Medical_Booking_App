@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
 import "./UserManage.scss";
-import { getAllUsers, createNewUserByAdmin, deleteUserByAdmin } from "../../services/userService";
+import { getAllUsers, createNewUserByAdmin, deleteUserByAdmin, editUserByAdmin } from "../../services/userService";
 import ModalUser from "./ModalUser";
 import ModalDeleteUserConfirm from "./ModalDeleteUserConfirm";
+import ModalEditUser from "./ModalEditUser";
 
 class UserManage extends Component {
   // state = {};
@@ -14,7 +15,8 @@ class UserManage extends Component {
       arrUsers: [],
       isOpenModalUser: false,
       isOpenModalDeleteUserConfirm: false,
-      userToBeDeleted: {},
+      isOpenModalEditUser: false,
+      userInEffect: {},
     };
   }
 
@@ -71,7 +73,7 @@ class UserManage extends Component {
   openDeleteConfirmModal = (user) => {
     this.setState({
       isOpenModalDeleteUserConfirm: true,
-      userToBeDeleted: user,
+      userInEffect: user,
     });
   };
 
@@ -81,6 +83,31 @@ class UserManage extends Component {
       await this.getAllUsersFromDB();
       this.setState({
         isOpenModalDeleteUserConfirm: false,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  toggleModalEditUser = () => {
+    this.setState({
+      isOpenModalEditUser: !this.state.isOpenModalEditUser,
+    });
+  };
+
+  openEditUserModal = (user) => {
+    this.setState({
+      isOpenModalEditUser: true,
+      userInEffect: user,
+    });
+  };
+
+  handleEditUser = async (user) => {
+    try {
+      await editUserByAdmin(user);
+      await this.getAllUsersFromDB();
+      this.setState({
+        isOpenModalEditUser: false,
       });
     } catch (e) {
       console.log(e);
@@ -105,20 +132,22 @@ class UserManage extends Component {
 
     return (
       <div className="users-container mx-1">
-        <ModalUser isOpen={this.state.isOpenModalUser} test={"abc"} toggleModalFromParent={this.toggleUserModal} createNewUser={this.createNewUser} />
+        <ModalUser isOpen={this.state.isOpenModalUser} toggleModalFromParent={this.toggleUserModal} createNewUser={this.createNewUser} />
 
         <ModalDeleteUserConfirm
           isOpen={this.state.isOpenModalDeleteUserConfirm}
           toggleModalFromParent={this.toggleModalDeleteUserConfirm}
           deleteUserByAdmin={this.handleDeleteUser}
-          user={this.state.userToBeDeleted}
+          user={this.state.userInEffect}
         />
+
+        <ModalEditUser isOpen={this.state.isOpenModalEditUser} toggleModalFromParent={this.toggleModalEditUser} editUserByAdmin={this.handleEditUser} user={this.state.userInEffect} />
 
         <div className="title text-center">Manage users</div>
 
         <div className="mx-1">
           <button className="btn btn-primary px-3 py-1" onClick={() => this.handleAddNewUser()}>
-            <i class="fas fa-plus"></i> Add new user
+            <i className="fas fa-plus"></i> Add new user
           </button>
         </div>
 
@@ -139,21 +168,18 @@ class UserManage extends Component {
               {arrUsers &&
                 arrUsers.map((item, index) => {
                   return (
-                    <tr>
+                    <tr key={item.id}>
                       <td>{item.email}</td>
                       <td>{item.firstName}</td>
                       <td>{item.lastName}</td>
                       <td>{renderRole(item.roleId)}</td>
                       <td>{item.createdAt}</td>
                       <td>
-                        <button className="btn-edit">
-                          <i class="fas fa-pencil-alt fa-lg"></i>
+                        <button className="btn-edit" onClick={() => this.openEditUserModal(item)}>
+                          <i className="fas fa-pencil-alt fa-lg"></i>
                         </button>
-                        {/* <button className="btn-delete" onClick={() => this.handleDeleteUser(item)}>
-                          <i class="fas fa-trash-alt fa-lg"></i>
-                        </button> */}
                         <button className="btn-delete" onClick={() => this.openDeleteConfirmModal(item)}>
-                          <i class="fas fa-trash-alt fa-lg"></i>
+                          <i className="fas fa-trash-alt fa-lg"></i>
                         </button>
                       </td>
                     </tr>

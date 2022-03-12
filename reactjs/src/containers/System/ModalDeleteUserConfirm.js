@@ -14,24 +14,6 @@ class ModalDeleteUserConfirm extends Component {
     this.props.toggleModalFromParent();
   };
 
-  handleAddNewUser = async () => {
-    let isValid = this.validateInputs();
-    if (isValid === true) {
-      // call api
-      let success = await this.props.createNewUser(this.state);
-      console.log("success is ", success);
-      if (success) {
-        this.setState({
-          email: "",
-          password: "",
-          firstName: "",
-          lastName: "",
-          roleId: "",
-        });
-      }
-    }
-  };
-
   render() {
     return (
       <Modal
@@ -53,27 +35,25 @@ class ModalDeleteUserConfirm extends Component {
         <ModalBody>
           <div className="modal-user-body">
             <div className="warning-message text-center">
-              <i class="fas fa-exclamation-triangle fa-lg"></i>
+              <i className="fas fa-exclamation-triangle fa-lg"></i>
               <h2>Are you sure to delete this system user?</h2>
             </div>
             {/* first row in modal: email role*/}
-            <div class="row g-2">
-              <div class="col-md">
-                <div class="form-floating mb-3">
-                  <input type="email" class="form-control" id="floatingInput" placeholder="Email adress" readonly value={this.props.user.email} />
-                  <label for="floatingInput">Email address</label>
+            <div className="row g-2">
+              <div className="col-md">
+                <div className="form-floating mb-3">
+                  <input type="email" className="form-control" id="floatingInput" placeholder="Email adress" readOnly value={this.props.user.email} />
+                  <label htmlFor="floatingInput">Email address</label>
                 </div>
               </div>
 
-              <div class="col-md">
-                <div class="input-group mb-3">
-                  <label class="input-group-text" for="role">
+              <div className="col-md">
+                <div className="input-group mb-3">
+                  <label className="input-group-text" htmlFor="role">
                     Role
                   </label>
-                  <select class="form-select" id="role" readonly disabled value={this.props.user.roleId}>
-                    <option selected value="">
-                      Choose...
-                    </option>
+                  <select className="form-select" id="role" readOnly disabled value={this.props.user.roleId}>
+                    <option value="">Choose...</option>
                     <option value="R1">Admin</option>
                     <option value="R2">Doctor</option>
                     <option value="R4">Medical Staff</option>
@@ -83,18 +63,18 @@ class ModalDeleteUserConfirm extends Component {
             </div>
 
             {/* 2nd row in modal: first + last name*/}
-            <div class="row g-2">
-              <div class="col-md">
-                <div class="form-floating mb-3">
-                  <input type="text" class="form-control" id="floatingInput" placeholder="First Name" value={this.props.user.firstName} />
-                  <label for="floatingInput">First Name</label>
+            <div className="row g-2">
+              <div className="col-md">
+                <div className="form-floating mb-3">
+                  <input type="text" className="form-control" id="floatingInput" readOnly placeholder="First Name" value={this.props.user.firstName} />
+                  <label htmlFor="floatingInput">First Name</label>
                 </div>
               </div>
 
-              <div class="col-md">
-                <div class="form-floating mb-3">
-                  <input type="text" class="form-control" id="floatingInput" placeholder="Last Name" value={this.props.user.lastName} />
-                  <label for="floatingInput">Last Name</label>
+              <div className="col-md">
+                <div className="form-floating mb-3">
+                  <input type="text" className="form-control" id="floatingInput" readOnly placeholder="Last Name" value={this.props.user.lastName} />
+                  <label htmlFor="floatingInput">Last Name</label>
                 </div>
               </div>
             </div>
