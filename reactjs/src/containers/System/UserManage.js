@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
+import { FormGroup, Label, Input, Col } from "reactstrap";
 import "./UserManage.scss";
 import { getAllUsers, createNewUserByAdmin, deleteUserByAdmin, editUserByAdmin } from "../../services/userService";
 import ModalUser from "./ModalUser";
@@ -13,6 +14,7 @@ class UserManage extends Component {
     super(props);
     this.state = {
       arrUsers: [],
+      filteredUserList: [],
       isOpenModalUser: false,
       isOpenModalDeleteUserConfirm: false,
       isOpenModalEditUser: false,
@@ -29,6 +31,7 @@ class UserManage extends Component {
     if (response && response.errCode === 0) {
       this.setState({
         arrUsers: response.users,
+        filteredUserList: response.users,
       });
     }
   };
@@ -114,8 +117,24 @@ class UserManage extends Component {
     }
   };
 
+  handleFilterUserByRole = (role) => {
+    if (role) {
+      this.setState({
+        filteredUserList: this.state.arrUsers.filter((user) => {
+          return user.roleId === role;
+        }),
+      });
+    } else {
+      this.setState({
+        filteredUserList: [...this.state.arrUsers],
+      });
+      console.log("no role recorded");
+    }
+  };
+
   render() {
     let arrUsers = this.state.arrUsers;
+    let filteredUserList = this.state.filteredUserList;
 
     const renderRole = (roleId) => {
       switch (roleId) {
@@ -145,10 +164,31 @@ class UserManage extends Component {
 
         <div className="title text-center">Manage users</div>
 
-        <div className="mx-1">
-          <button className="btn btn-primary px-3 py-1" onClick={() => this.handleAddNewUser()}>
-            <i className="fas fa-plus"></i> Add new user
-          </button>
+        <div className="mx-1 container">
+          <div className="row">
+            <div className="col-4">
+              <button className="btn btn-primary px-3 py-1" onClick={() => this.handleAddNewUser()}>
+                <i className="fas fa-plus"></i> New User
+              </button>
+            </div>
+
+            <div className="col-8">
+              <FormGroup row>
+                <Label htmlFor="exampleSelect" sm={1}>
+                  Role
+                </Label>
+                <Col sm={3}>
+                  <Input id="exampleSelect" name="select" type="select">
+                    <option onClick={() => this.handleFilterUserByRole()}>All Roles</option>
+                    <option onClick={() => this.handleFilterUserByRole("R1")}>Admin</option>
+                    <option onClick={() => this.handleFilterUserByRole("R2")}>Doctor</option>
+                    <option onClick={() => this.handleFilterUserByRole("R4")}>Medical Staff</option>
+                    <option onClick={() => this.handleFilterUserByRole("R3")}>Patient</option>
+                  </Input>
+                </Col>
+              </FormGroup>
+            </div>
+          </div>
         </div>
 
         <div className="users-table mt-4 mx-1">
@@ -165,8 +205,8 @@ class UserManage extends Component {
             </thead>
 
             <tbody>
-              {arrUsers &&
-                arrUsers.map((item, index) => {
+              {filteredUserList &&
+                filteredUserList.map((item, index) => {
                   return (
                     <tr key={item.id}>
                       <td>{item.email}</td>
