@@ -1,12 +1,13 @@
 import React, { Component } from "react";
-import { FormattedMessage } from "react-intl";
+// import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
-import { FormGroup, Label, Input, Col } from "reactstrap";
+import { Label, Input, Col, Container, InputGroup, InputGroupText } from "reactstrap";
 import "./UserManage.scss";
 import { getAllUsers, createNewUserByAdmin, deleteUserByAdmin, editUserByAdmin } from "../../services/userService";
 import ModalUser from "./ModalUser";
 import ModalDeleteUserConfirm from "./ModalDeleteUserConfirm";
 import ModalEditUser from "./ModalEditUser";
+// import { values } from "lodash";
 
 class UserManage extends Component {
   // state = {};
@@ -128,12 +129,25 @@ class UserManage extends Component {
       this.setState({
         filteredUserList: [...this.state.arrUsers],
       });
-      console.log("no role recorded");
+    }
+  };
+
+  handleSearchUser = (term) => {
+    if (term) {
+      this.setState({
+        filteredUserList: this.state.arrUsers.filter((user) => {
+          return user.email.toLowerCase().includes(term) || user.firstName.toLowerCase().includes(term) || user.lastName.toLowerCase().includes(term);
+        }),
+      });
+    } else {
+      this.setState({
+        filteredUserList: [...this.state.arrUsers],
+      });
     }
   };
 
   render() {
-    let arrUsers = this.state.arrUsers;
+    // let arrUsers = this.state.arrUsers;
     let filteredUserList = this.state.filteredUserList;
 
     const renderRole = (roleId) => {
@@ -146,6 +160,8 @@ class UserManage extends Component {
           return "Patient";
         case "R4":
           return "Medical Staff";
+        default:
+          return "Unknown role";
       }
     };
 
@@ -164,21 +180,39 @@ class UserManage extends Component {
 
         <div className="title text-center">Manage users</div>
 
-        <div className="mx-1 container">
-          <div className="row">
-            <div className="col-4">
+        <div className="mt-1 mt-md-4 container">
+          <div className="row justify-content-end justify-content-md-start">
+            <div className="col-5 col-md-3">
               <button className="btn btn-primary px-3 py-1" onClick={() => this.handleAddNewUser()}>
                 <i className="fas fa-plus"></i> New User
               </button>
             </div>
 
-            <div className="col-8">
-              <FormGroup row>
-                <Label htmlFor="exampleSelect" sm={1}>
+            <div className="col-7 col-md-6">
+              <InputGroup>
+                <InputGroupText>
+                  <i className="fas fa-search"></i>
+                </InputGroupText>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search..."
+                  onChange={(e) => {
+                    this.handleSearchUser(e.target.value);
+                  }}
+                />
+              </InputGroup>
+            </div>
+
+            <div className="d-block d-md-none"></div>
+
+            <div className="col-5 col-md-3 mx-5 mx-md-0">
+              <Container className="d-flex flex-row justify-content-start">
+                <Label htmlFor="roleSelect" md={{ size: "auto" }} sm={{ size: "auto" }}>
                   Role
                 </Label>
-                <Col sm={3}>
-                  <Input id="exampleSelect" name="select" type="select">
+                <Col md={{ offset: 1, size: "auto" }} xs={{ offset: 1, size: "auto" }}>
+                  <Input id="roleSelect" name="select" type="select" className="text-left">
                     <option onClick={() => this.handleFilterUserByRole()}>All Roles</option>
                     <option onClick={() => this.handleFilterUserByRole("R1")}>Admin</option>
                     <option onClick={() => this.handleFilterUserByRole("R2")}>Doctor</option>
@@ -186,12 +220,12 @@ class UserManage extends Component {
                     <option onClick={() => this.handleFilterUserByRole("R3")}>Patient</option>
                   </Input>
                 </Col>
-              </FormGroup>
+              </Container>
             </div>
           </div>
         </div>
 
-        <div className="users-table mt-4 mx-1">
+        <div className="users-table mt-1 mt-md-3 mx-1 my-1">
           <table id="customers">
             <thead>
               <tr>

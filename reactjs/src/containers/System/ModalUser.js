@@ -169,6 +169,9 @@ class ModalUser extends Component {
                   <option value="R1">Admin</option>
                   <option value="R2">Doctor</option>
                   <option value="R4">Medical Staff</option>
+                  <option value="R3" disabled>
+                    Patient
+                  </option>
                 </select>
               </div>
             </div>
