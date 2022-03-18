@@ -20,6 +20,8 @@ class UserManage extends Component {
       isOpenModalDeleteUserConfirm: false,
       isOpenModalEditUser: false,
       userInEffect: {},
+      query: "",
+      role: "",
     };
   }
 
@@ -118,32 +120,41 @@ class UserManage extends Component {
     }
   };
 
-  handleFilterUserByRole = (role) => {
-    if (role) {
-      this.setState({
-        filteredUserList: this.state.arrUsers.filter((user) => {
-          return user.roleId === role;
-        }),
-      });
-    } else {
-      this.setState({
-        filteredUserList: [...this.state.arrUsers],
-      });
-    }
+  handleOnChangeInput = (event, id) => {
+    let copyState = { ...this.state };
+    copyState[id] = event.target.value;
+    this.setState(
+      {
+        ...copyState,
+      },
+      () => {
+        this.handleFilterUser();
+      }
+    );
   };
 
-  handleSearchUser = (term) => {
-    if (term) {
-      this.setState({
-        filteredUserList: this.state.arrUsers.filter((user) => {
-          return user.email.toLowerCase().includes(term) || user.firstName.toLowerCase().includes(term) || user.lastName.toLowerCase().includes(term);
-        }),
-      });
-    } else {
-      this.setState({
-        filteredUserList: [...this.state.arrUsers],
-      });
+  checkRole = (user) => {
+    let role = this.state.role;
+    if (role) {
+      return user.roleId === this.state.role;
     }
+    return true;
+  };
+
+  checkTerm = (user) => {
+    let term = this.state.query.toLowerCase();
+    if (term) {
+      return user.email.toLowerCase().includes(term) || user.firstName.toLowerCase().includes(term) || user.lastName.toLowerCase().includes(term);
+    }
+    return true;
+  };
+
+  handleFilterUser = () => {
+    this.setState({
+      filteredUserList: this.state.arrUsers.filter((user) => {
+        return this.checkRole(user) && this.checkTerm(user);
+      }),
+    });
   };
 
   render() {
@@ -198,8 +209,9 @@ class UserManage extends Component {
                   className="form-control"
                   placeholder="Search..."
                   onChange={(e) => {
-                    this.handleSearchUser(e.target.value);
+                    this.handleOnChangeInput(e, "query");
                   }}
+                  value={this.state.query}
                 />
               </InputGroup>
             </div>
@@ -212,12 +224,20 @@ class UserManage extends Component {
                   Role
                 </Label>
                 <Col md={{ offset: 1, size: "auto" }} xs={{ offset: 1, size: "auto" }}>
-                  <Input id="roleSelect" name="select" type="select" className="text-left">
-                    <option onClick={() => this.handleFilterUserByRole()}>All Roles</option>
-                    <option onClick={() => this.handleFilterUserByRole("R1")}>Admin</option>
-                    <option onClick={() => this.handleFilterUserByRole("R2")}>Doctor</option>
-                    <option onClick={() => this.handleFilterUserByRole("R4")}>Medical Staff</option>
-                    <option onClick={() => this.handleFilterUserByRole("R3")}>Patient</option>
+                  <Input
+                    id="roleSelect"
+                    name="select"
+                    type="select"
+                    className="text-left"
+                    onChange={(e) => {
+                      this.handleOnChangeInput(e, "role");
+                    }}
+                  >
+                    <option value="">All Roles</option>
+                    <option value="R1">Admin</option>
+                    <option value="R2">Doctor</option>
+                    <option value="R4">Medical Staff</option>
+                    <option value="R3">Patient</option>
                   </Input>
                 </Col>
               </Container>
