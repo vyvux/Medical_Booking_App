@@ -130,7 +130,7 @@ let createNewBranch = async (data) => {
         image: data.image,
       });
       resolve({
-        newBranch: newBranch,
+        errCode: 0,
         message: "created new branch",
       });
     } catch (e) {

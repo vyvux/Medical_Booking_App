@@ -2,6 +2,7 @@ import React, { Component } from "react";
 // import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
 import { getAllBranches, createNewBranch, editBranch, deleteBranch } from "../../services/adminService";
+import BranchModal from "./BranchModal";
 import "./UserManage.scss";
 
 class BranchManage extends Component {
@@ -116,6 +117,8 @@ class BranchManage extends Component {
     let arrBranches = this.state.arrBranches;
     return (
       <div className="users-container mx-1">
+        <BranchModal isOpen={this.state.isOpenModalBranch} toggleModalFromParent={this.toggleBranchModal} createNewBranch={this.createNewBranch} />
+
         <div className="title text-center">Manage branches</div>
         {/* Add new button */}
         <div className="mt-1 mt-md-4 container">
