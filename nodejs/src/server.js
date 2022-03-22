@@ -2,6 +2,8 @@ import express from "express";
 import bodyParser from "body-parser";
 import viewEngine from "./config/viewEngine";
 import initWebRoutes from "./route/web";
+import initWebRoutesAdmin from "./route/admin_route";
+import initWebroutesPatient from "./route/patient-route";
 import connectDB from "./config/connectDB";
 import cors from "cors";
 
@@ -14,7 +16,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 viewEngine(app);
+
+// routes
 initWebRoutes(app);
+initWebRoutesAdmin(app);
+initWebroutesPatient(app);
 
 connectDB();
 

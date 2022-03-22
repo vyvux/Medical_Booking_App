@@ -216,8 +216,6 @@ class UserManage extends Component {
               </InputGroup>
             </div>
 
-            <div className="d-block d-md-none"></div>
-
             <div className="col-5 col-md-3 mx-5 mx-md-0">
               <Container className="d-flex flex-row justify-content-start">
                 <Label htmlFor="roleSelect" md={{ size: "auto" }} sm={{ size: "auto" }}>
