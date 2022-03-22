@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 // import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
-import { Label, Input, Col, Container, InputGroup, InputGroupText } from "reactstrap";
+import { getAllBranches, createNewBranch, editBranch, deleteBranch } from "../../services/adminService";
+import "./UserManage.scss";
 
 class BranchManage extends Component {
   state = {};
@@ -17,11 +18,12 @@ class BranchManage extends Component {
     };
   }
 
-  componentDidMount() {}
+  async componentDidMount() {
+    this.getAllBranchesFromDB();
+  }
 
-  // TODO create getAllBranches < services <userService
   getAllBranchesFromDB = async () => {
-    let response = await this.getAllBranches("ALL");
+    let response = await getAllBranches("ALL");
     if (response && response.errCode === 0) {
       this.setState({
         arrBranches: response.branches,
@@ -41,25 +43,24 @@ class BranchManage extends Component {
     });
   };
 
-  // TODO create
-  // createNewBranch = async (data) => {
-  //   let succes = false;
-  //   try {
-  //     let response = await createNewBranchByAdmin(data);
-  //     if (response && response.errCode !== 0) {
-  //       alert(response.errMessage);
-  //     } else {
-  //       await this.getAllBranchesFromDB();
-  //       this.setState({
-  //         isOpenModalBranch: false,
-  //       });
-  //     }
-  //     succes = true;
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  //   return succes;
-  // };
+  createNewBranch = async (data) => {
+    let succes = false;
+    try {
+      let response = await createNewBranch(data);
+      if (response && response.errCode !== 0) {
+        alert(response.errMessage);
+      } else {
+        await this.getAllBranchesFromDB();
+        this.setState({
+          isOpenModalBranch: false,
+        });
+      }
+      succes = true;
+    } catch (e) {
+      console.log(e);
+    }
+    return succes;
+  };
 
   toggleModalDeleteBranchConfirm = () => {
     this.setState({
@@ -74,18 +75,17 @@ class BranchManage extends Component {
     });
   };
 
-  // TODO create deleteBranch service
-  // handleDeleteBranch = async (branch) => {
-  //   try {
-  //     await deleteBranch(branch.id);
-  //     await this.getAllBranchesFromDB();
-  //     this.setState({
-  //       isOpenModalDeleteBranchConfirm: false,
-  //     });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
+  handleDeleteBranch = async (branch) => {
+    try {
+      await deleteBranch(branch.id);
+      await this.getAllBranchesFromDB();
+      this.setState({
+        isOpenModalDeleteBranchConfirm: false,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   toggleModelEditBranch = () => {
     this.setState({
@@ -100,24 +100,24 @@ class BranchManage extends Component {
     });
   };
 
-  // TODO create deleteBranch service
-  // handleEditBranch = async (branch) => {
-  //   try {
-  //     await editBranchByAdmin(branch);
-  //     await this.getAllBranchesFromDB();
-  //     this.setState({
-  //       isOpenModalEditBranch: false,
-  //     });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
+  handleEditBranch = async (branch) => {
+    try {
+      await editBranch(branch);
+      await this.getAllBranchesFromDB();
+      this.setState({
+        isOpenModalEditBranch: false,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   render() {
     let arrBranches = this.state.arrBranches;
     return (
       <div className="users-container mx-1">
-        <div className="title text-center">Manage branches</div>;{/* Add new button */}
+        <div className="title text-center">Manage branches</div>
+        {/* Add new button */}
         <div className="mt-1 mt-md-4 container">
           <button className="btn btn-primary px-3 py-1" onClick={() => this.handleAddNewBranch()}>
             <i className="fas fa-plus"></i> New Branch
@@ -143,9 +143,9 @@ class BranchManage extends Component {
                   return (
                     <tr key={item.id}>
                       <td>{item.name}</td>
-                      <td>{item.address}</td>
+                      <td className="limited-word">{item.address}</td>
                       <td>{item.phoneNumber}</td>
-                      <td>{item.description}</td>
+                      <td className="limited-word">{item.description}</td>
                       <td>{item.createdAt}</td>
                       <td>
                         <button className="btn-edit" onClick={() => this.openEditBranchModal(item)}>

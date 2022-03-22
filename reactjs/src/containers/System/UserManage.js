@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Label, Input, Col, Container, InputGroup, InputGroupText } from "reactstrap";
 import "./UserManage.scss";
-import { getAllUsers, createNewUserByAdmin, deleteUserByAdmin, editUserByAdmin } from "../../services/userService";
+import { getAllUsers, createNewUserByAdmin, deleteUserByAdmin, editUserByAdmin } from "../../services/adminService";
 import ModalUser from "./ModalUser";
 import ModalDeleteUserConfirm from "./ModalDeleteUserConfirm";
 import ModalEditUser from "./ModalEditUser";

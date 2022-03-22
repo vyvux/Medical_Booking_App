@@ -8,6 +8,16 @@
     top: 0;
   }
 
+  tbody {
+    // limit width branch data row
+    .limited-word {
+      max-width: 40vw;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
   td {
     border: 1px solid #ddd;
     padding: 8px;
