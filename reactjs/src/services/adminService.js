@@ -33,4 +33,35 @@ const editBranch = (data) => {
 const deleteBranch = (branchId) => {
   return axios.delete("/api/delete-branch", { data: { id: branchId } });
 };
-export { getAllUsers, createNewUserByAdmin, deleteUserByAdmin, editUserByAdmin, getAllBranches, createNewBranch, editBranch, deleteBranch };
+
+/** Manage Service */
+const getAllServices = (inputId) => {
+  return axios.get(`/api/get-all-services?id=${inputId}`);
+};
+
+const createNewService = (data) => {
+  return axios.post("/api/create-service", data);
+};
+
+const editService = (data) => {
+  return axios.put("/api/edit-service", data);
+};
+
+const deleteService = (serviceId) => {
+  return axios.delete("/api/delete-service", { data: { id: serviceId } });
+};
+
+export {
+  getAllUsers,
+  createNewUserByAdmin,
+  deleteUserByAdmin,
+  editUserByAdmin,
+  getAllBranches,
+  createNewBranch,
+  editBranch,
+  deleteBranch,
+  createNewService,
+  getAllServices,
+  editService,
+  deleteService,
+};

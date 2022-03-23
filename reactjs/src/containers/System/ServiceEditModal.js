@@ -3,14 +3,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import _ from "lodash";
-class BranchEditModal extends Component {
+class ServiceEditModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
       id: "",
       name: "",
-      address: "",
-      phoneNumber: "",
       description: "",
     };
   }
@@ -19,15 +17,13 @@ class BranchEditModal extends Component {
 
   // change state when new data row is selected
   componentDidUpdate() {
-    if (this.props.branch.id !== this.state.id) {
-      let branch = this.props.branch;
-      if (branch && !_.isEmpty(branch)) {
+    if (this.props.service.id !== this.state.id) {
+      let service = this.props.service;
+      if (service && !_.isEmpty(service)) {
         this.setState({
-          id: branch.id,
-          name: branch.name,
-          address: branch.address,
-          phoneNumber: branch.phoneNumber,
-          description: branch.description,
+          id: service.id,
+          name: service.name,
+          description: service.description,
         });
       }
     }
@@ -47,7 +43,7 @@ class BranchEditModal extends Component {
 
   validateInputs = () => {
     let isValid = true;
-    let arrInputs = ["name", "address", "phoneNumber", "description"];
+    let arrInputs = ["name", "description"];
     for (let i = 0; i < arrInputs.length; i++) {
       if (!this.state[arrInputs[i]]) {
         isValid = false;
@@ -58,11 +54,11 @@ class BranchEditModal extends Component {
     return isValid;
   };
 
-  handleEditBranch = async () => {
+  handleEditService = async () => {
     let isValid = this.validateInputs();
     if (isValid === true) {
       // call api
-      await this.props.editBranch(this.state);
+      await this.props.editService(this.state);
     }
   };
 
@@ -82,67 +78,29 @@ class BranchEditModal extends Component {
             this.toggle();
           }}
         >
-          Edit Branch Information
+          Edit Service Information
         </ModalHeader>
         <ModalBody>
           <div className="modal-user-body">
-            {/* first row in modal: name + phone*/}
+            {/* first row in modal: name*/}
             <div className="row g-2">
-              <div className="col-md">
-                <div className="form-floating mb-3">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="floatingName"
-                    placeholder="Branch Name"
-                    autoComplete="off"
-                    onChange={(event) => {
-                      this.handleOnChangeInput(event, "name");
-                    }}
-                    value={this.state.name}
-                  />
-                  <label htmlFor="floatingName">Branch Name</label>
-                </div>
-              </div>
-
-              <div className="col-md">
-                <div className="form-floating mb-3">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="floatingPhonenumber"
-                    placeholder="First Name"
-                    autoComplete="off"
-                    onChange={(event) => {
-                      this.handleOnChangeInput(event, "phoneNumber");
-                    }}
-                    value={this.state.phoneNumber}
-                  />
-                  <label htmlFor="floatingPhonenumber">Phone number</label>
-                </div>
+              <div className="form-floating mb-3">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="floatingName"
+                  placeholder="Service Name"
+                  autoComplete="off"
+                  onChange={(event) => {
+                    this.handleOnChangeInput(event, "name");
+                  }}
+                  value={this.state.name}
+                />
+                <label htmlFor="floatingName">Service Name</label>
               </div>
             </div>
 
-            {/* 2nd row in modal: address*/}
-            <div className="row">
-              <div className="col-md">
-                <div className="form-floating">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="floatingAddress"
-                    placeholder="Address"
-                    onChange={(event) => {
-                      this.handleOnChangeInput(event, "address");
-                    }}
-                    value={this.state.address}
-                  />
-                  <label htmlFor="floatingAddress">Address</label>
-                </div>
-              </div>
-            </div>
-
-            {/* 3rd row in modal: description*/}
+            {/* 2nd row in modal: description*/}
             <div className="row">
               <div className="col">
                 <div className="form-floating my-3">
@@ -166,7 +124,7 @@ class BranchEditModal extends Component {
             className="px-3"
             color="primary"
             onClick={() => {
-              this.handleEditBranch();
+              this.handleEditService();
             }}
           >
             Save Changes
@@ -193,4 +151,4 @@ const mapDispatchToProps = (dispatch) => {
   return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(BranchEditModal);
+export default connect(mapStateToProps, mapDispatchToProps)(ServiceEditModal);

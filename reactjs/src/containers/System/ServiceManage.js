@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 // import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
-import { getAllBranches, createNewBranch, editBranch, deleteBranch } from "../../services/adminService";
-import BranchModal from "./BranchModal";
-import BranchEditModal from "./BranchEditModal";
+import { getAllServices, createNewService, editService, deleteService } from "../../services/adminService";
 import "./UserManage.scss";
-import BranchDeleteModal from "./BranchDeleteModal";
+import ServiceModal from "./ServiceModal";
+import ServiceEditModal from "./ServiceEditModal";
+import ServiceDeleteModal from "./ServiceDeleteModal";
 
-class BranchManage extends Component {
+class ServiceManage extends Component {
   state = {};
 
   constructor(props) {
@@ -26,109 +26,109 @@ class BranchManage extends Component {
   }
 
   getAllServicesFromDB = async () => {
-    // let response = await getAllBranches("ALL");
-    // if (response && response.errCode === 0) {
-    //   this.setState({
-    //     arrBranches: response.branches,
-    //   });
-    // }
+    let response = await getAllServices("ALL");
+    if (response && response.errCode === 0) {
+      this.setState({
+        arrServices: response.services,
+      });
+    }
   };
 
   handleAddNewService = () => {
     this.setState({
-      isOpenModalBranch: true,
+      isOpenModalService: true,
     });
   };
 
   toggleServiceModal = () => {
     this.setState({
-      isOpenModalBranch: !this.state.isOpenModalBranch,
+      isOpenModalService: !this.state.isOpenModalService,
     });
   };
 
   createNewService = async (data) => {
-    // let succes = false;
-    // try {
-    //   let response = await createNewBranch(data);
-    //   if (response && response.errCode !== 0) {
-    //     alert(response.errMessage);
-    //   } else {
-    //     await this.getAllBranchesFromDB();
-    //     this.setState({
-    //       isOpenModalBranch: false,
-    //     });
-    //   }
-    //   succes = true;
-    // } catch (e) {
-    //   console.log(e);
-    // }
-    // return succes;
+    let succes = false;
+    try {
+      let response = await createNewService(data);
+      if (response && response.errCode !== 0) {
+        alert(response.errMessage);
+      } else {
+        await this.getAllServicesFromDB();
+        this.setState({
+          isOpenModalService: false,
+        });
+      }
+      succes = true;
+    } catch (e) {
+      console.log(e);
+    }
+    return succes;
   };
 
   toggleModalDeleteServiceConfirm = () => {
     this.setState({
-      isOpenModalDeleteBranchConfirm: !this.state.isOpenModalDeleteBranchConfirm,
+      isOpenModalDeleteServiceConfirm: !this.state.isOpenModalDeleteServiceConfirm,
     });
   };
 
-  openDeleteConfirmModal = (branch) => {
+  openDeleteConfirmModal = (service) => {
     this.setState({
-      isOpenModalDeleteBranchConfirm: true,
-      branchInEffect: branch,
+      isOpenModalDeleteServiceConfirm: true,
+      serviceInEffect: service,
     });
   };
 
-  handleDeleteService = async (branch) => {
-    // try {
-    //   await deleteBranch(branch.id);
-    //   await this.getAllBranchesFromDB();
-    //   this.setState({
-    //     isOpenModalDeleteBranchConfirm: false,
-    //   });
-    // } catch (e) {
-    //   console.log(e);
-    // }
+  handleDeleteService = async (service) => {
+    try {
+      await deleteService(service.id);
+      await this.getAllServicesFromDB();
+      this.setState({
+        isOpenModalDeleteServiceConfirm: false,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   toggleModelEditService = () => {
     this.setState({
-      isOpenModalEditBranch: !this.state.isOpenModalEditBranch,
+      isOpenModalEditService: !this.state.isOpenModalEditService,
     });
   };
 
-  openEditServiceModal = (branch) => {
+  openEditServiceModal = (service) => {
     this.setState({
-      isOpenModalEditBranch: true,
-      branchInEffect: branch,
+      isOpenModalEditService: true,
+      serviceInEffect: service,
     });
   };
 
-  handleEditService = async (branch) => {
-    // try {
-    //   await editBranch(branch);
-    //   await this.getAllBranchesFromDB();
-    //   this.setState({
-    //     isOpenModalEditBranch: false,
-    //   });
-    // } catch (e) {
-    //   console.log(e);
-    // }
+  handleEditService = async (service) => {
+    try {
+      await editService(service);
+      await this.getAllServicesFromDB();
+      this.setState({
+        isOpenModalEditService: false,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   render() {
     let arrServices = this.state.arrServices;
     return (
       <div className="users-container mx-1">
-        {/* <ServiceModal isOpen={this.state.isOpenModalService} toggleModalFromParent={this.toggleServiceModal} createNewService={this.createNewService} />
+        <ServiceModal isOpen={this.state.isOpenModalService} toggleModalFromParent={this.toggleServiceModal} createNewService={this.createNewService} />
 
-        <ServiceEditModal isOpen={this.state.isOpenModalEditService} toggleModalFromParent={this.toggleModelEditService} editBranch={this.handleEditService} branch={this.state.serviceInEffect} />
+        <ServiceEditModal isOpen={this.state.isOpenModalEditService} toggleModalFromParent={this.toggleModelEditService} editService={this.handleEditService} service={this.state.serviceInEffect} />
 
         <ServiceDeleteModal
           isOpen={this.state.isOpenModalDeleteServiceConfirm}
           toggleModalFromParent={this.toggleModalDeleteServiceConfirm}
-          deleteBranch={this.handleDeleteService}
-          branch={this.state.serviceInEffect}
-        /> */}
+          deleteService={this.handleDeleteService}
+          service={this.state.serviceInEffect}
+        />
 
         <div className="title text-center">Manage services</div>
         {/* Add new button */}
@@ -143,8 +143,6 @@ class BranchManage extends Component {
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Address</th>
-                <th>Phone Number</th>
                 <th>Description</th>
                 <th>Registered On</th>
                 <th>Actions</th>
@@ -157,8 +155,6 @@ class BranchManage extends Component {
                   return (
                     <tr key={item.id}>
                       <td>{item.name}</td>
-                      <td className="limited-word-small">{item.address}</td>
-                      <td>{item.phoneNumber}</td>
                       <td className="limited-word">{item.description}</td>
                       <td>{item.createdAt}</td>
                       <td>
@@ -188,4 +184,4 @@ const mapDispatchToProps = (dispatch) => {
   return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(BranchManage);
+export default connect(mapStateToProps, mapDispatchToProps)(ServiceManage);

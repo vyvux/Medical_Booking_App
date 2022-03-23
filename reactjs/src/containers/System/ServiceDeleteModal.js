@@ -2,7 +2,7 @@ import React, { Component } from "react";
 // import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-class BranchDeleteModal extends Component {
+class ServiceDeleteModal extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -30,46 +30,27 @@ class BranchDeleteModal extends Component {
             this.toggle();
           }}
         >
-          Delete Branch
+          Delete Service
         </ModalHeader>
         <ModalBody>
           <div className="modal-user-body">
             <div className="warning-message text-center">
               <i className="fas fa-exclamation-triangle fa-lg"></i>
-              <h2>Are you sure to delete this branch?</h2>
+              <h2>Are you sure to delete this service?</h2>
             </div>
-            {/* first row in modal: email role*/}
+            {/* first row in modal: name*/}
             <div className="row g-2">
-              <div className="col-md">
-                <div className="form-floating mb-3">
-                  <input type="text" className="form-control" id="floatingName" placeholder="Branch Name" autoComplete="off" value={this.props.branch.name} readOnly />
-                  <label htmlFor="floatingName">Branch Name</label>
-                </div>
-              </div>
-
-              <div className="col-md">
-                <div className="form-floating mb-3">
-                  <input type="text" className="form-control" id="floatingPhonenumber" placeholder="First Name" autoComplete="off" value={this.props.branch.phoneNumber} readOnly />
-                  <label htmlFor="floatingPhonenumber">Phone number</label>
-                </div>
+              <div className="form-floating mb-3">
+                <input type="text" className="form-control" id="floatingName" placeholder="Service Name" autoComplete="off" value={this.props.service.name} readOnly />
+                <label htmlFor="floatingName">Service Name</label>
               </div>
             </div>
 
-            {/* 2nd row in modal: address*/}
-            <div className="row">
-              <div className="col-md">
-                <div className="form-floating">
-                  <input type="text" className="form-control" id="floatingAddress" placeholder="Address" value={this.props.branch.address} readOnly />
-                  <label htmlFor="floatingAddress">Address</label>
-                </div>
-              </div>
-            </div>
-
-            {/* 3rd row in modal: description*/}
+            {/* 2nd row in modal: description*/}
             <div className="row">
               <div className="col">
                 <div className="form-floating my-3">
-                  <textarea className="form-control" placeholder="Description" id="floatingDesc" value={this.props.branch.description} readOnly></textarea>
+                  <textarea className="form-control" placeholder="Description" id="floatingDesc" value={this.props.service.description} readOnly></textarea>
                   <label htmlFor="floatingDesc">Description</label>
                 </div>
               </div>
@@ -81,7 +62,7 @@ class BranchDeleteModal extends Component {
             className="px-3"
             color="primary"
             onClick={() => {
-              this.props.deleteBranch(this.props.branch);
+              this.props.deleteService(this.props.service);
             }}
           >
             Delete
@@ -108,4 +89,4 @@ const mapDispatchToProps = (dispatch) => {
   return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(BranchDeleteModal);
+export default connect(mapStateToProps, mapDispatchToProps)(ServiceDeleteModal);
