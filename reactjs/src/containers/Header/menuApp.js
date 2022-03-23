@@ -14,6 +14,10 @@ export const adminMenu = [
             name: "menu.system.system-administrator.branch-manage",
             link: "/system/branch-manage",
           },
+          {
+            name: "menu.system.system-administrator.service-manage",
+            link: "/system/service-manage",
+          },
         ],
       },
       // { name: 'menu.system.system-parameter.header', link: '/system/system-parameter' },

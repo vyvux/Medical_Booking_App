@@ -30,8 +30,9 @@
       "header": "System",
       "system-administrator": {
         "header": "System Administrator",
-        "user-manage": "User manage",
-        "branch-manage": "Branch manage"
+        "user-manage": "User Manage",
+        "branch-manage": "Branch Manage",
+        "service-manage": "Service Manage"
       },
       "system-parameter": {
         "header": "System-parameter"

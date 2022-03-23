@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
 import UserManage from "../containers/System/UserManage";
 import BranchManage from "../containers/System/BranchManage";
+import ServiceManage from "../containers/System/ServiceManage";
 
 class System extends Component {
   render() {
@@ -13,6 +14,7 @@ class System extends Component {
           <Switch>
             <Route path="/system/user-manage" component={UserManage} />
             <Route path="/system/branch-manage" component={BranchManage} />
+            <Route path="/system/service-manage" component={ServiceManage} />
             <Route
               component={() => {
                 return <Redirect to={systemMenuPath} />;
