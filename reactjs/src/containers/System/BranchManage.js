@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getAllBranches, createNewBranch, editBranch, deleteBranch } from "../../services/adminService";
 import BranchModal from "./BranchModal";
+import BranchEditModal from "./BranchEditModal";
 import "./UserManage.scss";
 
 class BranchManage extends Component {
@@ -119,6 +120,8 @@ class BranchManage extends Component {
       <div className="users-container mx-1">
         <BranchModal isOpen={this.state.isOpenModalBranch} toggleModalFromParent={this.toggleBranchModal} createNewBranch={this.createNewBranch} />
 
+        <BranchEditModal isOpen={this.state.isOpenModalEditBranch} toggleModalFromParent={this.toggleModelEditBranch} editBranch={this.handleEditBranch} branch={this.state.branchInEffect} />
+
         <div className="title text-center">Manage branches</div>
         {/* Add new button */}
         <div className="mt-1 mt-md-4 container">
@@ -146,7 +149,7 @@ class BranchManage extends Component {
                   return (
                     <tr key={item.id}>
                       <td>{item.name}</td>
-                      <td className="limited-word">{item.address}</td>
+                      <td className="limited-word-small">{item.address}</td>
                       <td>{item.phoneNumber}</td>
                       <td className="limited-word">{item.description}</td>
                       <td>{item.createdAt}</td>
