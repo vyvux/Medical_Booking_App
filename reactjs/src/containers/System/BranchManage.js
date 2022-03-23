@@ -5,6 +5,7 @@ import { getAllBranches, createNewBranch, editBranch, deleteBranch } from "../..
 import BranchModal from "./BranchModal";
 import BranchEditModal from "./BranchEditModal";
 import "./UserManage.scss";
+import BranchDeleteModal from "./BranchDeleteModal";
 
 class BranchManage extends Component {
   state = {};
@@ -122,6 +123,12 @@ class BranchManage extends Component {
 
         <BranchEditModal isOpen={this.state.isOpenModalEditBranch} toggleModalFromParent={this.toggleModelEditBranch} editBranch={this.handleEditBranch} branch={this.state.branchInEffect} />
 
+        <BranchDeleteModal
+          isOpen={this.state.isOpenModalDeleteBranchConfirm}
+          toggleModalFromParent={this.toggleModalDeleteBranchConfirm}
+          deleteBranch={this.handleDeleteBranch}
+          branch={this.state.branchInEffect}
+        />
         <div className="title text-center">Manage branches</div>
         {/* Add new button */}
         <div className="mt-1 mt-md-4 container">
