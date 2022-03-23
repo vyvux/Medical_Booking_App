@@ -16,6 +16,12 @@ let initWebRoutesAdmin = (app) => {
   router.put("/api/edit-branch", adminController.editBranch);
   router.delete("/api/delete-branch", adminController.deleteBranch);
 
+  /** Manage Service */
+  router.post("/api/create-service", adminController.createNewService);
+  router.get("/api/get-all-services", adminController.handleGetAllServices);
+  router.put("/api/edit-service", adminController.editService);
+  router.delete("/api/delete-service", adminController.deleteService);
+
   return app.use("/", router);
 };
 

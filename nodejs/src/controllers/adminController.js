@@ -84,6 +84,48 @@ let deleteBranch = async (req, res) => {
   return res.status(200).json(message);
 };
 
+// Manage Services
+let createNewService = async (req, res) => {
+  let message = await adminService.createNewService(req.body);
+  return res.status(200).json(message);
+};
+
+let handleGetAllServices = async (req, res) => {
+  let id = req.query.id; //ALL ,or id
+
+  if (!id) {
+    return res.status(200).json({
+      errCode: 1,
+      errMessage: "Missing required parameters",
+      services: [],
+    });
+  }
+
+  let services = await adminService.getAllServices(id);
+  return res.status(200).json({
+    errCode: 0,
+    errMessage: "OK",
+    services,
+  });
+};
+
+let editService = async (req, res) => {
+  let data = req.body;
+  let message = await adminService.editService(data);
+  return res.status(200).json(message);
+};
+
+let deleteService = async (req, res) => {
+  if (!req.body.id) {
+    return res.status(200).json({
+      errCode: 1,
+      errMessage: "Missing required parameters!",
+    });
+  }
+  let message = await adminService.deleteService(req.body.id);
+  return res.status(200).json(message);
+};
+
 module.exports = {
   createNewUserByAdmin: createNewUserByAdmin,
   handleGetAllUsers: handleGetAllUsers,
@@ -94,4 +136,9 @@ module.exports = {
   handleGetAllBranches: handleGetAllBranches,
   editBranch: editBranch,
   deleteBranch: deleteBranch,
+
+  createNewService: createNewService,
+  handleGetAllServices: handleGetAllServices,
+  editService: editService,
+  deleteService: deleteService,
 };

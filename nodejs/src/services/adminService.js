@@ -227,6 +227,110 @@ let deleteBranch = async (branchId) => {
   });
 };
 
+// Manage Service
+let createNewService = async (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let newService = await db.Service.create({
+        name: data.name,
+        description: data.description,
+      });
+      resolve({
+        errCode: 0,
+        message: "created new service",
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let getAllServices = async (serviceId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let services = "";
+      if (serviceId === "ALL") {
+        services = await db.Service.findAll({
+          attributes: {
+            include: ["id", "name", "description", [sequelize.fn("DATE_FORMAT", sequelize.col("createdAt"), "%d-%m-%Y %H:%i:%s"), "createdAt"], "updatedAt"],
+          },
+        });
+      }
+
+      if (serviceId && serviceId !== "ALL") {
+        services = await db.Service.findOne({
+          where: { id: serviceId },
+          attributes: {
+            include: ["id", "name", "description", [sequelize.fn("DATE_FORMAT", sequelize.col("createdAt"), "%d-%m-%Y %H:%i:%s"), "createdAt"], "updatedAt"],
+          },
+        });
+      }
+      resolve(services);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let editService = async (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.id) {
+        resolve({
+          errCode: 2,
+          errMessage: "Missing required parameters!",
+        });
+      }
+
+      let service = await db.Service.findOne({
+        where: { id: data.id },
+        raw: false,
+      });
+      if (service) {
+        service.name = data.name;
+        service.description = data.description;
+
+        await service.save();
+        resolve({
+          errCode: 0,
+          message: "Update service information successfully!",
+        });
+      } else {
+        resolve({
+          errCode: 1,
+          errMessage: "Service not found",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let deleteService = async (serviceId) => {
+  return new Promise(async (resolve, reject) => {
+    let service = await db.Service.findOne({
+      where: { id: serviceId },
+    });
+
+    if (!service) {
+      resolve({
+        errCode: 2,
+        errMessage: "Service not found",
+      });
+    }
+
+    await db.Service.destroy({
+      where: { id: serviceId },
+    });
+
+    resolve({
+      errCode: 0,
+      message: "Service is deleted",
+    });
+  });
+};
+
 module.exports = {
   createNewUserByAdmin: createNewUserByAdmin,
   getAllUsers: getAllUsers,
@@ -237,4 +341,9 @@ module.exports = {
   getAllBranches: getAllBranches,
   editBranch: editBranch,
   deleteBranch: deleteBranch,
+
+  createNewService: createNewService,
+  getAllServices: getAllServices,
+  editService: editService,
+  deleteService: deleteService,
 };
