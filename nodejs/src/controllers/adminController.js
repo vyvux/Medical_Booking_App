@@ -126,6 +126,30 @@ let deleteService = async (req, res) => {
   return res.status(200).json(message);
 };
 
+// Manage Doctors
+let createNewDoctor = async (req, res) => {
+  let message = await adminService.createDoctor(req.body);
+  return res.status(200).json(message);
+};
+
+let getAllDoctors = async (req, res) => {
+  let id = req.body.id;
+  if (!id) {
+    return res.status(200).json({
+      errCode: 1,
+      errMessage: "Missing required parameters",
+      services: [],
+    });
+  }
+
+  let doctors = await adminService.getAllDoctors(id);
+  return res.status(200).json({
+    errCode: 0,
+    errMessage: "OK",
+    doctors,
+  });
+};
+
 module.exports = {
   createNewUserByAdmin: createNewUserByAdmin,
   handleGetAllUsers: handleGetAllUsers,
@@ -141,4 +165,7 @@ module.exports = {
   handleGetAllServices: handleGetAllServices,
   editService: editService,
   deleteService: deleteService,
+
+  createNewDoctor: createNewDoctor,
+  getAllDoctors: getAllDoctors,
 };

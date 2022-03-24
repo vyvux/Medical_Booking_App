@@ -331,6 +331,88 @@ let deleteService = async (serviceId) => {
   });
 };
 
+// Manage Doctor
+let createDoctor = async (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let findDoctor = await db.Doctor.findOne({
+        where: { userId: data.id },
+      });
+
+      // check existing doctor
+      if (findDoctor) {
+        resolve({
+          errCode: 1,
+          errMessage: "doctor already exists",
+        });
+      } else {
+        let doctor = await db.Doctor.create({
+          userId: data.id,
+          about: data.about,
+          serviceId: data.serviceId,
+          branchId: data.branchId,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          gender: data.gender === "1" ? true : false,
+        });
+        resolve({
+          errCode: 0,
+          message: "created doctor",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let getAllDoctors = async (doctorId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let doctors = "";
+      if (doctorId === "ALL") {
+        doctors = await db.Doctor.findAll({
+          attributes: {
+            include: [
+              "userId",
+              "serviceId",
+              "branchId",
+              "about",
+              "gender",
+              "firstName",
+              "lastName",
+              [sequelize.fn("DATE_FORMAT", sequelize.col("createdAt"), "%d-%m-%Y %H:%i:%s"), "createdAt"],
+              "updatedAt",
+            ],
+          },
+        });
+      }
+
+      if (doctorId && doctorId !== "ALL") {
+        doctors = await db.Doctor.findOne({
+          where: { id: doctorId },
+          attributes: {
+            include: [
+              "userId",
+              "serviceId",
+              "branchId",
+              "about",
+              "gender",
+              "firstName",
+              "lastName",
+              [sequelize.fn("DATE_FORMAT", sequelize.col("createdAt"), "%d-%m-%Y %H:%i:%s"), "createdAt"],
+              "updatedAt",
+            ],
+          },
+        });
+      }
+      resolve(doctors);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   createNewUserByAdmin: createNewUserByAdmin,
   getAllUsers: getAllUsers,
@@ -346,4 +428,7 @@ module.exports = {
   getAllServices: getAllServices,
   editService: editService,
   deleteService: deleteService,
+
+  createDoctor: createDoctor,
+  getAllDoctors: getAllDoctors,
 };
