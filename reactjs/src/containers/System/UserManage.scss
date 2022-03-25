@@ -76,16 +76,30 @@
   }
 }
 
+.container {
+  margin: auto 0px;
+  max-width: 99%;
+
+  .drop-down {
+    padding-left: 0px !important;
+    padding-right: 15px !important;
+  }
+}
 // Add new user button
 .users-container {
   button {
     height: auto;
   }
-}
 
-.users-table {
-  max-height: 80vh;
-  overflow-y: auto;
+  .list-length-label {
+    font-size: 13px;
+    font-style: italic;
+  }
+
+  .users-table {
+    max-height: 75vh;
+    overflow-y: auto;
+  }
 }
 
 // toggle modal

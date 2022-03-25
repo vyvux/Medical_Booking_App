@@ -136,8 +136,11 @@ class BranchManage extends Component {
             <i className="fas fa-plus"></i> New Branch
           </button>
         </div>
+
+        <div className="list-length-label mt-md-3 mx-3">{arrBranches.length} branches found</div>
+
         {/* branch table */}
-        <div className="users-table mt-1 mt-md-3 mx-1 my-1">
+        <div className="users-table mx-1">
           <table id="customers">
             <thead>
               <tr>

@@ -243,7 +243,9 @@ class UserManage extends Component {
           </div>
         </div>
 
-        <div className="users-table mt-1 mt-md-3 mx-1 my-1">
+        <div className="list-length-label mt-md-3 mx-3">{filteredUserList.length} users found</div>
+        {/* <div className="users-table mt-1 mt-md-3 mx-1 my-1"> */}
+        <div className="users-table mx-1">
           <table id="customers">
             <thead>
               <tr>

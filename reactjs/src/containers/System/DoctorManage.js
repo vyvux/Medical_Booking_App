@@ -146,7 +146,7 @@ class UserManage extends Component {
   checkService = (doctor) => {
     let service = this.state.service;
     if (service) {
-      return doctor.serviceId === this.state.service;
+      return doctor.serviceId == this.state.service;
     }
     return true;
   };
@@ -154,7 +154,7 @@ class UserManage extends Component {
   checkBranch = (doctor) => {
     let branch = this.state.branch;
     if (branch) {
-      return doctor.branchId === this.state.branch;
+      return doctor.branchId == this.state.branch;
     }
     return true;
   };
@@ -176,7 +176,6 @@ class UserManage extends Component {
   };
 
   render() {
-    // let arrDoctors = this.state.arrDoctors;
     let filteredDoctorList = this.state.filteredDoctorList;
     let serviceList = this.state.serviceList;
     let branchList = this.state.branchList;
@@ -225,13 +224,15 @@ class UserManage extends Component {
 
         <div className="mt-1 mt-md-4 container">
           <div className="row justify-content-end justify-content-md-start">
+            {/* add new button */}
             <div className="col-5 col-md-3">
-              <button className="btn btn-primary px-3 py-1" onClick={() => this.handleAddNewDoctor()}>
+              <button className="btn btn-primary px-3 py-1 " onClick={() => this.handleAddNewDoctor()}>
                 <i className="fas fa-plus"></i> New Doctor
               </button>
             </div>
 
-            <div className="col-7 col-md-6">
+            {/* Doctor's name search*/}
+            <div className="col-7 col-md-3">
               <InputGroup>
                 <InputGroupText>
                   <i className="fas fa-search"></i>
@@ -248,34 +249,71 @@ class UserManage extends Component {
               </InputGroup>
             </div>
 
-            {/* <div className="col-5 col-md-3 mx-5 mx-md-0">
-              <Container className="d-flex flex-row justify-content-start">
-                <Label htmlFor="roleSelect" md={{ size: "auto" }} sm={{ size: "auto" }}>
-                  Role
+            {/* Service filter */}
+            {/* <div className="col-5 col-md-2 mx-5 mx-md-0"> */}
+            <div className="col-6 col-md-3">
+              <Container className="d-flex flex-row justify-content-start drop-down">
+                {/* <Label htmlFor="serviceSelect" md={{ size: 2 }} xs={{ size: 3 }}> */}
+                <Label htmlFor="serviceSelect" lg={{ offset: 1, size: 2 }} md={{ size: 3 }} sm={{ size: "auto" }}>
+                  Service
                 </Label>
-                <Col md={{ offset: 1, size: "auto" }} xs={{ offset: 1, size: "auto" }}>
+                <Col md={{ offset: 1, size: 9 }} xs={{ offset: 1, size: 9 }}>
                   <Input
-                    id="roleSelect"
+                    id="serviceSelect"
                     name="select"
                     type="select"
                     className="text-left"
                     onChange={(e) => {
-                      this.handleOnChangeInput(e, "role");
+                      this.handleOnChangeInput(e, "service");
                     }}
                   >
-                    <option value="">All Roles</option>
-                    <option value="R1">Admin</option>
-                    <option value="R2">Doctor</option>
-                    <option value="R4">Medical Staff</option>
-                    <option value="R3">Patient</option>
+                    <option value="">All Services</option>
+                    {serviceList &&
+                      serviceList.map((item, index) => {
+                        return (
+                          <option value={item.id} key={item.id}>
+                            {item.name}
+                          </option>
+                        );
+                      })}
                   </Input>
                 </Col>
               </Container>
-            </div> */}
+            </div>
+            {/* Branch filter */}
+            <div className="col-6 col-md-3">
+              <Container className="d-flex flex-row justify-content-start drop-down">
+                <Label htmlFor="branchSelect" lg={{ offset: 1, size: 2 }} md={{ size: 3 }} sm={{ size: "auto" }}>
+                  Branch
+                </Label>
+                <Col md={{ offset: 1, size: 9 }} xs={{ offset: 1, size: 9 }}>
+                  <Input
+                    id="branchSelect"
+                    name="select"
+                    type="select"
+                    className="text-left"
+                    onChange={(e) => {
+                      this.handleOnChangeInput(e, "branch");
+                    }}
+                  >
+                    <option value="">All Branches</option>
+                    {branchList &&
+                      branchList.map((item, index) => {
+                        return (
+                          <option value={item.id} key={item.id}>
+                            {item.name}
+                          </option>
+                        );
+                      })}
+                  </Input>
+                </Col>
+              </Container>
+            </div>
           </div>
         </div>
 
-        <div className="users-table mt-1 mt-md-3 mx-1 my-1">
+        <div className="list-length-label mt-md-3 mx-3">{filteredDoctorList.length} doctors found</div>
+        <div className="users-table mx-1">
           <table id="customers">
             <thead>
               <tr>
