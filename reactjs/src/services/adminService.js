@@ -51,6 +51,24 @@ const deleteService = (serviceId) => {
   return axios.delete("/api/delete-service", { data: { id: serviceId } });
 };
 
+/** Manage Doctor */
+
+const getAllDoctors = (inputId) => {
+  return axios.get(`/api/get-all-doctors?id=${inputId}`);
+};
+
+const createNewDoctor = (data) => {
+  return axios.post("/api/create-doctor", data);
+};
+
+const editDoctor = (data) => {
+  return axios.put("/api/edit-doctor", data);
+};
+
+const deleteDoctor = (doctorUserId) => {
+  return axios.delete("/api/delete-doctor", { data: { userId: doctorUserId } });
+};
+
 export {
   getAllUsers,
   createNewUserByAdmin,
@@ -64,4 +82,8 @@ export {
   getAllServices,
   editService,
   deleteService,
+  getAllDoctors,
+  createNewDoctor,
+  editDoctor,
+  deleteDoctor,
 };
