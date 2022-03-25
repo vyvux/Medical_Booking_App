@@ -22,9 +22,11 @@ let initWebRoutesAdmin = (app) => {
   router.put("/api/edit-service", adminController.editService);
   router.delete("/api/delete-service", adminController.deleteService);
 
-  /** Manage Doctors */
+  /** Manage Doctor */
   router.post("/api/create-doctor", adminController.createNewDoctor);
   router.get("/api/get-all-doctors", adminController.getAllDoctors);
+  router.put("/api/edit-doctor", adminController.editDoctorInfo);
+  router.delete("/api/delete-doctor", adminController.deleteDoctor);
 
   return app.use("/", router);
 };

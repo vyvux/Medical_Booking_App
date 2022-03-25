@@ -133,7 +133,7 @@ let createNewDoctor = async (req, res) => {
 };
 
 let getAllDoctors = async (req, res) => {
-  let id = req.body.id;
+  let id = req.query.id;
   if (!id) {
     return res.status(200).json({
       errCode: 1,
@@ -148,6 +148,23 @@ let getAllDoctors = async (req, res) => {
     errMessage: "OK",
     doctors,
   });
+};
+
+let editDoctorInfo = async (req, res) => {
+  let data = req.body;
+  let message = await adminService.editDoctor(data);
+  return res.status(200).json(message);
+};
+
+let deleteDoctor = async (req, res) => {
+  if (!req.body.userId) {
+    return res.status(200).json({
+      errCode: 1,
+      errMessage: "Missing required parameters!",
+    });
+  }
+  let message = await adminService.deleteDoctor(req.body.userId);
+  return res.status(200).json(message);
 };
 
 module.exports = {
@@ -168,4 +185,6 @@ module.exports = {
 
   createNewDoctor: createNewDoctor,
   getAllDoctors: getAllDoctors,
+  editDoctorInfo: editDoctorInfo,
+  deleteDoctor: deleteDoctor,
 };

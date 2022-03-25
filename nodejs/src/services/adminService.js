@@ -366,11 +366,11 @@ let createDoctor = async (data) => {
   });
 };
 
-let getAllDoctors = async (doctorId) => {
+let getAllDoctors = async (doctorUserId) => {
   return new Promise(async (resolve, reject) => {
     try {
       let doctors = "";
-      if (doctorId === "ALL") {
+      if (doctorUserId === "ALL") {
         doctors = await db.Doctor.findAll({
           attributes: {
             include: [
@@ -388,9 +388,9 @@ let getAllDoctors = async (doctorId) => {
         });
       }
 
-      if (doctorId && doctorId !== "ALL") {
+      if (doctorUserId && doctorUserId !== "ALL") {
         doctors = await db.Doctor.findOne({
-          where: { id: doctorId },
+          where: { userId: doctorUserId },
           attributes: {
             include: [
               "userId",
@@ -413,6 +413,66 @@ let getAllDoctors = async (doctorId) => {
   });
 };
 
+let editDoctor = async (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.userId) {
+        resolve({
+          errCode: 2,
+          errMessage: "Missing required parameters!",
+        });
+      }
+
+      let doctor = await db.Doctor.findOne({
+        where: { userId: data.userId },
+        raw: false,
+      });
+      if (doctor) {
+        doctor.about = data.about;
+        doctor.serviceId = data.serviceId;
+        doctor.branchId = data.branchId;
+
+        await doctor.save();
+        resolve({
+          errCode: 0,
+          message: "Update doctor information successfully!",
+        });
+      } else {
+        resolve({
+          errCode: 1,
+          errMessage: "Doctor not found",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let deleteDoctor = async (doctorUserId) => {
+  return new Promise(async (resolve, reject) => {
+    let doctor = await db.Doctor.findOne({
+      where: { userId: doctorUserId },
+    });
+
+    if (!doctor) {
+      resolve({
+        errCode: 2,
+        errMessage: "Doctor not found",
+      });
+    }
+
+    await db.Doctor.destroy({
+      where: { userId: doctorUserId },
+    });
+
+    resolve({
+      errCode: 0,
+      message: "Doctor is deleted",
+    });
+  });
+};
+
 module.exports = {
   createNewUserByAdmin: createNewUserByAdmin,
   getAllUsers: getAllUsers,
@@ -431,4 +491,6 @@ module.exports = {
 
   createDoctor: createDoctor,
   getAllDoctors: getAllDoctors,
+  editDoctor: editDoctor,
+  deleteDoctor: deleteDoctor,
 };
