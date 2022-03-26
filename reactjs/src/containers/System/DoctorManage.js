@@ -3,7 +3,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Label, Input, Col, Container, InputGroup, InputGroupText } from "reactstrap";
 import "./UserManage.scss";
-import { getAllDoctors, createNewDoctor, editDoctor, deleteDoctor, getAllBranches, getAllServices } from "../../services/adminService";
+import { getAllDoctors, createNewDoctor, editDoctor, deleteDoctor, getAllBranches, getAllServices, getAllUsers } from "../../services/adminService";
+import DoctorModal from "./DoctorModal";
 
 // import { values } from "lodash";
 
@@ -22,11 +23,13 @@ class UserManage extends Component {
       service: "",
       branchList: [],
       serviceList: [],
+      unregisteredDoctors: [],
     };
   }
 
   async componentDidMount() {
     this.getAllDoctorsFromDB();
+    this.getUnregisteredDoctors();
   }
 
   getAllDoctorsFromDB = async () => {
@@ -49,6 +52,29 @@ class UserManage extends Component {
     }
   };
 
+  getUnregisteredDoctors = async () => {
+    let users = await getAllUsers("ALL");
+    if (users) {
+      let doctors = users.users.filter((user) => {
+        return user.roleId === "R2" && this.checkRegister(user);
+      });
+      if (doctors) {
+        this.setState({
+          unregisteredDoctors: doctors,
+        });
+      }
+    }
+  };
+
+  checkRegister = (doctorToBeChecked) => {
+    let doctor = this.state.arrDoctors.find(({ userId }) => userId === doctorToBeChecked.id);
+    if (doctor) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   handleAddNewDoctor = () => {
     this.setState({
       isOpenModalDoctor: true,
@@ -61,7 +87,7 @@ class UserManage extends Component {
     });
   };
 
-  createNewUser = async (data) => {
+  createNewDoctor = async (data) => {
     let success = false;
     try {
       let response = await createNewDoctor(data);
@@ -69,6 +95,7 @@ class UserManage extends Component {
         alert(response.errMessage);
       } else {
         await this.getAllDoctorsFromDB();
+        await this.getUnregisteredDoctors();
         this.setState({
           isOpenModalDoctor: false,
         });
@@ -94,15 +121,15 @@ class UserManage extends Component {
   };
 
   handleDeleteDoctor = async (user) => {
-    try {
-      await deleteDoctor(user.id);
-      await this.getAllDoctorsFromDB();
-      this.setState({
-        isOpenModalDeleteDoctorConfirm: false,
-      });
-    } catch (e) {
-      console.log(e);
-    }
+    // try {
+    //   await deleteDoctor(user.id);
+    //   await this.getAllDoctorsFromDB();
+    //   this.setState({
+    //     isOpenModalDeleteDoctorConfirm: false,
+    //   });
+    // } catch (e) {
+    //   console.log(e);
+    // }
   };
 
   toggleModalEditDoctor = () => {
@@ -119,15 +146,15 @@ class UserManage extends Component {
   };
 
   handleEditDoctor = async (doctor) => {
-    try {
-      await editDoctor(doctor);
-      await this.getAllDoctorsFromDB();
-      this.setState({
-        isOpenModalEditDoctor: false,
-      });
-    } catch (e) {
-      console.log(e);
-    }
+    // try {
+    //   await editDoctor(doctor);
+    //   await this.getAllDoctorsFromDB();
+    //   this.setState({
+    //     isOpenModalEditDoctor: false,
+    //   });
+    // } catch (e) {
+    //   console.log(e);
+    // }
   };
 
   handleOnChangeInput = (event, id) => {
@@ -209,9 +236,16 @@ class UserManage extends Component {
 
     return (
       <div className="users-container mx-1">
-        {/* <ModalUser isOpen={this.state.isOpenModalDoctor} toggleModalFromParent={this.toggleDoctorModal} createNewUser={this.createNewUser} />
+        <DoctorModal
+          isOpen={this.state.isOpenModalDoctor}
+          toggleModalFromParent={this.toggleDoctorModal}
+          createNewDoctor={this.createNewDoctor}
+          doctorList={this.state.unregisteredDoctors}
+          serviceList={this.state.serviceList}
+          branchList={this.state.branchList}
+        />
 
-        <ModalDeleteUserConfirm
+        {/* <ModalDeleteUserConfirm
           isOpen={this.state.isOpenModalDeleteDoctorConfirm}
           toggleModalFromParent={this.toggleModalDeleteDoctorConfirm}
           deleteUserByAdmin={this.handleDeleteDoctor}
