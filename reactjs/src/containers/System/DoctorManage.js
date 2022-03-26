@@ -5,6 +5,8 @@ import { Label, Input, Col, Container, InputGroup, InputGroupText } from "reacts
 import "./UserManage.scss";
 import { getAllDoctors, createNewDoctor, editDoctor, deleteDoctor, getAllBranches, getAllServices, getAllUsers } from "../../services/adminService";
 import DoctorModal from "./DoctorModal";
+import DoctorEditModal from "./DoctorEditModal";
+import DoctorDeleteModal from "./DoctorDeleteModal";
 
 // import { values } from "lodash";
 
@@ -120,16 +122,17 @@ class UserManage extends Component {
     });
   };
 
-  handleDeleteDoctor = async (user) => {
-    // try {
-    //   await deleteDoctor(user.id);
-    //   await this.getAllDoctorsFromDB();
-    //   this.setState({
-    //     isOpenModalDeleteDoctorConfirm: false,
-    //   });
-    // } catch (e) {
-    //   console.log(e);
-    // }
+  handleDeleteDoctor = async (doctor) => {
+    try {
+      await deleteDoctor(doctor.userId);
+      await this.getAllDoctorsFromDB();
+      await this.getUnregisteredDoctors();
+      this.setState({
+        isOpenModalDeleteDoctorConfirm: false,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   toggleModalEditDoctor = () => {
@@ -146,15 +149,15 @@ class UserManage extends Component {
   };
 
   handleEditDoctor = async (doctor) => {
-    // try {
-    //   await editDoctor(doctor);
-    //   await this.getAllDoctorsFromDB();
-    //   this.setState({
-    //     isOpenModalEditDoctor: false,
-    //   });
-    // } catch (e) {
-    //   console.log(e);
-    // }
+    try {
+      await editDoctor(doctor);
+      await this.getAllDoctorsFromDB();
+      this.setState({
+        isOpenModalEditDoctor: false,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   handleOnChangeInput = (event, id) => {
@@ -245,14 +248,23 @@ class UserManage extends Component {
           branchList={this.state.branchList}
         />
 
-        {/* <ModalDeleteUserConfirm
+        <DoctorDeleteModal
           isOpen={this.state.isOpenModalDeleteDoctorConfirm}
           toggleModalFromParent={this.toggleModalDeleteDoctorConfirm}
-          deleteUserByAdmin={this.handleDeleteDoctor}
-          user={this.state.doctorInEffect}
+          deleteDoctor={this.handleDeleteDoctor}
+          doctor={this.state.doctorInEffect}
+          serviceList={this.state.serviceList}
+          branchList={this.state.branchList}
         />
 
-        <ModalEditUser isOpen={this.state.isOpenModalEditDoctor} toggleModalFromParent={this.toggleModalEditDoctor} editUserByAdmin={this.handleEditDoctor} user={this.state.doctorInEffect} /> */}
+        <DoctorEditModal
+          isOpen={this.state.isOpenModalEditDoctor}
+          toggleModalFromParent={this.toggleModalEditDoctor}
+          editDoctor={this.handleEditDoctor}
+          doctor={this.state.doctorInEffect}
+          serviceList={this.state.serviceList}
+          branchList={this.state.branchList}
+        />
 
         <div className="title text-center">Manage doctors</div>
 

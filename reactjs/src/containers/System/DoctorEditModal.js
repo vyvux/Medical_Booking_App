@@ -2,11 +2,12 @@ import React, { Component } from "react";
 // import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-class DoctorModal extends Component {
+import _ from "lodash";
+class DoctorEditModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: "",
+      userId: "",
       gender: "",
       serviceId: "",
       branchId: "",
@@ -18,6 +19,24 @@ class DoctorModal extends Component {
 
   componentDidMount() {}
 
+  // change state when new data row is selected
+  componentDidUpdate() {
+    if (this.props.doctor.userId !== this.state.userId) {
+      let doctor = this.props.doctor;
+      if (doctor && !_.isEmpty(doctor)) {
+        this.setState({
+          userId: doctor.userId,
+          gender: doctor.gender,
+          serviceId: doctor.serviceId,
+          branchId: doctor.branchId,
+          about: doctor.about,
+          firstName: doctor.firstName,
+          lastName: doctor.lastName,
+        });
+      }
+    }
+  }
+
   toggle = () => {
     this.props.toggleModalFromParent();
   };
@@ -25,34 +44,14 @@ class DoctorModal extends Component {
   handleOnChangeInput = (event, id) => {
     let copyState = { ...this.state };
     copyState[id] = event.target.value;
-    this.setState(
-      {
-        ...copyState,
-      },
-      () => {
-        if (id === "id") {
-          this.assignDoctorName();
-        }
-      }
-    );
-  };
-
-  assignDoctorName = () => {
-    let doctors = this.props.doctorList;
-    if (doctors) {
-      let selectDoctor = doctors.find(({ id }) => id == this.state.id);
-      if (selectDoctor) {
-        this.setState({
-          firstName: selectDoctor.firstName,
-          lastName: selectDoctor.lastName,
-        });
-      }
-    }
+    this.setState({
+      ...copyState,
+    });
   };
 
   validateInputs = () => {
     let isValid = true;
-    let arrInputs = ["id", "gender", "firstName", "lastName", "serviceId", "branchId", "about"];
+    let arrInputs = ["userId", "gender", "serviceId", "branchId", "about"];
     for (let i = 0; i < arrInputs.length; i++) {
       if (!this.state[arrInputs[i]]) {
         isValid = false;
@@ -63,28 +62,15 @@ class DoctorModal extends Component {
     return isValid;
   };
 
-  handleAddNewDoctor = async () => {
+  handleEditDoctor = async () => {
     let isValid = this.validateInputs();
     if (isValid === true) {
       // call api
-      let success = await this.props.createNewDoctor(this.state);
-      if (success) {
-        this.setState({
-          id: "",
-          gender: "",
-          serviceId: "",
-          branchId: "",
-          about: "",
-          firstName: "",
-          lastName: "",
-        });
-      }
-      console.log(this.state);
+      await this.props.editDoctor(this.state);
     }
   };
 
   render() {
-    let unregisteredDoctors = this.props.doctorList;
     let services = this.props.serviceList;
     let branches = this.props.branchList;
     return (
@@ -102,7 +88,7 @@ class DoctorModal extends Component {
             this.toggle();
           }}
         >
-          Create New Doctor
+          Edit Doctor Information
         </ModalHeader>
         <ModalBody>
           <div className="modal-user-body">
@@ -113,23 +99,10 @@ class DoctorModal extends Component {
                   <label className="input-group-text" htmlFor="userId">
                     User
                   </label>
-                  <select
-                    className="form-select"
-                    id="userId"
-                    onChange={(event) => {
-                      this.handleOnChangeInput(event, "id");
-                    }}
-                    value={this.state.id}
-                  >
-                    <option value="">Choose...</option>
-                    {unregisteredDoctors &&
-                      unregisteredDoctors.map((item, index) => {
-                        return (
-                          <option value={item.id} key={item.id}>
-                            ID {item.id} - {item.firstName} {item.lastName}
-                          </option>
-                        );
-                      })}
+                  <select className="form-select" id="userId" value={this.state.id}>
+                    <option value={this.state.userId}>
+                      ID {this.state.userId} - {this.state.firstName} {this.state.lastName}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -232,10 +205,10 @@ class DoctorModal extends Component {
             className="px-3"
             color="primary"
             onClick={() => {
-              this.handleAddNewDoctor();
+              this.handleEditDoctor();
             }}
           >
-            Submit Doctor
+            Save Changes
           </Button>{" "}
           <Button
             className="px-3"
@@ -259,4 +232,4 @@ const mapDispatchToProps = (dispatch) => {
   return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DoctorModal);
+export default connect(mapStateToProps, mapDispatchToProps)(DoctorEditModal);
