@@ -22,6 +22,10 @@ export const adminMenu = [
             name: "menu.system.system-administrator.doctor-manage",
             link: "/system/doctor-manage",
           },
+          {
+            name: "menu.system.system-administrator.log-manage",
+            link: "/system/log-manage",
+          },
         ],
       },
       // { name: 'menu.system.system-parameter.header', link: '/system/system-parameter' },

@@ -10,7 +10,7 @@ import DoctorDeleteModal from "./DoctorDeleteModal";
 
 // import { values } from "lodash";
 
-class UserManage extends Component {
+class DoctorManage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -413,4 +413,4 @@ const mapDispatchToProps = (dispatch) => {
   return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserManage);
+export default connect(mapStateToProps, mapDispatchToProps)(DoctorManage);

@@ -5,6 +5,7 @@ import UserManage from "../containers/System/UserManage";
 import BranchManage from "../containers/System/BranchManage";
 import ServiceManage from "../containers/System/ServiceManage";
 import DoctorManage from "../containers/System/DoctorManage";
+import LogManage from "../containers/System/LogManage";
 
 class System extends Component {
   render() {
@@ -17,6 +18,7 @@ class System extends Component {
             <Route path="/system/branch-manage" component={BranchManage} />
             <Route path="/system/service-manage" component={ServiceManage} />
             <Route path="/system/doctor-manage" component={DoctorManage} />
+            <Route path="/system/log-manage" component={LogManage} />
             <Route
               component={() => {
                 return <Redirect to={systemMenuPath} />;

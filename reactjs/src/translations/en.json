@@ -33,7 +33,8 @@
         "user-manage": "User Manage",
         "branch-manage": "Branch Manage",
         "service-manage": "Service Manage",
-        "doctor-manage": "Doctor Manage"
+        "doctor-manage": "Doctor Manage",
+        "log-manage": "Log Manage"
       },
       "system-parameter": {
         "header": "System-parameter"

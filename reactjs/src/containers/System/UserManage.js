@@ -253,6 +253,7 @@ class UserManage extends Component {
           <table id="customers">
             <thead>
               <tr>
+                <th>User ID</th>
                 <th>Email</th>
                 <th>First Name</th>
                 <th>Last Name</th>
@@ -267,6 +268,7 @@ class UserManage extends Component {
                 filteredUserList.map((item, index) => {
                   return (
                     <tr key={item.id}>
+                      <td>{item.id}</td>
                       <td>{item.email}</td>
                       <td>{item.firstName}</td>
                       <td>{item.lastName}</td>
