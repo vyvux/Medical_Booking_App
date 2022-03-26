@@ -66,19 +66,31 @@ let deleteUserByAdmin = async (userId) => {
 
     if (!user) {
       resolve({
-        errCode: 2,
+        errCode: 1,
         errMessage: "User not found",
       });
     }
 
-    await db.User.destroy({
-      where: { id: userId },
+    // check if user is doctor role and is registered in doctor list
+    let doctor = await db.Doctor.findOne({
+      where: { userId: user.id },
     });
 
-    resolve({
-      errCode: 0,
-      message: "User is deleted",
-    });
+    if (doctor) {
+      resolve({
+        errCode: 2,
+        errMessage: "This user has doctor role and has been registered as a doctor. Consider remove the user from doctor list before deleting user.",
+      });
+    } else {
+      await db.User.destroy({
+        where: { id: userId },
+      });
+
+      resolve({
+        errCode: 0,
+        message: "User is deleted",
+      });
+    }
   });
 };
 

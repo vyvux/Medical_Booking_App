@@ -85,8 +85,12 @@ class UserManage extends Component {
 
   handleDeleteUser = async (user) => {
     try {
-      await deleteUserByAdmin(user.id);
-      await this.getAllUsersFromDB();
+      let response = await deleteUserByAdmin(user.id);
+      if (response && response.errCode !== 0) {
+        alert(response.errMessage);
+      } else {
+        await this.getAllUsersFromDB();
+      }
       this.setState({
         isOpenModalDeleteUserConfirm: false,
       });
