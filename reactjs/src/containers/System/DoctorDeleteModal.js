@@ -130,7 +130,7 @@ class DoctorDeleteModal extends Component {
         <ModalFooter>
           <Button
             className="px-3"
-            color="primary"
+            color="danger"
             onClick={() => {
               this.props.deleteDoctor(this.props.doctor);
             }}

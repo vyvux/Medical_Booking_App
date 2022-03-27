@@ -15,7 +15,7 @@ let createNewUserByAdmin = async (data) => {
 
         resolve({
           errCode: 0,
-          message: "OK. New user created",
+          message: "Create new user successfully!",
         });
       } else {
         resolve({
@@ -143,7 +143,7 @@ let createNewBranch = async (data) => {
       });
       resolve({
         errCode: 0,
-        message: "created new branch",
+        message: "Create new branch successfully!",
       });
     } catch (e) {
       reject(e);
@@ -223,19 +223,31 @@ let deleteBranch = async (branchId) => {
 
     if (!branch) {
       resolve({
-        errCode: 2,
+        errCode: 1,
         errMessage: "Branch not found",
       });
     }
 
-    await db.Branch.destroy({
-      where: { id: branchId },
+    // check if there is still any doctor registered for this branch
+    let doctor = await db.Doctor.findOne({
+      where: { branchId: branch.id },
     });
 
-    resolve({
-      errCode: 0,
-      message: "Branch is deleted",
-    });
+    if (doctor) {
+      resolve({
+        errCode: 2,
+        errMessage: "There is doctor registered with this branch. Consider remove all associated doctors before deleting this branch.",
+      });
+    } else {
+      await db.Branch.destroy({
+        where: { id: branchId },
+      });
+
+      resolve({
+        errCode: 0,
+        message: "Delete branch successfully!",
+      });
+    }
   });
 };
 
@@ -249,7 +261,7 @@ let createNewService = async (data) => {
       });
       resolve({
         errCode: 0,
-        message: "created new service",
+        message: "Create new service successfully!",
       });
     } catch (e) {
       reject(e);
@@ -332,14 +344,26 @@ let deleteService = async (serviceId) => {
       });
     }
 
-    await db.Service.destroy({
-      where: { id: serviceId },
+    // check if there is still any doctor registered for this branch
+    let doctor = await db.Doctor.findOne({
+      where: { serviceId: service.id },
     });
 
-    resolve({
-      errCode: 0,
-      message: "Service is deleted",
-    });
+    if (doctor) {
+      resolve({
+        errCode: 2,
+        errMessage: "There is doctor registered with this service. Consider remove all associated doctors before deleting this service.",
+      });
+    } else {
+      await db.Service.destroy({
+        where: { id: serviceId },
+      });
+
+      resolve({
+        errCode: 0,
+        message: "Service is deleted",
+      });
+    }
   });
 };
 
@@ -355,7 +379,7 @@ let createDoctor = async (data) => {
       if (findDoctor) {
         resolve({
           errCode: 1,
-          errMessage: "doctor already exists",
+          errMessage: "Doctor already exists!",
         });
       } else {
         let doctor = await db.Doctor.create({
@@ -369,7 +393,7 @@ let createDoctor = async (data) => {
         });
         resolve({
           errCode: 0,
-          message: "created doctor",
+          message: "Created doctor successfully!",
         });
       }
     } catch (e) {
@@ -480,7 +504,7 @@ let deleteDoctor = async (doctorUserId) => {
 
     resolve({
       errCode: 0,
-      message: "Doctor is deleted",
+      message: "Delete doctor successfully!",
     });
   });
 };

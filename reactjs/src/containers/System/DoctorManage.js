@@ -7,6 +7,7 @@ import { getAllDoctors, createNewDoctor, editDoctor, deleteDoctor, getAllBranche
 import DoctorModal from "./DoctorModal";
 import DoctorEditModal from "./DoctorEditModal";
 import DoctorDeleteModal from "./DoctorDeleteModal";
+import { toast } from "react-toastify";
 
 // import { values } from "lodash";
 
@@ -93,16 +94,17 @@ class DoctorManage extends Component {
     let success = false;
     try {
       let response = await createNewDoctor(data);
-      if (response && response.errCode !== 0) {
-        alert(response.errMessage);
-      } else {
+      if (response && response.errCode === 0) {
         await this.getAllDoctorsFromDB();
         await this.getUnregisteredDoctors();
-        this.setState({
-          isOpenModalDoctor: false,
-        });
+        toast.success(response.message);
         success = true;
+      } else {
+        toast.error(response.errMessage);
       }
+      this.setState({
+        isOpenModalDoctor: false,
+      });
     } catch (e) {
       console.log(e);
     }
@@ -124,9 +126,14 @@ class DoctorManage extends Component {
 
   handleDeleteDoctor = async (doctor) => {
     try {
-      await deleteDoctor(doctor.userId);
-      await this.getAllDoctorsFromDB();
-      await this.getUnregisteredDoctors();
+      let response = await deleteDoctor(doctor.userId);
+      if (response && response.errCode === 0) {
+        await this.getAllDoctorsFromDB();
+        await this.getUnregisteredDoctors();
+        toast.success(response.message);
+      } else {
+        toast.error(response.errMessage);
+      }
       this.setState({
         isOpenModalDeleteDoctorConfirm: false,
       });
@@ -150,8 +157,13 @@ class DoctorManage extends Component {
 
   handleEditDoctor = async (doctor) => {
     try {
-      await editDoctor(doctor);
-      await this.getAllDoctorsFromDB();
+      let response = await editDoctor(doctor);
+      if (response && response.errCode === 0) {
+        await this.getAllDoctorsFromDB();
+        toast.success(response.message);
+      } else {
+        toast.error(response.errMessage);
+      }
       this.setState({
         isOpenModalEditDoctor: false,
       });

@@ -122,7 +122,7 @@ class ServiceEditModal extends Component {
         <ModalFooter>
           <Button
             className="px-3"
-            color="primary"
+            color="warning"
             onClick={() => {
               this.handleEditService();
             }}

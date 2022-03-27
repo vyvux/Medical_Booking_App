@@ -83,7 +83,7 @@ class ModalDeleteUserConfirm extends Component {
         <ModalFooter>
           <Button
             className="px-3"
-            color="primary"
+            color="danger"
             onClick={() => {
               this.props.deleteUserByAdmin(this.props.user);
             }}

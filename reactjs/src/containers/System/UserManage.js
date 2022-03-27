@@ -7,6 +7,7 @@ import { getAllUsers, createNewUserByAdmin, deleteUserByAdmin, editUserByAdmin }
 import ModalUser from "./ModalUser";
 import ModalDeleteUserConfirm from "./ModalDeleteUserConfirm";
 import ModalEditUser from "./ModalEditUser";
+import { toast } from "react-toastify";
 // import { values } from "lodash";
 
 class UserManage extends Component {
@@ -56,13 +57,14 @@ class UserManage extends Component {
     try {
       let response = await createNewUserByAdmin(data);
       if (response && response.errCode !== 0) {
-        alert(response.errMessage);
+        toast.error(response.errMessage);
       } else {
         await this.getAllUsersFromDB();
         this.setState({
           isOpenModalUser: false,
         });
         success = true;
+        toast.success(response.message);
       }
     } catch (e) {
       console.log(e);
@@ -87,9 +89,10 @@ class UserManage extends Component {
     try {
       let response = await deleteUserByAdmin(user.id);
       if (response && response.errCode !== 0) {
-        alert(response.errMessage);
+        toast.error(response.errMessage, { autoClose: 10000 });
       } else {
         await this.getAllUsersFromDB();
+        toast.success(response.message);
       }
       this.setState({
         isOpenModalDeleteUserConfirm: false,
@@ -114,8 +117,13 @@ class UserManage extends Component {
 
   handleEditUser = async (user) => {
     try {
-      await editUserByAdmin(user);
-      await this.getAllUsersFromDB();
+      let response = await editUserByAdmin(user);
+      if (response && response.errCode === 0) {
+        await this.getAllUsersFromDB();
+        toast.success(response.message);
+      } else {
+        toast.error(response.errMessage);
+      }
       this.setState({
         isOpenModalEditUser: false,
       });
@@ -198,7 +206,12 @@ class UserManage extends Component {
         <div className="mt-1 mt-md-4 container">
           <div className="row justify-content-end justify-content-md-start">
             <div className="col-5 col-md-3">
-              <button className="btn btn-primary px-3 py-1" onClick={() => this.handleAddNewUser()}>
+              <button
+                className="btn btn-primary px-3 py-1"
+                onClick={() => {
+                  this.handleAddNewUser();
+                }}
+              >
                 <i className="fas fa-plus"></i> New User
               </button>
             </div>

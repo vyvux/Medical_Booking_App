@@ -2,6 +2,7 @@ import React, { Component } from "react";
 // import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { toast } from "react-toastify";
 class DoctorModal extends Component {
   constructor(props) {
     super(props);
@@ -56,7 +57,7 @@ class DoctorModal extends Component {
     for (let i = 0; i < arrInputs.length; i++) {
       if (!this.state[arrInputs[i]]) {
         isValid = false;
-        alert("Missing parameter: " + arrInputs[i]);
+        toast.warning("Missing parameter: " + arrInputs[i]);
         break;
       }
     }

@@ -60,7 +60,7 @@ class ServiceDeleteModal extends Component {
         <ModalFooter>
           <Button
             className="px-3"
-            color="primary"
+            color="danger"
             onClick={() => {
               this.props.deleteService(this.props.service);
             }}

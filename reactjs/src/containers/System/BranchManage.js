@@ -6,6 +6,7 @@ import BranchModal from "./BranchModal";
 import BranchEditModal from "./BranchEditModal";
 import "./UserManage.scss";
 import BranchDeleteModal from "./BranchDeleteModal";
+import { toast } from "react-toastify";
 
 class BranchManage extends Component {
   state = {};
@@ -47,22 +48,19 @@ class BranchManage extends Component {
   };
 
   createNewBranch = async (data) => {
-    let succes = false;
+    let success = false;
     try {
       let response = await createNewBranch(data);
-      if (response && response.errCode !== 0) {
-        alert(response.errMessage);
-      } else {
-        await this.getAllBranchesFromDB();
-        this.setState({
-          isOpenModalBranch: false,
-        });
-      }
-      succes = true;
+      await this.getAllBranchesFromDB();
+      this.setState({
+        isOpenModalBranch: false,
+      });
+      toast.success(response.message);
+      success = true;
     } catch (e) {
       console.log(e);
     }
-    return succes;
+    return success;
   };
 
   toggleModalDeleteBranchConfirm = () => {
@@ -80,8 +78,13 @@ class BranchManage extends Component {
 
   handleDeleteBranch = async (branch) => {
     try {
-      await deleteBranch(branch.id);
-      await this.getAllBranchesFromDB();
+      let response = await deleteBranch(branch.id);
+      if (response && response.errCode === 0) {
+        await this.getAllBranchesFromDB();
+        toast.success(response.message);
+      } else {
+        toast.error(response.errMessage, { autoClose: 8000 });
+      }
       this.setState({
         isOpenModalDeleteBranchConfirm: false,
       });
@@ -105,8 +108,13 @@ class BranchManage extends Component {
 
   handleEditBranch = async (branch) => {
     try {
-      await editBranch(branch);
-      await this.getAllBranchesFromDB();
+      let response = await editBranch(branch);
+      if (response && response.errCode === 0) {
+        await this.getAllBranchesFromDB();
+        toast.success(response.message);
+      } else {
+        toast.error(response.errMessage);
+      }
       this.setState({
         isOpenModalEditBranch: false,
       });

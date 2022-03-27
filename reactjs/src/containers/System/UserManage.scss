@@ -35,7 +35,7 @@
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
-    background-color: #04aa6d;
+    background-color: #3c796b;
     color: white;
     padding-left: 10px;
   }
@@ -100,6 +100,12 @@
     max-height: 75vh;
     overflow-y: auto;
   }
+}
+
+.form-control:focus,
+.input-group select:focus {
+  border-color: #3c796b; //#28a745
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
 }
 
 // toggle modal

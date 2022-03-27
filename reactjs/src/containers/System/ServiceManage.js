@@ -6,6 +6,7 @@ import "./UserManage.scss";
 import ServiceModal from "./ServiceModal";
 import ServiceEditModal from "./ServiceEditModal";
 import ServiceDeleteModal from "./ServiceDeleteModal";
+import { toast } from "react-toastify";
 
 class ServiceManage extends Component {
   state = {};
@@ -47,22 +48,19 @@ class ServiceManage extends Component {
   };
 
   createNewService = async (data) => {
-    let succes = false;
+    let success = false;
     try {
       let response = await createNewService(data);
-      if (response && response.errCode !== 0) {
-        alert(response.errMessage);
-      } else {
-        await this.getAllServicesFromDB();
-        this.setState({
-          isOpenModalService: false,
-        });
-      }
-      succes = true;
+      await this.getAllServicesFromDB();
+      toast.success(response.message);
+      this.setState({
+        isOpenModalService: false,
+      });
+      success = true;
     } catch (e) {
       console.log(e);
     }
-    return succes;
+    return success;
   };
 
   toggleModalDeleteServiceConfirm = () => {
@@ -80,8 +78,13 @@ class ServiceManage extends Component {
 
   handleDeleteService = async (service) => {
     try {
-      await deleteService(service.id);
-      await this.getAllServicesFromDB();
+      let response = await deleteService(service.id);
+      if (response && response.errCode === 0) {
+        await this.getAllServicesFromDB();
+        toast.success(response.message);
+      } else {
+        toast.error(response.errMessage, { autoClose: 8000 });
+      }
       this.setState({
         isOpenModalDeleteServiceConfirm: false,
       });
@@ -105,8 +108,13 @@ class ServiceManage extends Component {
 
   handleEditService = async (service) => {
     try {
-      await editService(service);
-      await this.getAllServicesFromDB();
+      let response = await editService(service);
+      if (response && response.errCode === 0) {
+        await this.getAllServicesFromDB();
+        toast.success(response.message);
+      } else {
+        toast.error(response.errMessage);
+      }
       this.setState({
         isOpenModalEditService: false,
       });
