@@ -2,6 +2,7 @@ import React, { Component } from "react";
 // import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { toast } from "react-toastify";
 import _ from "lodash";
 class DoctorEditModal extends Component {
   constructor(props) {
@@ -55,7 +56,7 @@ class DoctorEditModal extends Component {
     for (let i = 0; i < arrInputs.length; i++) {
       if (!this.state[arrInputs[i]]) {
         isValid = false;
-        alert("Missing parameter: " + arrInputs[i]);
+        toast.error("Missing parameter: " + arrInputs[i]);
         break;
       }
     }
@@ -99,7 +100,7 @@ class DoctorEditModal extends Component {
                   <label className="input-group-text" htmlFor="userId">
                     User
                   </label>
-                  <select className="form-select" id="userId" value={this.state.userId}>
+                  <select className="form-select" id="userId" defaultValue={this.state.userId}>
                     <option value={this.state.userId}>
                       ID {this.state.userId} - {this.state.firstName} {this.state.lastName}
                     </option>

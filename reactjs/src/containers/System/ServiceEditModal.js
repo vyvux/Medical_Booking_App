@@ -2,6 +2,7 @@ import React, { Component } from "react";
 // import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { toast } from "react-toastify";
 import _ from "lodash";
 class ServiceEditModal extends Component {
   constructor(props) {
@@ -47,7 +48,7 @@ class ServiceEditModal extends Component {
     for (let i = 0; i < arrInputs.length; i++) {
       if (!this.state[arrInputs[i]]) {
         isValid = false;
-        alert("Missing parameter: " + arrInputs[i]);
+        toast.error("Missing parameter: " + arrInputs[i]);
         break;
       }
     }
