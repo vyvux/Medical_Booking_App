@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Label, Input, Col, Container, InputGroup, InputGroupText } from "reactstrap";
 import "./UserManage.scss";
 import { getAllDoctors, createNewDoctor, editDoctor, deleteDoctor, getAllBranches, getAllServices, getAllUsers } from "../../services/adminService";
+import { renderGender, renderBranch, renderService } from "./AllCode";
 import DoctorModal from "./DoctorModal";
 import DoctorEditModal from "./DoctorEditModal";
 import DoctorDeleteModal from "./DoctorDeleteModal";
@@ -222,33 +223,6 @@ class DoctorManage extends Component {
     let serviceList = this.state.serviceList;
     let branchList = this.state.branchList;
 
-    const renderGender = (gender) => {
-      switch (gender) {
-        case 1:
-          return "Male";
-        default:
-          return "Female";
-      }
-    };
-
-    const renderService = (serviceId) => {
-      let service = serviceList.find(({ id }) => id === serviceId);
-      if (service) {
-        return service.name;
-      } else {
-        return "";
-      }
-    };
-
-    const renderBranch = (branchId) => {
-      let branch = branchList.find(({ id }) => id === branchId);
-      if (branch) {
-        return branch.name;
-      } else {
-        return "";
-      }
-    };
-
     return (
       <div className="users-container mx-1">
         <DoctorModal
@@ -284,7 +258,7 @@ class DoctorManage extends Component {
           <div className="row justify-content-end justify-content-md-start">
             {/* add new button */}
             <div className="col-5 col-md-3">
-              <button className="btn btn-primary px-3 py-1 " onClick={() => this.handleAddNewDoctor()}>
+              <button className="btn btn-success px-3 py-1 " onClick={() => this.handleAddNewDoctor()}>
                 <i className="fas fa-plus"></i> New Doctor
               </button>
             </div>
@@ -394,8 +368,8 @@ class DoctorManage extends Component {
                       <td>{item.userId}</td>
                       <td>{item.firstName}</td>
                       <td>{item.lastName}</td>
-                      <td>{renderService(item.serviceId)}</td>
-                      <td>{renderBranch(item.branchId)}</td>
+                      <td>{renderService(serviceList, item.serviceId)}</td>
+                      <td>{renderBranch(branchList, item.branchId)}</td>
                       <td className="limited-word">{item.about}</td>
                       <td>{renderGender(item.gender)}</td>
                       <td>

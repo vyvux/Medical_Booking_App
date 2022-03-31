@@ -207,7 +207,7 @@ class UserManage extends Component {
           <div className="row justify-content-end justify-content-md-start">
             <div className="col-5 col-md-3">
               <button
-                className="btn btn-primary px-3 py-1"
+                className="btn btn-success px-3 py-1"
                 onClick={() => {
                   this.handleAddNewUser();
                 }}

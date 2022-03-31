@@ -141,7 +141,7 @@ class ServiceManage extends Component {
         <div className="title text-center">Manage services</div>
         {/* Add new button */}
         <div className="mt-1 mt-md-4 container">
-          <button className="btn btn-primary px-3 py-1" onClick={() => this.handleAddNewService()}>
+          <button className="btn btn-success px-3 py-1" onClick={() => this.handleAddNewService()}>
             <i className="fas fa-plus"></i> New Service
           </button>
         </div>

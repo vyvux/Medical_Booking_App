@@ -8,13 +8,24 @@ import "./Header.scss";
 
 class Header extends Component {
   render() {
-    const { processLogout } = this.props;
+    const { processLogout, userInfo } = this.props;
 
     return (
       <div className="header-container">
         {/* navigator bar */}
-        <div className="header-tabs-container">
+        <div>
           <Navigator menus={adminMenu} />
+        </div>
+
+        <div className="user-info container">
+          <div className="row justify-content-end align-items-center">
+            <div className="col-1 col-sm-1 text-right">
+              <i className="fas fa-user-circle fa-2x"></i>
+            </div>
+            <div className="col-5 offset-1 col-sm-2 offset-sm-0 text-left">
+              {userInfo.firstName} {userInfo.lastName}
+            </div>
+          </div>
         </div>
 
         {/* logout button */}

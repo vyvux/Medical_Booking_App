@@ -99,7 +99,7 @@ class DoctorEditModal extends Component {
                   <label className="input-group-text" htmlFor="userId">
                     User
                   </label>
-                  <select className="form-select" id="userId" value={this.state.id}>
+                  <select className="form-select" id="userId" value={this.state.userId}>
                     <option value={this.state.userId}>
                       ID {this.state.userId} - {this.state.firstName} {this.state.lastName}
                     </option>

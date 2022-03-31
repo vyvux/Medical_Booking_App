@@ -9,12 +9,15 @@
   // background: linear-gradient(204deg, rgba(34, 193, 195, 1) 0%, rgba(234, 45, 253, 1) 100%);
   background: linear-gradient(204deg, rgba(143, 188, 139, 1) 0%, rgba(0, 73, 83, 1) 100%);
   color: $common-text-color;
-  height: 40px;
+  height: 45px;
   position: relative;
+  .user-info {
+    font-size: medium;
+  }
   .btn-logout {
     color: $common-text-color;
-    line-height: 40px;
-    height: 40px;
+    line-height: 45px;
+    height: 45px;
     padding: 0 10px;
     &:hover {
       color: $text-in-light;

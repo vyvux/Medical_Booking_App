@@ -140,7 +140,7 @@ class BranchManage extends Component {
         <div className="title text-center">Manage branches</div>
         {/* Add new button */}
         <div className="mt-1 mt-md-4 container">
-          <button className="btn btn-primary px-3 py-1" onClick={() => this.handleAddNewBranch()}>
+          <button className="btn btn-success px-3 py-1" onClick={() => this.handleAddNewBranch()}>
             <i className="fas fa-plus"></i> New Branch
           </button>
         </div>

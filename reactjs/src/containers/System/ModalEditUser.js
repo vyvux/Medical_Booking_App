@@ -9,7 +9,7 @@ class ModalEditUser extends Component {
     this.state = {
       id: "",
       email: "",
-      roleId: "",
+      // roleId: "",
       firstName: "",
       lastName: "",
     };
@@ -47,7 +47,7 @@ class ModalEditUser extends Component {
 
   validateInputs = () => {
     let isValid = true;
-    let arrInputs = ["email", "firstName", "lastName", "roleId"];
+    let arrInputs = ["email", "firstName", "lastName"];
     for (let i = 0; i < arrInputs.length; i++) {
       if (!this.state[arrInputs[i]]) {
         isValid = false;
@@ -67,6 +67,20 @@ class ModalEditUser extends Component {
   };
 
   render() {
+    const renderRole = (roleId) => {
+      switch (roleId) {
+        case "R1":
+          return "Admin";
+        case "R2":
+          return "Doctor";
+        case "R3":
+          return "Patient";
+        case "R4":
+          return "Medical Staff";
+        default:
+          return "Unknown role";
+      }
+    };
     return (
       <Modal
         isOpen={this.props.isOpen}
@@ -110,18 +124,8 @@ class ModalEditUser extends Component {
                   <label className="input-group-text" htmlFor="role">
                     Role
                   </label>
-                  <select
-                    className="form-select"
-                    id="role"
-                    value={this.state.roleId}
-                    onChange={(event) => {
-                      this.handleOnChangeInput(event, "roleId");
-                    }}
-                  >
-                    <option value="R1">Admin</option>
-                    <option value="R2">Doctor</option>
-                    <option value="R4">Medical Staff</option>
-                    <option value="R3">Patient</option>
+                  <select className="form-select" id="role" value={this.state.roleId}>
+                    <option value={this.state.roleId}>{renderRole(this.state.roleId)}</option>
                   </select>
                 </div>
               </div>
