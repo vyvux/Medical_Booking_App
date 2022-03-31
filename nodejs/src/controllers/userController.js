@@ -21,6 +21,14 @@ let handleLogin = async (req, res) => {
   });
 };
 
+let getAllCodes = async (req, res) => {
+  let response = await systemUserService.getAllCodes();
+  return res.status(200).json({
+    allCodes: response ? response : {},
+  });
+};
+
 module.exports = {
   handleLogin: handleLogin,
+  getAllCodes: getAllCodes,
 };

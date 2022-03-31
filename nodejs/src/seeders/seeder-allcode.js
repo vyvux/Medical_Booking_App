@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert("Allcode", [
+    return queryInterface.bulkInsert("Allcodes", [
       {
         type: "role",
         key: "R1",
@@ -132,14 +132,42 @@ module.exports = {
       {
         type: "actionType",
         key: "A4",
-        value: "Edit patient profile",
+        value: "Delete user",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         type: "actionType",
         key: "A5",
-        value: "Add medical file",
+        value: "Edit user information",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        type: "actionType",
+        key: "A5",
+        value: "Edit patient profile",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        type: "actionType",
+        key: "A6",
+        value: "Add doctor available hours",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        type: "actionType",
+        key: "A7",
+        value: "Remove doctor available hours",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        type: "actionType",
+        key: "A8",
+        value: "User login",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -153,6 +181,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    return queryInterface.bulkDelete("Allcode", null, {});
+    return queryInterface.bulkDelete("Allcodes", null, {});
   },
 };

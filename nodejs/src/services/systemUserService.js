@@ -143,6 +143,19 @@ let checkValidPatientId = (patientId) => {
   });
 };
 
+let getAllCodes = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let allCodes = await db.Allcode.findAll({
+        attributes: ["key", "value"],
+      });
+      resolve(allCodes);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   handleUserLogin: handleUserLogin,
 
@@ -151,4 +164,5 @@ module.exports = {
   checkValidPatientId: checkValidPatientId,
   createNewUser: createNewUser,
   createNewPatient: createNewPatient,
+  getAllCodes: getAllCodes,
 };
