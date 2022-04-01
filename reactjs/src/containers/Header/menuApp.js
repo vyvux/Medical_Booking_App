@@ -26,6 +26,10 @@ export const adminMenu = [
             name: "menu.system.system-administrator.log-manage",
             link: "/system/log-manage",
           },
+          {
+            name: "menu.system.system-administrator.patient-manage",
+            link: "/system/patient-manage",
+          },
         ],
       },
       // { name: 'menu.system.system-parameter.header', link: '/system/system-parameter' },

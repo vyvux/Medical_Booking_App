@@ -34,7 +34,8 @@
         "branch-manage": "Branch Manage",
         "service-manage": "Service Manage",
         "doctor-manage": "Doctor Manage",
-        "log-manage": "Log Manage"
+        "log-manage": "Log Manage",
+        "patient-manage": "Patient Manage"
       },
       "system-parameter": {
         "header": "System-parameter"
@@ -43,7 +44,7 @@
   },
   "system": {
     "user-manage": {
-      "fail-to-load-fouser": "Fail to load system users list",
+      "fail-to-load-user": "Fail to load system users list",
       "user-id": "User ID",
       "usertype": "User type",
       "username": "Username",

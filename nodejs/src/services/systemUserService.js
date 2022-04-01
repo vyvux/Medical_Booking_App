@@ -156,6 +156,55 @@ let getAllCodes = () => {
   });
 };
 
+let getAllPatients = (patientId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let patients = "";
+      if (patientId === "ALL") {
+        patients = await db.Patient.findAll({
+          attributes: {
+            include: [
+              "id",
+              "userId",
+              "phoneNumber",
+              "address",
+              "allergy",
+              "firstName",
+              "lastName",
+              [sequelize.fn("DATE_FORMAT", sequelize.col("createdAt"), "%d-%m-%Y %H:%i:%s"), "createdAt"],
+              [sequelize.fn("DATE_FORMAT", sequelize.col("dob"), "%d-%m-%Y"), "dob"],
+              "updatedAt",
+            ],
+          },
+        });
+      }
+
+      if (patientId && patientId !== "ALL") {
+        patients = await db.Patient.findOne({
+          where: { id: patientId },
+          attributes: {
+            include: [
+              "id",
+              "userId",
+              "phoneNumber",
+              "address",
+              "allergy",
+              "firstName",
+              "lastName",
+              [sequelize.fn("DATE_FORMAT", sequelize.col("createdAt"), "%d-%m-%Y %H:%i:%s"), "createdAt"],
+              [sequelize.fn("DATE_FORMAT", sequelize.col("dob"), "%d-%m-%Y"), "dob"],
+              "updatedAt",
+            ],
+          },
+        });
+      }
+      resolve(patients);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   handleUserLogin: handleUserLogin,
 
@@ -165,4 +214,5 @@ module.exports = {
   createNewUser: createNewUser,
   createNewPatient: createNewPatient,
   getAllCodes: getAllCodes,
+  getAllPatients: getAllPatients,
 };

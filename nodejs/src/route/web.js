@@ -13,6 +13,10 @@ let initWebRoutes = (app) => {
 
   router.get("/api/get-all-code", userController.getAllCodes);
 
+  router.get("/api/get-all-patients", userController.getAllPatients);
+
+  router.post("/api/create-patient", userController.createPatient);
+
   return app.use("/", router);
 };
 

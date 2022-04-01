@@ -28,7 +28,31 @@ let getAllCodes = async (req, res) => {
   });
 };
 
+let getAllPatients = async (req, res) => {
+  let id = req.query.id;
+  if (!id) {
+    return res.status(200).json({
+      errCode: 1,
+      errMessage: "Missing required parameters",
+      branches: [],
+    });
+  }
+  let patients = await systemUserService.getAllPatients(id);
+  return res.status(200).json({
+    errCode: 0,
+    errMessage: "OK",
+    patients,
+  });
+};
+
+let createPatient = async (req, res) => {
+  let message = await systemUserService.createNewPatient(req.body);
+  return res.status(200).json(message);
+};
+
 module.exports = {
   handleLogin: handleLogin,
   getAllCodes: getAllCodes,
+  getAllPatients: getAllPatients,
+  createPatient: createPatient,
 };

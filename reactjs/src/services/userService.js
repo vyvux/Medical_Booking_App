@@ -7,4 +7,8 @@ const handleLoginApi = (email, password) => {
 const getAllCodes = () => {
   return axios.get("/api/get-all-code");
 };
-export { handleLoginApi, getAllCodes };
+
+const getAllPatients = (patientId) => {
+  return axios.get(`/api/get-all-patients?id=${patientId}`);
+};
+export { handleLoginApi, getAllCodes, getAllPatients };

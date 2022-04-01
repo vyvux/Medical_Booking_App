@@ -17,12 +17,12 @@ class Header extends Component {
           <Navigator menus={adminMenu} />
         </div>
 
-        <div className="user-info container">
+        <div className="container">
           <div className="row justify-content-end align-items-center">
             <div className="col-1 col-sm-1 text-right">
               <i className="fas fa-user-circle fa-2x"></i>
             </div>
-            <div className="col-5 offset-1 col-sm-2 offset-sm-0 text-left">
+            <div className="col-6 offset-1 col-sm-2 offset-sm-0 text-left">
               {userInfo.firstName} {userInfo.lastName}
             </div>
           </div>
