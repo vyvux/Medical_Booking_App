@@ -5,6 +5,7 @@ import { Label, Input, Col, Container, InputGroup, InputGroupText } from "reacts
 import "./UserManage.scss";
 import { getAllPatients } from "../../services/userService";
 import { renderGender } from "./AllCode";
+import PatientViewModal from "./PatientViewModal";
 // import { values } from "lodash";
 
 class PatientManage extends Component {
@@ -108,7 +109,7 @@ class PatientManage extends Component {
     let filteredPatientList = this.state.filteredPatientList;
     return (
       <div className="users-container mx-1">
-        {/* <PatientViewModal isOpen={this.state.isOpenModalViewPatient} toggleModalFromParent={this.toggleModalViewPatient} patient={this.state.patientInEffect} /> */}
+        <PatientViewModal isOpen={this.state.isOpenModalViewPatient} toggleModalFromParent={this.toggleModalViewPatient} patient={this.state.patientInEffect} />
 
         <div className="title text-center">Manage patients</div>
 
@@ -135,7 +136,7 @@ class PatientManage extends Component {
             {/* have registered user filter */}
             <div className="col-6 col-md-3">
               <Container className="d-flex flex-row justify-content-start drop-down">
-                <Label htmlFor="regSelect" lg={{ offset: 1, size: 5 }} md={{ size: 8 }} sm={{ size: "auto" }}>
+                <Label className="text-right" htmlFor="regSelect" lg={{ offset: 1, size: 5 }} md={{ size: 8 }} sm={{ size: "auto" }}>
                   Register status
                 </Label>
                 <Col md={{ size: 9 }} xs={{ offset: 1, size: 9 }}>
@@ -191,7 +192,7 @@ class PatientManage extends Component {
                       <td>{item.phoneNumber}</td>
                       <td className="limited-word-small">{item.address}</td>
                       <td className="limited-word-small">{item.allergy}</td>
-                      <td>{item.createdAt}</td>
+                      <td className="limited-word-small">{item.createdAt}</td>
                       <td>
                         <button className="btn-edit" onClick={() => this.openViewDoctorModal(item)}>
                           <i className="fas fa-eye"></i>

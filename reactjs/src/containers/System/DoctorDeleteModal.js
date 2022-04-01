@@ -2,6 +2,7 @@ import React, { Component } from "react";
 // import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { renderGender, renderBranch, renderService } from "./AllCode";
 class DoctorDeleteModal extends Component {
   constructor(props) {
     super(props);
@@ -16,32 +17,6 @@ class DoctorDeleteModal extends Component {
 
   render() {
     let doctor = this.props.doctor;
-    const renderGender = (gender) => {
-      switch (gender) {
-        case 1:
-          return "Male";
-        default:
-          return "Female";
-      }
-    };
-
-    const renderService = (serviceId) => {
-      let service = this.props.serviceList.find(({ id }) => id === serviceId);
-      if (service) {
-        return service.name;
-      } else {
-        return "";
-      }
-    };
-
-    const renderBranch = (branchId) => {
-      let branch = this.props.branchList.find(({ id }) => id === branchId);
-      if (branch) {
-        return branch.name;
-      } else {
-        return "";
-      }
-    };
 
     return (
       <Modal
@@ -100,7 +75,7 @@ class DoctorDeleteModal extends Component {
                   Service
                 </label>
                 <select className="form-select" id="service" value={doctor.serviceId} readOnly>
-                  <option value={doctor.serviceId}>{renderService(doctor.serviceId)}.</option>
+                  <option value={doctor.serviceId}>{renderService(this.props.serviceList, doctor.serviceId)}.</option>
                 </select>
               </div>
             </div>
@@ -111,7 +86,7 @@ class DoctorDeleteModal extends Component {
                   Branch
                 </label>
                 <select className="form-select" id="branch" value={doctor.branchId} readOnly>
-                  <option value={doctor.branchId}>{renderBranch(doctor.branchId)}</option>
+                  <option value={doctor.branchId}>{renderBranch(this.props.branchList, doctor.branchId)}</option>
                 </select>
               </div>
             </div>
