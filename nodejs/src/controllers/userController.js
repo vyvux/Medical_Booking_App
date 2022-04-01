@@ -50,9 +50,16 @@ let createPatient = async (req, res) => {
   return res.status(200).json(message);
 };
 
+let editPatient = async (req, res) => {
+  let data = req.body;
+  let response = await systemUserService.editPatient(data);
+  return res.status(200).json(response);
+};
+
 module.exports = {
   handleLogin: handleLogin,
   getAllCodes: getAllCodes,
   getAllPatients: getAllPatients,
   createPatient: createPatient,
+  editPatient: editPatient,
 };

@@ -118,44 +118,6 @@ let createNewPatient = (data, userId) => {
   });
 };
 
-let checkValidPatientId = (patientId) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let patient = await db.Patient.findOne({
-        where: { id: patientId },
-      });
-      if (patient) {
-        // patient exists
-        if (patient.userId === null) {
-          // no associated system user for this patient
-          resolve(true);
-        } else {
-          // patient profile has been linked with another system user
-          resolve(false);
-        }
-      } else {
-        // patient doesnt exist
-        resolve(false);
-      }
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
-
-let getAllCodes = () => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let allCodes = await db.Allcode.findAll({
-        attributes: ["key", "value"],
-      });
-      resolve(allCodes);
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
-
 let getAllPatients = (patientId) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -205,6 +167,85 @@ let getAllPatients = (patientId) => {
   });
 };
 
+let editPatient = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.id) {
+        resolve({
+          errCode: 2,
+          errMessage: "Missing required parameters!",
+        });
+      }
+
+      let patient = await db.Patient.findOne({
+        where: { id: data.id },
+        raw: false,
+      });
+      if (patient) {
+        patient.firstName = data.firstName;
+        patient.lastName = data.lastName;
+        patient.userId = data.userId;
+        patient.gender = data.gender;
+        patient.dob = data.dob;
+        patient.phoneNumber = data.phoneNumber;
+        patient.address = data.address;
+        patient.allergy = data.allergy;
+
+        await patient.save();
+        resolve({
+          errCode: 0,
+          message: "Update patient information successfully!",
+        });
+      } else {
+        resolve({
+          errCode: 1,
+          errMessage: "Patient not found",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let checkValidPatientId = (patientId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let patient = await db.Patient.findOne({
+        where: { id: patientId },
+      });
+      if (patient) {
+        // patient exists
+        if (patient.userId === null) {
+          // no associated system user for this patient
+          resolve(true);
+        } else {
+          // patient profile has been linked with another system user
+          resolve(false);
+        }
+      } else {
+        // patient doesnt exist
+        resolve(false);
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let getAllCodes = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let allCodes = await db.Allcode.findAll({
+        attributes: ["key", "value"],
+      });
+      resolve(allCodes);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   handleUserLogin: handleUserLogin,
 
@@ -215,4 +256,5 @@ module.exports = {
   createNewPatient: createNewPatient,
   getAllCodes: getAllCodes,
   getAllPatients: getAllPatients,
+  editPatient: editPatient,
 };

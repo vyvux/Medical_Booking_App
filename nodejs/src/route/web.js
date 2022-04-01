@@ -17,6 +17,8 @@ let initWebRoutes = (app) => {
 
   router.post("/api/create-patient", userController.createPatient);
 
+  router.put("/api/edit-patient", userController.editPatient);
+
   return app.use("/", router);
 };
 
