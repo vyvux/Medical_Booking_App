@@ -28,7 +28,7 @@
   "menu": {
     "system": {
       "header": "System",
-      "system-administrator": {
+      "admin": {
         "header": "System Administrator",
         "user-manage": "User Manage",
         "branch-manage": "Branch Manage",
@@ -36,6 +36,17 @@
         "doctor-manage": "Doctor Manage",
         "log-manage": "Log Manage",
         "patient-manage": "Patient Manage"
+      },
+      "doctor": {
+        "header": "Doctor System",
+        "appointment-manage": "Appointment Manage",
+        "schedule-manage": "Doctor Schedule Manage"
+      },
+      "medical-staff": {
+        "header": "Medical Staff System",
+        "appointment-manage": "Appointment Manage",
+        "patient-manage": "Patient Manage",
+        "schedule-manage": "Doctor Availability Manage"
       },
       "system-parameter": {
         "header": "System-parameter"

@@ -3,10 +3,38 @@ import { connect } from "react-redux";
 
 import * as actions from "../../store/actions";
 import Navigator from "../../components/Navigator";
-import { adminMenu } from "./menuApp";
+import { adminMenu, doctorMenu, medicalStaffMenu } from "./menuApp";
 import "./Header.scss";
+import _ from "lodash";
+import { USER_ROLE } from "../../utils/constant";
 
 class Header extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      menuApp: [],
+    };
+  }
+  componentDidMount() {
+    let { userInfo } = this.props;
+    let menu = [];
+    if (userInfo && !_.isEmpty(userInfo)) {
+      let role = userInfo.roleId;
+      if (role === USER_ROLE.ADMIN) {
+        menu = adminMenu;
+      }
+      if (role === USER_ROLE.DOCTOR) {
+        menu = doctorMenu;
+      }
+      if (role === USER_ROLE.MEDICAL_STAFF) {
+        menu = medicalStaffMenu;
+      }
+    }
+    this.setState({
+      menuApp: menu,
+    });
+  }
+
   render() {
     const { processLogout, userInfo } = this.props;
 
@@ -14,7 +42,7 @@ class Header extends Component {
       <div className="header-container">
         {/* navigator bar */}
         <div>
-          <Navigator menus={adminMenu} />
+          <Navigator menus={this.state.menuApp} />
         </div>
 
         <div className="container">
