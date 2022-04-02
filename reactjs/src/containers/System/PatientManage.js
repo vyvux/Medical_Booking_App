@@ -3,9 +3,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Label, Input, Col, Container, InputGroup, InputGroupText } from "reactstrap";
 import "./UserManage.scss";
-import { getAllPatients } from "../../services/userService";
+import { getAllPatients, editPatient } from "../../services/userService";
+import { getAllUsers } from "../../services/adminService";
 import { renderGender } from "./AllCode";
 import PatientViewModal from "./PatientViewModal";
+import PatientEditModal from "./PatientEditModal";
+import FormattedDate from "../../components/Formating/FormattedDate";
+import { toast } from "react-toastify";
 // import { values } from "lodash";
 
 class PatientManage extends Component {
@@ -15,14 +19,17 @@ class PatientManage extends Component {
       arrPatients: [],
       filteredPatientList: [],
       isOpenModalViewPatient: false,
+      isOpenModalEditPatient: false,
       patientInEffect: {},
       query: "",
       registeredUser: "",
+      users: [],
     };
   }
 
   async componentDidMount() {
     this.getAllPatientsFromDB();
+    this.getAllUsersFromDB();
   }
 
   getAllPatientsFromDB = async () => {
@@ -35,35 +42,57 @@ class PatientManage extends Component {
     }
   };
 
+  getAllUsersFromDB = async () => {
+    let response = await getAllUsers("ALL");
+    if (response && response.errCode === 0) {
+      this.setState({
+        users: response.users,
+      });
+    }
+  };
+
   toggleModalViewPatient = () => {
     this.setState({
       isOpenModalViewPatient: !this.state.isOpenModalViewPatient,
     });
   };
 
-  openViewDoctorModal = (patient) => {
+  toggleModalEditPatient = () => {
+    this.setState({
+      isOpenModalEditPatient: !this.state.isOpenModalEditPatient,
+    });
+  };
+
+  openViewPatientModal = (patient) => {
     this.setState({
       isOpenModalViewPatient: true,
       patientInEffect: patient,
     });
   };
 
-  //   handleEditDoctor = async (doctor) => {
-  //     try {
-  //       let response = await editDoctor(doctor);
-  //       if (response && response.errCode === 0) {
-  //         await this.getAllDoctorsFromDB();
-  //         toast.success(response.message);
-  //       } else {
-  //         toast.error(response.errMessage);
-  //       }
-  //       this.setState({
-  //         isOpenModalViewPatient: false,
-  //       });
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //   };
+  handleEditPatient = async (patient) => {
+    try {
+      let response = await editPatient(patient);
+      if (response && response.errCode === 0) {
+        await this.getAllPatientsFromDB();
+        toast.success(response.message);
+      } else {
+        toast.error(response.errMessage);
+      }
+      this.setState({
+        isOpenModalEditPatient: false,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  openEditPatientModal = (patient) => {
+    this.setState({
+      isOpenModalEditPatient: true,
+      patientInEffect: patient,
+    });
+  };
 
   handleOnChangeInput = (event, id) => {
     let copyState = { ...this.state };
@@ -81,7 +110,7 @@ class PatientManage extends Component {
   checkTerm = (patient) => {
     let term = this.state.query.toLowerCase();
     if (term) {
-      return patient.firstName.toLowerCase().includes(term) || patient.lastName.toLowerCase().includes(term) || patient.id == term;
+      return patient.firstName.toLowerCase().includes(term) || patient.lastName.toLowerCase().includes(term) || patient.id.toString() === term;
     }
     return true;
   };
@@ -89,7 +118,7 @@ class PatientManage extends Component {
   checkUserRegistered = (patient) => {
     let state = this.state.registeredUser;
     if (state) {
-      if (state == 1) {
+      if (state === "1") {
         return patient.userId !== null;
       }
       return patient.userId === null;
@@ -110,6 +139,14 @@ class PatientManage extends Component {
     return (
       <div className="users-container mx-1">
         <PatientViewModal isOpen={this.state.isOpenModalViewPatient} toggleModalFromParent={this.toggleModalViewPatient} patient={this.state.patientInEffect} />
+
+        <PatientEditModal
+          isOpen={this.state.isOpenModalEditPatient}
+          toggleModalFromParent={this.toggleModalEditPatient}
+          patient={this.state.patientInEffect}
+          editPatient={this.handleEditPatient}
+          userList={this.state.users}
+        />
 
         <div className="title text-center">Manage patients</div>
 
@@ -188,14 +225,23 @@ class PatientManage extends Component {
                       <td>{item.firstName}</td>
                       <td>{item.lastName}</td>
                       <td>{renderGender(item.gender)}</td>
-                      <td className="limited-word-small">{item.dob}</td>
+                      <td className="limited-word-small">
+                        <FormattedDate value={item.dob} />
+                      </td>
+                      {/* <td className="limited-word-small">{item.dob}</td> */}
                       <td>{item.phoneNumber}</td>
                       <td className="limited-word-small">{item.address}</td>
                       <td className="limited-word-small">{item.allergy}</td>
-                      <td className="limited-word-small">{item.createdAt}</td>
+                      <td className="limited-word-small">
+                        <FormattedDate format="DD/MM/YYYY HH:MM:SS" value={item.createdAt} />
+                      </td>
+                      {/* <td className="limited-word-small">{item.createdAt}</td> */}
                       <td>
-                        <button className="btn-edit" onClick={() => this.openViewDoctorModal(item)}>
+                        <button className="btn-view" onClick={() => this.openViewPatientModal(item)}>
                           <i className="fas fa-eye"></i>
+                        </button>
+                        <button className="btn-edit" onClick={() => this.openEditPatientModal(item)}>
+                          <i className="fas fa-pencil-alt fa-lg"></i>
                         </button>
                       </td>
                     </tr>

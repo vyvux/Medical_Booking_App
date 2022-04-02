@@ -11,4 +11,8 @@ const getAllCodes = () => {
 const getAllPatients = (patientId) => {
   return axios.get(`/api/get-all-patients?id=${patientId}`);
 };
-export { handleLoginApi, getAllCodes, getAllPatients };
+
+const editPatient = (data) => {
+  return axios.put("/api/edit-patient", data);
+};
+export { handleLoginApi, getAllCodes, getAllPatients, editPatient };

@@ -125,18 +125,7 @@ let getAllPatients = (patientId) => {
       if (patientId === "ALL") {
         patients = await db.Patient.findAll({
           attributes: {
-            include: [
-              "id",
-              "userId",
-              "phoneNumber",
-              "address",
-              "allergy",
-              "firstName",
-              "lastName",
-              [sequelize.fn("DATE_FORMAT", sequelize.col("createdAt"), "%d-%m-%Y %H:%i:%s"), "createdAt"],
-              [sequelize.fn("DATE_FORMAT", sequelize.col("dob"), "%d-%m-%Y"), "dob"],
-              "updatedAt",
-            ],
+            include: ["id", "userId", "phoneNumber", "address", "allergy", "firstName", "lastName", [sequelize.fn("DATE_FORMAT", sequelize.col("dob"), "%Y-%m-%d"), "dob"], "createdAt", "updatedAt"],
           },
         });
       }
@@ -145,18 +134,7 @@ let getAllPatients = (patientId) => {
         patients = await db.Patient.findOne({
           where: { id: patientId },
           attributes: {
-            include: [
-              "id",
-              "userId",
-              "phoneNumber",
-              "address",
-              "allergy",
-              "firstName",
-              "lastName",
-              [sequelize.fn("DATE_FORMAT", sequelize.col("createdAt"), "%d-%m-%Y %H:%i:%s"), "createdAt"],
-              [sequelize.fn("DATE_FORMAT", sequelize.col("dob"), "%d-%m-%Y"), "dob"],
-              "updatedAt",
-            ],
+            include: ["id", "userId", "phoneNumber", "address", "allergy", "firstName", "lastName", [sequelize.fn("DATE_FORMAT", sequelize.col("dob"), "%Y-%m-%d"), "dob"], "createdAt", "updatedAt"],
           },
         });
       }
@@ -175,6 +153,20 @@ let editPatient = (data) => {
           errCode: 2,
           errMessage: "Missing required parameters!",
         });
+      }
+
+      // check for valid userID if associated
+      if (data.userId) {
+        let user = await db.User.findOne({
+          where: { id: data.userId },
+          raw: false,
+        });
+        if (!user || user.roleId !== "R3") {
+          resolve({
+            errCode: 3,
+            errMessage: "Registered user not found!",
+          });
+        }
       }
 
       let patient = await db.Patient.findOne({

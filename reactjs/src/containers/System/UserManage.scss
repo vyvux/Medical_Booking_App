@@ -76,6 +76,19 @@
   }
 }
 
+.btn-view {
+  width: 50px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #3c796b;
+
+  &:hover {
+    background-color: transparent !important;
+    color: #3c796b !important;
+  }
+}
+
 .container {
   margin: auto 0px;
   max-width: 99%;

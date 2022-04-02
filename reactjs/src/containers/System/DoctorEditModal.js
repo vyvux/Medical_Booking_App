@@ -54,7 +54,7 @@ class DoctorEditModal extends Component {
     let isValid = true;
     let arrInputs = ["userId", "gender", "serviceId", "branchId", "about"];
     for (let i = 0; i < arrInputs.length; i++) {
-      if (!this.state[arrInputs[i]]) {
+      if (this.state[arrInputs[i]] === "") {
         isValid = false;
         toast.error("Missing parameter: " + arrInputs[i]);
         break;
@@ -64,6 +64,7 @@ class DoctorEditModal extends Component {
   };
 
   handleEditDoctor = async () => {
+    console.log(this.state);
     let isValid = this.validateInputs();
     if (isValid === true) {
       // call api
