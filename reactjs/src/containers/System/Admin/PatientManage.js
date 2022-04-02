@@ -2,13 +2,13 @@ import React, { Component } from "react";
 // import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
 import { Label, Input, Col, Container, InputGroup, InputGroupText } from "reactstrap";
-import "./UserManage.scss";
-import { getAllPatients, editPatient } from "../../services/userService";
-import { getAllUsers } from "../../services/adminService";
-import { renderGender } from "./AllCode";
+import "../UserManage.scss";
+import { getAllPatients, editPatient } from "../../../services/userService";
+import { getAllUsers } from "../../../services/adminService";
+import { renderGender } from "../AllCode";
 import PatientViewModal from "./PatientViewModal";
 import PatientEditModal from "./PatientEditModal";
-import FormattedDate from "../../components/Formating/FormattedDate";
+import FormattedDate from "../../../components/Formating/FormattedDate";
 import { toast } from "react-toastify";
 // import { values } from "lodash";
 

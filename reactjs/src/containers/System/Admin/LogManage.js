@@ -2,8 +2,8 @@ import React, { Component } from "react";
 // import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
 import { Label, Input, Col, Container, InputGroup, InputGroupText } from "reactstrap";
-import "./UserManage.scss";
-import { getAllUsers } from "../../services/adminService";
+import "../UserManage.scss";
+import { getAllUsers } from "../../../services/adminService";
 
 // import { values } from "lodash";
 

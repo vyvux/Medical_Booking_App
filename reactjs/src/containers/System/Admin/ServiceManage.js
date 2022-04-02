@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 // import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
-import { getAllServices, createNewService, editService, deleteService } from "../../services/adminService";
-import "./UserManage.scss";
+import { getAllServices, createNewService, editService, deleteService } from "../../../services/adminService";
+import "../UserManage.scss";
 import ServiceModal from "./ServiceModal";
 import ServiceEditModal from "./ServiceEditModal";
 import ServiceDeleteModal from "./ServiceDeleteModal";

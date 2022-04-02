@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 // import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
-import { getAllBranches, createNewBranch, editBranch, deleteBranch } from "../../services/adminService";
+import { getAllBranches, createNewBranch, editBranch, deleteBranch } from "../../../services/adminService";
 import BranchModal from "./BranchModal";
 import BranchEditModal from "./BranchEditModal";
-import "./UserManage.scss";
+import "../UserManage.scss";
 import BranchDeleteModal from "./BranchDeleteModal";
 import { toast } from "react-toastify";
 

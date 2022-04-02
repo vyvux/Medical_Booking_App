@@ -2,7 +2,7 @@ import React, { Component } from "react";
 // import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import { renderGender, renderBranch, renderService } from "./AllCode";
+import { renderGender, renderBranch, renderService } from "../AllCode";
 class DoctorDeleteModal extends Component {
   constructor(props) {
     super(props);

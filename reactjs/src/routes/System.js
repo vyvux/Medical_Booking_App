@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
 import UserManage from "../containers/System/UserManage";
-import BranchManage from "../containers/System/BranchManage";
-import ServiceManage from "../containers/System/ServiceManage";
-import DoctorManage from "../containers/System/DoctorManage";
-import LogManage from "../containers/System/LogManage";
-import PatientManage from "../containers/System/PatientManage";
+import BranchManage from "../containers/System/Admin/BranchManage";
+import ServiceManage from "../containers/System/Admin/ServiceManage";
+import DoctorManage from "../containers/System/Admin/DoctorManage";
+import LogManage from "../containers/System/Admin/LogManage";
+import PatientManage from "../containers/System/Admin/PatientManage";
 
 class System extends Component {
   render() {
