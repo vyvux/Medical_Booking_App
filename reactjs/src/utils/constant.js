@@ -3,6 +3,7 @@ export const path = {
   LOGIN: "/login",
   LOG_OUT: "/logout",
   SYSTEM: "/system",
+  DOCTOR: "/doctor",
 };
 
 export const languages = {

@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
-import UserManage from "../containers/Doctor/UserManage";
+import AppointmentManage from "../containers/System/Doctor/AppointmentManage";
+import ScheduleManage from "../containers/System/Doctor/ScheduleManage";
 class Doctor extends Component {
   render() {
     const { isLoggedIn, systemMenuPath } = this.props;
@@ -9,12 +10,8 @@ class Doctor extends Component {
       <div className="system-container">
         <div className="system-list">
           <Switch>
-            <Route path="/doctor/appointment-manage" component={UserManage} />
-            {/* <Route
-              component={() => {
-                return <Redirect to={systemMenuPath} />;
-              }}
-            /> */}
+            <Route path="/doctor/appointment-manage" component={AppointmentManage} />
+            <Route path="/doctor/schedule-manage" component={ScheduleManage} />
           </Switch>
         </div>
       </div>
