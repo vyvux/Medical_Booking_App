@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
-import AppointmentManage from "../containers/System/Doctor/AppointmentManage";
-import ScheduleManage from "../containers/System/Doctor/ScheduleManage";
+import StaffAppointmentManage from "../containers/System/Staff/StaffAppointmentManage";
+import StaffPatientManage from "../containers/System/Staff/StaffPatientManage";
+import StaffScheduleManage from "../containers/System/Staff/StaffScheduleManage";
+
 import Header from "../containers/Header/Header";
 class Doctor extends Component {
   render() {
@@ -13,8 +15,9 @@ class Doctor extends Component {
         <div className="system-container">
           <div className="system-list">
             <Switch>
-              <Route path="/doctor/appointment-manage" component={AppointmentManage} />
-              <Route path="/doctor/schedule-manage" component={ScheduleManage} />
+              <Route path="/staff/appointment-manage" component={StaffAppointmentManage} />
+              <Route path="/staff/patient-manage" component={StaffPatientManage} />
+              <Route path="/staff/schedule-manage" component={StaffScheduleManage} />
             </Switch>
           </div>
         </div>

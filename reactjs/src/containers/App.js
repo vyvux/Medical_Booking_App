@@ -15,9 +15,11 @@ import Login from "./Authenticate/Login";
 import Header from "./Header/Header";
 import System from "../routes/System";
 import Doctor from "../routes/Doctor";
+import MedStaff from "../routes/MedStaff";
 
 import { CustomToastCloseButton } from "../components/CustomToast";
 import ConfirmModal from "../components/ConfirmModal";
+import CustomScrollbars from "../components/CustomScrollbars";
 
 class App extends Component {
   handlePersistorState = () => {
@@ -43,17 +45,20 @@ class App extends Component {
       <Fragment>
         <Router history={history}>
           <div className="main-container">
-            <ConfirmModal />
-            {this.props.isLoggedIn && <Header userInfo={this.props.userInfo} />}
+            {/* <ConfirmModal /> */}
+            {/* {this.props.isLoggedIn && <Header />} */}
 
-            <span className="content-container">
-              <Switch>
-                <Route path={path.HOME} exact component={Home} />
-                <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
-                <Route path={path.SYSTEM} component={userIsAuthenticated(System)} />
-                <Route path={path.DOCTOR} component={userIsAuthenticated(Doctor)} />
-              </Switch>
-            </span>
+            <div className="content-container">
+              <CustomScrollbars style={{ height: "100vh", width: "100%" }}>
+                <Switch>
+                  <Route path={path.HOME} exact component={Home} />
+                  <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
+                  <Route path={path.SYSTEM} component={userIsAuthenticated(System)} />
+                  <Route path={path.DOCTOR} component={userIsAuthenticated(Doctor)} />
+                  <Route path={path.MEDICAL_STAFF} component={userIsAuthenticated(MedStaff)} />
+                </Switch>
+              </CustomScrollbars>
+            </div>
 
             <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="dark" />
           </div>
@@ -67,7 +72,6 @@ const mapStateToProps = (state) => {
   return {
     started: state.app.started,
     isLoggedIn: state.user.isLoggedIn,
-    userInfo: state.user.userInfo,
   };
 };
 
