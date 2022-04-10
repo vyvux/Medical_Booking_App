@@ -37,6 +37,20 @@ class Header extends Component {
 
   render() {
     const { processLogout, userInfo } = this.props;
+    const renderRole = (roleId) => {
+      switch (roleId) {
+        case "R1":
+          return "Admin";
+        case "R2":
+          return "Doctor";
+        case "R3":
+          return "Patient";
+        case "R4":
+          return "Medical Staff";
+        default:
+          return "Unknown role";
+      }
+    };
 
     return (
       <div className="header-container">
@@ -51,7 +65,12 @@ class Header extends Component {
               <i className="fas fa-user-circle fa-2x"></i>
             </div>
             <div className="col-6 offset-1 col-sm-2 offset-sm-0 text-left">
-              {userInfo.firstName} {userInfo.lastName}
+              <div className="column">
+                <div className="row name-title">
+                  {userInfo.firstName} {userInfo.lastName}
+                </div>
+                <div className="row role-title">{renderRole(userInfo.roleId)}</div>
+              </div>
             </div>
           </div>
         </div>

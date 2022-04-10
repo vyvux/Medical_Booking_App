@@ -23,4 +23,14 @@
       font-size: $base-size + 1px;
     }
   }
+
+  .container {
+    .name-title {
+      font-weight: 600;
+    }
+    .role-title {
+      font-weight: 200;
+      font-size: smaller;
+    }
+  }
 }

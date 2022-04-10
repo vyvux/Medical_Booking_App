@@ -12,7 +12,6 @@ import { path } from "../utils";
 import Home from "../routes/Home";
 // import Login from '../routes/Login';
 import Login from "./Authenticate/Login";
-import Header from "./Header/Header";
 import System from "../routes/System";
 import Doctor from "../routes/Doctor";
 import MedStaff from "../routes/MedStaff";
@@ -46,7 +45,6 @@ class App extends Component {
         <Router history={history}>
           <div className="main-container">
             {/* <ConfirmModal /> */}
-            {/* {this.props.isLoggedIn && <Header />} */}
 
             <div className="content-container">
               <CustomScrollbars style={{ height: "100vh", width: "100%" }}>

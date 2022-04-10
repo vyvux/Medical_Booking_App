@@ -80,7 +80,6 @@ class DoctorModal extends Component {
           lastName: "",
         });
       }
-      console.log(this.state);
     }
   };
 

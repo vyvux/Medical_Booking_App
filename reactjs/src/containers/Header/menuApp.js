@@ -8,27 +8,27 @@ export const adminMenu = [
       //   subMenus: [
       {
         name: "menu.system.admin.user-manage",
-        link: "/system/user-manage",
+        link: "/admin/user-manage",
       },
       {
         name: "menu.system.admin.branch-manage",
-        link: "/system/branch-manage",
+        link: "/admin/branch-manage",
       },
       {
         name: "menu.system.admin.service-manage",
-        link: "/system/service-manage",
+        link: "/admin/service-manage",
       },
       {
         name: "menu.system.admin.doctor-manage",
-        link: "/system/doctor-manage",
+        link: "/admin/doctor-manage",
       },
       {
         name: "menu.system.admin.patient-manage",
-        link: "/system/patient-manage",
+        link: "/admin/patient-manage",
       },
       {
         name: "menu.system.admin.log-manage",
-        link: "/system/log-manage",
+        link: "/admin/log-manage",
       },
     ],
   },
