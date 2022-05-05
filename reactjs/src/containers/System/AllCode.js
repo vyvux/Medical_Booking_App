@@ -27,7 +27,7 @@ const renderBranch = (branchList, branchId) => {
 
 // render role - all code
 const renderAllCode = (allCode, keyCode) => {
-  let item = allCode.find(({ key }) => key === keyCode);
+  let item = allCode.find(({ key }) => key === keyCode.toString());
   if (item) {
     return item.value;
   } else {

@@ -9,6 +9,8 @@ import ModalUser from "./ModalUser";
 import ModalDeleteUserConfirm from "./ModalDeleteUserConfirm";
 import ModalEditUser from "./ModalEditUser";
 import { toast } from "react-toastify";
+import { renderAllCode } from "./AllCode";
+import * as actions from "../../store/actions";
 // import { values } from "lodash";
 
 class UserManage extends Component {
@@ -30,6 +32,7 @@ class UserManage extends Component {
 
   async componentDidMount() {
     this.getAllUsersFromDB();
+    this.props.getRoleStart();
   }
 
   getAllUsersFromDB = async () => {
@@ -198,21 +201,6 @@ class UserManage extends Component {
     });
   };
 
-  renderRole = (roleId) => {
-    switch (roleId) {
-      case "R1":
-        return "Admin";
-      case "R2":
-        return "Doctor";
-      case "R3":
-        return "Patient";
-      case "R4":
-        return "Medical Staff";
-      default:
-        return "Unknown role";
-    }
-  };
-
   render() {
     // let arrUsers = this.state.arrUsers;
     let filteredUserList = this.state.filteredUserList;
@@ -278,10 +266,14 @@ class UserManage extends Component {
                     }}
                   >
                     <option value="">All Roles</option>
-                    <option value="R1">Admin</option>
+                    {this.props.role &&
+                      this.props.role.map((item, index) => {
+                        return <option value={item.key}>{item.value}</option>;
+                      })}
+                    {/* <option value="R1">Admin</option>
                     <option value="R2">Doctor</option>
                     <option value="R4">Medical Staff</option>
-                    <option value="R3">Patient</option>
+                    <option value="R3">Patient</option> */}
                   </Input>
                 </Col>
               </Container>
@@ -314,7 +306,7 @@ class UserManage extends Component {
                       <td>{item.email}</td>
                       <td>{item.firstName}</td>
                       <td>{item.lastName}</td>
-                      <td>{this.renderRole(item.roleId)}</td>
+                      <td>{renderAllCode(this.props.role, item.roleId)}</td>
                       <td>{item.createdAt}</td>
                       <td>
                         <button className="btn-edit" onClick={() => this.openEditUserModal(item)}>
@@ -336,11 +328,13 @@ class UserManage extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return { userInfo: state.user.userInfo };
+  return { userInfo: state.user.userInfo, role: state.code.role };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    getRoleStart: () => dispatch(actions.fetchRoleStart()),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserManage);

@@ -5,12 +5,13 @@ import { Label, Input, Col, Container, InputGroup, InputGroupText } from "reacts
 import "../UserManage.scss";
 import { getAllPatients, editPatient } from "../../../services/userService";
 import { getAllUsers } from "../../../services/adminService";
-import { renderGender } from "../AllCode";
+import { renderAllCode } from "../AllCode";
 import PatientViewModal from "./PatientViewModal";
 import PatientEditModal from "./PatientEditModal";
 import FormattedDate from "../../../components/Formating/FormattedDate";
 import { toast } from "react-toastify";
 import { addLog } from "../../../services/adminService";
+import * as actions from "../../../store/actions";
 // import { values } from "lodash";
 
 class PatientManage extends Component {
@@ -32,6 +33,7 @@ class PatientManage extends Component {
   async componentDidMount() {
     this.getAllPatientsFromDB();
     this.getAllUsersFromDB();
+    this.props.getGenderStart();
   }
 
   getAllPatientsFromDB = async () => {
@@ -234,7 +236,7 @@ class PatientManage extends Component {
                       <td>{item.userId ? item.userId : "N/A"}</td>
                       <td>{item.firstName}</td>
                       <td>{item.lastName}</td>
-                      <td>{renderGender(item.gender)}</td>
+                      <td>{renderAllCode(this.props.gender, item.gender)}</td>
                       <td className="limited-word-small">
                         <FormattedDate value={item.dob} />
                       </td>
@@ -266,11 +268,13 @@ class PatientManage extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return { userInfo: state.user.userInfo };
+  return { userInfo: state.user.userInfo, gender: state.code.gender };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    getGenderStart: () => dispatch(actions.fetchGenderStart()),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PatientManage);

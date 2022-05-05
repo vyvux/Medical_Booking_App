@@ -213,6 +213,20 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        type: "gender",
+        key: "0",
+        value: "Female",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        type: "gender",
+        key: "1",
+        value: "Male",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ]);
   },
 

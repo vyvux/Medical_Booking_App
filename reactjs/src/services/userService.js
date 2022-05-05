@@ -4,8 +4,8 @@ const handleLoginApi = (email, password) => {
   return axios.post("/api/login", { email, password }); // pass in data object
 };
 
-const getAllCodes = () => {
-  return axios.get("/api/get-all-code");
+const getAllCodes = (type) => {
+  return axios.get(`/api/get-all-code?type=${type}`);
 };
 
 const getAllPatients = (patientId) => {

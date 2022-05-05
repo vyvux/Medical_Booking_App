@@ -5,6 +5,8 @@ import { Label, Input, Col, Container, InputGroup, InputGroupText } from "reacts
 import "../UserManage.scss";
 import { getAllUsers, getAllLogs } from "../../../services/adminService";
 import LogViewModal from "./LogViewModal";
+import { renderAllCode } from "../AllCode";
+import * as actions from "../../../store/actions";
 
 // import { values } from "lodash";
 
@@ -26,6 +28,8 @@ class LogManage extends Component {
   async componentDidMount() {
     this.getAllLogsFromDB();
     this.getAllUsersFromDB();
+    this.props.getActionStart();
+    this.props.getRoleStart();
   }
 
   getAllLogsFromDB = async () => {
@@ -164,14 +168,10 @@ class LogManage extends Component {
                     }}
                   >
                     <option value="">All Action</option>
-                    <option value="A1">Add appointment</option>
-                    <option value="A2">Cancel appointment</option>
-                    <option value="A3">Create user</option>
-                    <option value="A4">Delete user</option>
-                    <option value="A5">Edit user information</option>
-                    <option value="A6">Edit patient profile</option>
-                    <option value="A7">Edit doctor available hours</option>
-                    <option value="A8">User login</option>
+                    {this.props.action &&
+                      this.props.action.map((item, index) => {
+                        return <option value={item.key}>{item.value}</option>;
+                      })}
                   </Input>
                 </Col>
               </Container>
@@ -193,10 +193,10 @@ class LogManage extends Component {
                     }}
                   >
                     <option value="">All Roles</option>
-                    <option value="R1">Admin</option>
-                    <option value="R2">Doctor</option>
-                    <option value="R4">Medical Staff</option>
-                    <option value="R3">Patient</option>
+                    {this.props.role &&
+                      this.props.role.map((item, index) => {
+                        return <option value={item.key}>{item.value}</option>;
+                      })}
                     <option value="unknown">Unknown User</option>
                   </Input>
                 </Col>
@@ -224,7 +224,7 @@ class LogManage extends Component {
                   return (
                     <tr key={item.id}>
                       <td>{item.userId}</td>
-                      <td>{item.actionType}</td>
+                      <td>{renderAllCode(this.props.action, item.actionType)}</td>
                       <td className="limited-word">{item.message}</td>
                       <td>{item.createdAt}</td>
                       <td>
@@ -244,11 +244,11 @@ class LogManage extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {};
+  return { action: state.code.action, role: state.code.role };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return { getActionStart: () => dispatch(actions.fetchActionStart()), getRoleStart: () => dispatch(actions.fetchRoleStart()) };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LogManage);

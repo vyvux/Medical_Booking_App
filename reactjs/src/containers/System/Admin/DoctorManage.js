@@ -4,12 +4,13 @@ import { connect } from "react-redux";
 import { Label, Input, Col, Container, InputGroup, InputGroupText } from "reactstrap";
 import "../UserManage.scss";
 import { getAllDoctors, createNewDoctor, editDoctor, deleteDoctor, getAllBranches, getAllServices, getAllUsers } from "../../../services/adminService";
-import { renderGender, renderBranch, renderService } from "../AllCode";
+import { renderBranch, renderService, renderAllCode } from "../AllCode";
 import DoctorModal from "./DoctorModal";
 import DoctorEditModal from "./DoctorEditModal";
 import DoctorDeleteModal from "./DoctorDeleteModal";
 import { toast } from "react-toastify";
 import { addLog } from "../../../services/adminService";
+import * as actions from "../../../store/actions";
 
 // import { values } from "lodash";
 
@@ -36,6 +37,7 @@ class DoctorManage extends Component {
   async componentDidMount() {
     this.getAllDoctorsFromDB();
     this.getUnregisteredDoctors();
+    this.props.getGenderStart();
   }
 
   getAllDoctorsFromDB = async () => {
@@ -398,7 +400,7 @@ class DoctorManage extends Component {
                       <td>{renderService(serviceList, item.serviceId)}</td>
                       <td>{renderBranch(branchList, item.branchId)}</td>
                       <td className="limited-word">{item.about}</td>
-                      <td>{renderGender(item.gender)}</td>
+                      <td>{renderAllCode(this.props.gender, item.gender)}</td>
                       <td>
                         <button className="btn-edit" onClick={() => this.openEditDoctorModal(item)}>
                           <i className="fas fa-pencil-alt fa-lg"></i>
@@ -419,11 +421,13 @@ class DoctorManage extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return { userInfo: state.user.userInfo };
+  return { userInfo: state.user.userInfo, gender: state.code.gender, role: state.code.role, time: state.code.time, action: state.code.action, status: state.code.status };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    getGenderStart: () => dispatch(actions.fetchGenderStart()),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DoctorManage);

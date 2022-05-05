@@ -22,9 +22,18 @@ let handleLogin = async (req, res) => {
 };
 
 let getAllCodes = async (req, res) => {
-  let response = await systemUserService.getAllCodes();
+  let type = req.query.type;
+  if (!type) {
+    return res.status(200).json({
+      errCode: 1,
+      errMessage: "Missing required parameters",
+      allCodes: [],
+    });
+  }
+  let response = await systemUserService.getAllCodes(req.query.type);
   return res.status(200).json({
-    allCodes: response ? response : {},
+    errCode: 0,
+    allCodes: response.allCodes ? response.allCodes : {},
   });
 };
 

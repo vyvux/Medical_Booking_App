@@ -225,13 +225,25 @@ let checkValidPatientId = (patientId) => {
   });
 };
 
-let getAllCodes = () => {
+let getAllCodes = (typeInput) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let allCodes = await db.Allcode.findAll({
-        attributes: ["key", "value"],
-      });
-      resolve(allCodes);
+      if (!typeInput) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing required parameters",
+        });
+      } else {
+        let allCodes = await db.Allcode.findAll({
+          where: { type: typeInput },
+          attributes: ["key", "value"],
+        });
+        resolve({
+          errCode: 0,
+          message: "OK",
+          allCodes: allCodes,
+        });
+      }
     } catch (e) {
       reject(e);
     }
