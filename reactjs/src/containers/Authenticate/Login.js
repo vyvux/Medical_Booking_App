@@ -6,6 +6,7 @@ import "./Login.scss";
 import { FormattedMessage } from "react-intl";
 import { handleLoginApi } from "../../services/userService";
 import { userLoginSuccess } from "../../store/actions";
+import { addLog } from "../../services/adminService";
 
 class Login extends Component {
   constructor(props) {
@@ -53,7 +54,13 @@ class Login extends Component {
       if (data && data.errCode === 0) {
         // login success
         this.props.userLoginSuccess(data.user);
-        console.log("login success");
+        // add log
+        let logInfo = {
+          userId: data.user.id,
+          actionType: "A8",
+          message: `User ${data.user.id} - ${data.user.firstName} ${data.user.lastName} (${this.renderRole(data.user.roleId)}) log into system`,
+        };
+        addLog(logInfo);
       }
     } catch (e) {
       if (e.response) {
@@ -63,6 +70,21 @@ class Login extends Component {
           });
         }
       }
+    }
+  };
+
+  renderRole = (roleId) => {
+    switch (roleId) {
+      case "R1":
+        return "Admin";
+      case "R2":
+        return "Doctor";
+      case "R3":
+        return "Patient";
+      case "R4":
+        return "Medical Staff";
+      default:
+        return "Unknown role";
     }
   };
 
@@ -105,13 +127,7 @@ class Login extends Component {
                     this.handleShowHidePassword();
                   }}
                 >
-                  <i
-                    className={
-                      this.state.showPassword
-                        ? "fas fa-eye"
-                        : "fas fa-eye-slash"
-                    }
-                  ></i>
+                  <i className={this.state.showPassword ? "fas fa-eye" : "fas fa-eye-slash"}></i>
                 </span>
               </div>
             </div>
@@ -154,8 +170,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     navigate: (path) => dispatch(push(path)),
     // userLoginFail: () => dispatch(actions.adminLoginFail()),
-    userLoginSuccess: (userInfo) =>
-      dispatch(actions.userLoginSuccess(userInfo)),
+    userLoginSuccess: (userInfo) => dispatch(actions.userLoginSuccess(userInfo)),
   };
 };
 
