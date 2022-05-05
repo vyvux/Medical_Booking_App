@@ -7,6 +7,7 @@ import BranchEditModal from "./BranchEditModal";
 import "../UserManage.scss";
 import BranchDeleteModal from "./BranchDeleteModal";
 import { toast } from "react-toastify";
+import { addLog } from "../../../services/adminService";
 
 class BranchManage extends Component {
   state = {};
@@ -19,6 +20,7 @@ class BranchManage extends Component {
       isOpenModalDeleteBranchConfirm: false,
       isOpenModalEditBranch: false,
       branchInEffect: {},
+      userInfo: this.props.userInfo,
     };
   }
 
@@ -57,6 +59,15 @@ class BranchManage extends Component {
       });
       toast.success(response.message);
       success = true;
+      // add log
+      let userInfo = this.state.userInfo;
+      let branch = response.branch;
+      let logInfo = {
+        userId: userInfo.id,
+        actionType: "A13",
+        message: `User ${userInfo.id} - ${userInfo.firstName} ${userInfo.lastName} add new branch (Branch ID: ${branch.id} - ${branch.name})`,
+      };
+      addLog(logInfo);
     } catch (e) {
       console.log(e);
     }
@@ -82,6 +93,14 @@ class BranchManage extends Component {
       if (response && response.errCode === 0) {
         await this.getAllBranchesFromDB();
         toast.success(response.message);
+        // add log
+        let userInfo = this.state.userInfo;
+        let logInfo = {
+          userId: userInfo.id,
+          actionType: "A15",
+          message: `User ${userInfo.id} - ${userInfo.firstName} ${userInfo.lastName} delete branch (Branch ID: ${branch.id} - ${branch.name})`,
+        };
+        addLog(logInfo);
       } else {
         toast.error(response.errMessage, { autoClose: 8000 });
       }
@@ -112,6 +131,14 @@ class BranchManage extends Component {
       if (response && response.errCode === 0) {
         await this.getAllBranchesFromDB();
         toast.success(response.message);
+        // add log
+        let userInfo = this.state.userInfo;
+        let logInfo = {
+          userId: userInfo.id,
+          actionType: "A15",
+          message: `User ${userInfo.id} - ${userInfo.firstName} ${userInfo.lastName} edit branch information (Branch ID: ${branch.id} - ${branch.name})`,
+        };
+        addLog(logInfo);
       } else {
         toast.error(response.errMessage);
       }
@@ -191,7 +218,7 @@ class BranchManage extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {};
+  return { userInfo: state.user.userInfo };
 };
 
 const mapDispatchToProps = (dispatch) => {

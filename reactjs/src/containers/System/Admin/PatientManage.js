@@ -10,6 +10,7 @@ import PatientViewModal from "./PatientViewModal";
 import PatientEditModal from "./PatientEditModal";
 import FormattedDate from "../../../components/Formating/FormattedDate";
 import { toast } from "react-toastify";
+import { addLog } from "../../../services/adminService";
 // import { values } from "lodash";
 
 class PatientManage extends Component {
@@ -24,6 +25,7 @@ class PatientManage extends Component {
       query: "",
       registeredUser: "",
       users: [],
+      userInfo: this.props.userInfo,
     };
   }
 
@@ -76,6 +78,14 @@ class PatientManage extends Component {
       if (response && response.errCode === 0) {
         await this.getAllPatientsFromDB();
         toast.success(response.message);
+        // add log
+        let userInfo = this.state.userInfo;
+        let logInfo = {
+          userId: userInfo.id,
+          actionType: "A6",
+          message: `User ${userInfo.id} - ${userInfo.firstName} ${userInfo.lastName} edit patient information (ID: ${patient.id} - ${patient.firstName} ${patient.lastName})`,
+        };
+        addLog(logInfo);
       } else {
         toast.error(response.errMessage);
       }
@@ -256,7 +266,7 @@ class PatientManage extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {};
+  return { userInfo: state.user.userInfo };
 };
 
 const mapDispatchToProps = (dispatch) => {

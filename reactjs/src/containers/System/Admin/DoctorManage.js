@@ -9,6 +9,7 @@ import DoctorModal from "./DoctorModal";
 import DoctorEditModal from "./DoctorEditModal";
 import DoctorDeleteModal from "./DoctorDeleteModal";
 import { toast } from "react-toastify";
+import { addLog } from "../../../services/adminService";
 
 // import { values } from "lodash";
 
@@ -28,6 +29,7 @@ class DoctorManage extends Component {
       branchList: [],
       serviceList: [],
       unregisteredDoctors: [],
+      userInfo: this.props.userInfo,
     };
   }
 
@@ -100,6 +102,15 @@ class DoctorManage extends Component {
         await this.getUnregisteredDoctors();
         toast.success(response.message);
         success = true;
+        // add log
+        let userInfo = this.state.userInfo;
+        let doctor = response.doctor;
+        let logInfo = {
+          userId: userInfo.id,
+          actionType: "A10",
+          message: `User ${userInfo.id} - ${userInfo.firstName} ${userInfo.lastName} create new doctor (Doctor ID: ${doctor.id} - ${doctor.firstName} ${doctor.lastName})`,
+        };
+        addLog(logInfo);
       } else {
         toast.error(response.errMessage);
       }
@@ -132,6 +143,14 @@ class DoctorManage extends Component {
         await this.getAllDoctorsFromDB();
         await this.getUnregisteredDoctors();
         toast.success(response.message);
+        // add log
+        let userInfo = this.state.userInfo;
+        let logInfo = {
+          userId: userInfo.id,
+          actionType: "A12",
+          message: `User ${userInfo.id} - ${userInfo.firstName} ${userInfo.lastName} delete doctor (Doctor ID: ${doctor.id} - ${doctor.firstName} ${doctor.lastName})`,
+        };
+        addLog(logInfo);
       } else {
         toast.error(response.errMessage);
       }
@@ -162,6 +181,14 @@ class DoctorManage extends Component {
       if (response && response.errCode === 0) {
         await this.getAllDoctorsFromDB();
         toast.success(response.message);
+        // add log
+        let userInfo = this.state.userInfo;
+        let logInfo = {
+          userId: userInfo.id,
+          actionType: "A10",
+          message: `User ${userInfo.id} - ${userInfo.firstName} ${userInfo.lastName} edit doctor information (Doctor ID: ${doctor.id} - ${doctor.firstName} ${doctor.lastName})`,
+        };
+        addLog(logInfo);
       } else {
         toast.error(response.errMessage);
       }
@@ -392,7 +419,7 @@ class DoctorManage extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {};
+  return { userInfo: state.user.userInfo };
 };
 
 const mapDispatchToProps = (dispatch) => {

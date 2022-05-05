@@ -145,6 +145,7 @@ let createNewBranch = async (data) => {
       resolve({
         errCode: 0,
         message: "Create new branch successfully!",
+        branch: newBranch,
       });
     } catch (e) {
       reject(e);
@@ -263,6 +264,7 @@ let createNewService = async (data) => {
       resolve({
         errCode: 0,
         message: "Create new service successfully!",
+        service: newService,
       });
     } catch (e) {
       reject(e);
@@ -395,6 +397,7 @@ let createDoctor = async (data) => {
         resolve({
           errCode: 0,
           message: "Created doctor successfully!",
+          doctor: doctor,
         });
       }
     } catch (e) {

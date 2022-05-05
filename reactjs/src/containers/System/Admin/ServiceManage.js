@@ -7,6 +7,7 @@ import ServiceModal from "./ServiceModal";
 import ServiceEditModal from "./ServiceEditModal";
 import ServiceDeleteModal from "./ServiceDeleteModal";
 import { toast } from "react-toastify";
+import { addLog } from "../../../services/adminService";
 
 class ServiceManage extends Component {
   state = {};
@@ -19,6 +20,7 @@ class ServiceManage extends Component {
       isOpenModalDeleteServiceConfirm: false,
       isOpenModalEditService: false,
       serviceInEffect: {},
+      userInfo: this.props.userInfo,
     };
   }
 
@@ -53,6 +55,16 @@ class ServiceManage extends Component {
       let response = await createNewService(data);
       await this.getAllServicesFromDB();
       toast.success(response.message);
+      // add log
+      let userInfo = this.state.userInfo;
+      let service = response.service;
+      let logInfo = {
+        userId: userInfo.id,
+        actionType: "A13",
+        message: `User ${userInfo.id} - ${userInfo.firstName} ${userInfo.lastName} add new service (Service ID: ${service.id} - ${service.name})`,
+      };
+      addLog(logInfo);
+
       this.setState({
         isOpenModalService: false,
       });
@@ -82,6 +94,14 @@ class ServiceManage extends Component {
       if (response && response.errCode === 0) {
         await this.getAllServicesFromDB();
         toast.success(response.message);
+        // add log
+        let userInfo = this.state.userInfo;
+        let logInfo = {
+          userId: userInfo.id,
+          actionType: "A15",
+          message: `User ${userInfo.id} - ${userInfo.firstName} ${userInfo.lastName} delete service (Service ID: ${service.id} - ${service.name})`,
+        };
+        addLog(logInfo);
       } else {
         toast.error(response.errMessage, { autoClose: 8000 });
       }
@@ -112,6 +132,14 @@ class ServiceManage extends Component {
       if (response && response.errCode === 0) {
         await this.getAllServicesFromDB();
         toast.success(response.message);
+        // add log
+        let userInfo = this.state.userInfo;
+        let logInfo = {
+          userId: userInfo.id,
+          actionType: "A14",
+          message: `User ${userInfo.id} - ${userInfo.firstName} ${userInfo.lastName} edit service information (Service ID: ${service.id} - ${service.name})`,
+        };
+        addLog(logInfo);
       } else {
         toast.error(response.errMessage);
       }
@@ -188,7 +216,7 @@ class ServiceManage extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {};
+  return { userInfo: state.user.userInfo };
 };
 
 const mapDispatchToProps = (dispatch) => {
