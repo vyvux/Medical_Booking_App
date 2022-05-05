@@ -16,6 +16,7 @@ let createNewUserByAdmin = async (data) => {
         resolve({
           errCode: 0,
           message: "Create new user successfully!",
+          newUser: newUser,
         });
       } else {
         resolve({
@@ -509,6 +510,42 @@ let deleteDoctor = async (doctorUserId) => {
   });
 };
 
+// Manage Log
+let addLog = async (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let newLog = await db.Log.create({
+        userId: data.userId,
+        actionType: data.actionType,
+        message: data.message,
+      });
+      resolve({
+        errCode: 0,
+        message: "New log recorded",
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let getAllLogs = async () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let logs = "";
+      logs = await db.Log.findAll({
+        attributes: {
+          include: ["userId", "actionType", "message", [sequelize.fn("DATE_FORMAT", sequelize.col("createdAt"), "%d-%m-%Y %H:%i:%s"), "createdAt"], "updatedAt"],
+        },
+      });
+
+      resolve(logs);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   createNewUserByAdmin: createNewUserByAdmin,
   getAllUsers: getAllUsers,
@@ -529,4 +566,7 @@ module.exports = {
   getAllDoctors: getAllDoctors,
   editDoctor: editDoctor,
   deleteDoctor: deleteDoctor,
+
+  addLog: addLog,
+  getAllLogs: getAllLogs,
 };

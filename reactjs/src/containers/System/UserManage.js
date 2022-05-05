@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Label, Input, Col, Container, InputGroup, InputGroupText } from "reactstrap";
 import "./UserManage.scss";
 import { getAllUsers, createNewUserByAdmin, deleteUserByAdmin, editUserByAdmin } from "../../services/adminService";
+import { addLog } from "../../services/adminService";
 import ModalUser from "./ModalUser";
 import ModalDeleteUserConfirm from "./ModalDeleteUserConfirm";
 import ModalEditUser from "./ModalEditUser";
@@ -23,6 +24,7 @@ class UserManage extends Component {
       userInEffect: {},
       query: "",
       role: "",
+      userInfo: this.props.userInfo,
     };
   }
 
@@ -65,6 +67,15 @@ class UserManage extends Component {
         });
         success = true;
         toast.success(response.message);
+
+        // add log
+        let userInfo = this.state.userInfo;
+        let logInfo = {
+          userId: userInfo.id,
+          actionType: "A3",
+          message: `User ${userInfo.id} - ${userInfo.firstName} ${userInfo.lastName} create new user (ID: ${response.newUser.id}) role ${this.renderRole(response.newUser.roleId)}`,
+        };
+        addLog(logInfo);
       }
     } catch (e) {
       console.log(e);
@@ -93,6 +104,15 @@ class UserManage extends Component {
       } else {
         await this.getAllUsersFromDB();
         toast.success(response.message);
+
+        // add log
+        let userInfo = this.state.userInfo;
+        let logInfo = {
+          userId: userInfo.id,
+          actionType: "A4",
+          message: `User ${userInfo.id} - ${userInfo.firstName} ${userInfo.lastName} delete user ID: ${user.id} - ${user.firstName} ${user.lastName} role ${this.renderRole(user.roleId)}`,
+        };
+        addLog(logInfo);
       }
       this.setState({
         isOpenModalDeleteUserConfirm: false,
@@ -121,6 +141,15 @@ class UserManage extends Component {
       if (response && response.errCode === 0) {
         await this.getAllUsersFromDB();
         toast.success(response.message);
+
+        // add log
+        let userInfo = this.state.userInfo;
+        let logInfo = {
+          userId: userInfo.id,
+          actionType: "A5",
+          message: `User ${userInfo.id} - ${userInfo.firstName} ${userInfo.lastName} edit information user ID: ${user.id} role ${this.renderRole(user.roleId)}`,
+        };
+        addLog(logInfo);
       } else {
         toast.error(response.errMessage);
       }
@@ -169,24 +198,24 @@ class UserManage extends Component {
     });
   };
 
+  renderRole = (roleId) => {
+    switch (roleId) {
+      case "R1":
+        return "Admin";
+      case "R2":
+        return "Doctor";
+      case "R3":
+        return "Patient";
+      case "R4":
+        return "Medical Staff";
+      default:
+        return "Unknown role";
+    }
+  };
+
   render() {
     // let arrUsers = this.state.arrUsers;
     let filteredUserList = this.state.filteredUserList;
-
-    const renderRole = (roleId) => {
-      switch (roleId) {
-        case "R1":
-          return "Admin";
-        case "R2":
-          return "Doctor";
-        case "R3":
-          return "Patient";
-        case "R4":
-          return "Medical Staff";
-        default:
-          return "Unknown role";
-      }
-    };
 
     return (
       <div className="users-container mx-1">
@@ -285,7 +314,7 @@ class UserManage extends Component {
                       <td>{item.email}</td>
                       <td>{item.firstName}</td>
                       <td>{item.lastName}</td>
-                      <td>{renderRole(item.roleId)}</td>
+                      <td>{this.renderRole(item.roleId)}</td>
                       <td>{item.createdAt}</td>
                       <td>
                         <button className="btn-edit" onClick={() => this.openEditUserModal(item)}>
@@ -307,7 +336,7 @@ class UserManage extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {};
+  return { userInfo: state.user.userInfo };
 };
 
 const mapDispatchToProps = (dispatch) => {

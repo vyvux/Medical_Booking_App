@@ -3,7 +3,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Label, Input, Col, Container, InputGroup, InputGroupText } from "reactstrap";
 import "../UserManage.scss";
-import { getAllUsers } from "../../../services/adminService";
+import { getAllUsers, getAllLogs } from "../../../services/adminService";
+import LogViewModal from "./LogViewModal";
 
 // import { values } from "lodash";
 
@@ -11,30 +12,14 @@ class LogManage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      arrLogs: [
-        { id: 1, userId: 1, actionType: "create", message: "create new admin role", createdAt: "2022-03-05 14:07:25" },
-        { id: 2, userId: 7, actionType: "create", message: "create new patient profile", createdAt: "2022-03-05 14:07:25" },
-        { id: 3, userId: 7, actionType: "create", message: "create new appointment", createdAt: "2022-03-05 14:07:25" },
-        { id: 4, userId: 14, actionType: "edit", message: "edit available hours", createdAt: "2022-03-05 14:07:25" },
-        { id: 5, userId: 20, actionType: "cancel", message: "cancel patient appointment", createdAt: "2022-03-05 14:07:25" },
-        { id: 6, userId: 21, actionType: "edit", message: "edit available hours", createdAt: "2022-03-05 14:07:25" },
-        { id: 7, userId: 3, actionType: "edit", message: "edit patient user information", createdAt: "2022-03-05 14:07:25" },
-        { id: 8, userId: 2, actionType: "edit", message: "edit patient user information", createdAt: "2022-03-05 14:07:25" },
-      ],
-      filteredLogList: [
-        { id: 1, userId: 1, actionType: "create", message: "create new admin role", createdAt: "2022-03-05 14:07:25" },
-        { id: 2, userId: 7, actionType: "create", message: "create new patient profile", createdAt: "2022-03-05 14:07:25" },
-        { id: 3, userId: 7, actionType: "create", message: "create new appointment", createdAt: "2022-03-05 14:07:25" },
-        { id: 4, userId: 14, actionType: "edit", message: "edit available hours", createdAt: "2022-03-05 14:07:25" },
-        { id: 5, userId: 20, actionType: "cancel", message: "cancel patient appointment", createdAt: "2022-03-05 14:07:25" },
-        { id: 6, userId: 21, actionType: "edit", message: "edit available hours", createdAt: "2022-03-05 14:07:25" },
-        { id: 7, userId: 3, actionType: "edit", message: "edit patient user information", createdAt: "2022-03-05 14:07:25" },
-        { id: 8, userId: 2, actionType: "edit", message: "edit patient user information", createdAt: "2022-03-05 14:07:25" },
-      ],
+      arrLogs: [],
+      filteredLogList: [],
       query: "",
       actionType: "",
       roleId: "",
       userList: [],
+      isOpenModalViewLog: false,
+      logInEffect: {},
     };
   }
 
@@ -44,13 +29,13 @@ class LogManage extends Component {
   }
 
   getAllLogsFromDB = async () => {
-    // let response = await getAllDoctors("ALL");
-    // if (response && response.errCode === 0) {
-    //   this.setState({
-    //     arrLogs: response.doctors,
-    //     filteredLogList: response.doctors,
-    //   });
-    // }
+    let response = await getAllLogs();
+    if (response && response.errCode === 0) {
+      this.setState({
+        arrLogs: response.logs,
+        filteredLogList: response.logs,
+      });
+    }
   };
 
   getAllUsersFromDB = async () => {
@@ -120,11 +105,25 @@ class LogManage extends Component {
     });
   };
 
+  openViewLogModal = (log) => {
+    this.setState({
+      isOpenModalViewLog: true,
+      logInEffect: log,
+    });
+  };
+
+  toggleModalViewLog = () => {
+    this.setState({
+      isOpenModalViewLog: !this.state.isOpenModalViewLog,
+    });
+  };
+
   render() {
     let filteredLogList = this.state.filteredLogList;
 
     return (
       <div className="users-container mx-1">
+        <LogViewModal isOpen={this.state.isOpenModalViewLog} toggleModalFromParent={this.toggleModalViewLog} log={this.state.logInEffect} />
         <div className="title text-center">Manage Logs</div>
 
         <div className="mt-1 mt-md-4 container">
@@ -165,6 +164,14 @@ class LogManage extends Component {
                     }}
                   >
                     <option value="">All Action</option>
+                    <option value="A1">Add appointment</option>
+                    <option value="A2">Cancel appointment</option>
+                    <option value="A3">Create user</option>
+                    <option value="A4">Delete user</option>
+                    <option value="A5">Edit user information</option>
+                    <option value="A6">Edit patient profile</option>
+                    <option value="A7">Edit doctor available hours</option>
+                    <option value="A8">User login</option>
                   </Input>
                 </Col>
               </Container>
@@ -207,6 +214,7 @@ class LogManage extends Component {
                 <th>Action</th>
                 <th>Details</th>
                 <th>Time Record</th>
+                <th>View</th>
               </tr>
             </thead>
 
@@ -219,6 +227,11 @@ class LogManage extends Component {
                       <td>{item.actionType}</td>
                       <td className="limited-word">{item.message}</td>
                       <td>{item.createdAt}</td>
+                      <td>
+                        <button className="btn-view" onClick={() => this.openViewLogModal(item)}>
+                          <i className="fas fa-eye"></i>
+                        </button>
+                      </td>
                     </tr>
                   );
                 })}

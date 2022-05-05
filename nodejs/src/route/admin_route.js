@@ -28,6 +28,10 @@ let initWebRoutesAdmin = (app) => {
   router.put("/api/edit-doctor", adminController.editDoctorInfo);
   router.delete("/api/delete-doctor", adminController.deleteDoctor);
 
+  /** Manage Log */
+  router.post("/api/add-log", adminController.addNewLog);
+  router.get("/api/get-all-logs", adminController.handleGetAllLogs);
+
   return app.use("/", router);
 };
 

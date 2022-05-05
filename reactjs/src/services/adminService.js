@@ -69,6 +69,15 @@ const deleteDoctor = (doctorUserId) => {
   return axios.delete("/api/delete-doctor", { data: { userId: doctorUserId } });
 };
 
+/** Manage Log */
+const addLog = (data) => {
+  return axios.post("/api/add-log", data);
+};
+
+const getAllLogs = () => {
+  return axios.get("/api/get-all-logs");
+};
+
 export {
   getAllUsers,
   createNewUserByAdmin,
@@ -86,4 +95,6 @@ export {
   createNewDoctor,
   editDoctor,
   deleteDoctor,
+  addLog,
+  getAllLogs,
 };

@@ -167,6 +167,22 @@ let deleteDoctor = async (req, res) => {
   return res.status(200).json(message);
 };
 
+// Manage Log
+let addNewLog = async (req, res) => {
+  let data = req.body;
+  let message = await adminService.addLog(data);
+  return res.status(200).json(message);
+};
+
+let handleGetAllLogs = async (req, res) => {
+  let logs = await adminService.getAllLogs();
+  return res.status(200).json({
+    errCode: 0,
+    errMessage: "OK",
+    logs,
+  });
+};
+
 module.exports = {
   createNewUserByAdmin: createNewUserByAdmin,
   handleGetAllUsers: handleGetAllUsers,
@@ -187,4 +203,7 @@ module.exports = {
   getAllDoctors: getAllDoctors,
   editDoctorInfo: editDoctorInfo,
   deleteDoctor: deleteDoctor,
+
+  addNewLog: addNewLog,
+  handleGetAllLogs: handleGetAllLogs,
 };

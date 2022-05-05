@@ -13,6 +13,7 @@ class MenuGroup extends Component {
             <li className="menu-group">
                 <div className="menu-group-name">
                     <FormattedMessage id={name} />
+                    <i className="fas fa-angle-down mx-2 fa-sm"></i>
                 </div>
                 <ul className="menu-list list-unstyled">
                     {children}
