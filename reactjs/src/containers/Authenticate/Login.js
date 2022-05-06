@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import { push } from "connected-react-router";
 import * as actions from "../../store/actions";
 import "./Login.scss";
@@ -7,6 +8,7 @@ import { FormattedMessage } from "react-intl";
 import { handleLoginApi } from "../../services/userService";
 import { userLoginSuccess } from "../../store/actions";
 import { addLog } from "../../services/adminService";
+import Logo from "../Logo/Logo";
 
 class Login extends Component {
   constructor(props) {
@@ -93,6 +95,9 @@ class Login extends Component {
       <div className="login-background">
         <div className="login-container">
           <div className="login-content row">
+            <Logo className="logo" />
+            <hr />
+
             <div className="col-12 text-login">Login</div>
 
             {/* EMAIL INPUT*/}
@@ -150,8 +155,15 @@ class Login extends Component {
             </div>
 
             {/* FORGOT PASSWORD */}
+            <div className="col-12 text-center my-1">
+              <Link className="forgot-password">Forgot your password?</Link>
+            </div>
+
             <div className="col-12 text-center">
-              <span className="forgot-password">Forgot your password?</span>
+              <span className="forgot-password">Don't have and account? </span>
+              <Link to="/register" className="signup">
+                Sign up
+              </Link>
             </div>
           </div>
         </div>
