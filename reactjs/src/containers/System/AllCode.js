@@ -25,6 +25,15 @@ const renderBranch = (branchList, branchId) => {
   }
 };
 
+const renderClinicInfo = (clinicInfo, infoId) => {
+  let item = clinicInfo.find(({ id }) => id === infoId);
+  if (item) {
+    return item.name;
+  } else {
+    return "Unknown clinic information";
+  }
+};
+
 // render role - all code
 const renderAllCode = (allCode, keyCode) => {
   let item = allCode.find(({ key }) => key === keyCode.toString());
@@ -40,4 +49,5 @@ module.exports = {
   renderService: renderService,
   renderBranch: renderBranch,
   renderAllCode: renderAllCode,
+  renderClinicInfo: renderClinicInfo,
 };

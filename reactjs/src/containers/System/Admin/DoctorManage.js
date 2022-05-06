@@ -3,13 +3,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Label, Input, Col, Container, InputGroup, InputGroupText } from "reactstrap";
 import "../UserManage.scss";
-import { getAllDoctors, createNewDoctor, editDoctor, deleteDoctor, getAllBranches, getAllServices, getAllUsers } from "../../../services/adminService";
-import { renderBranch, renderService, renderAllCode } from "../AllCode";
+import { getAllDoctors, createNewDoctor, editDoctor, deleteDoctor, getAllBranches, getAllServices, getAllUsers, addLog } from "../../../services/adminService";
+import { renderClinicInfo, renderAllCode } from "../AllCode";
 import DoctorModal from "./DoctorModal";
 import DoctorEditModal from "./DoctorEditModal";
 import DoctorDeleteModal from "./DoctorDeleteModal";
 import { toast } from "react-toastify";
-import { addLog } from "../../../services/adminService";
 import * as actions from "../../../store/actions";
 
 // import { values } from "lodash";
@@ -38,6 +37,8 @@ class DoctorManage extends Component {
     this.getAllDoctorsFromDB();
     this.getUnregisteredDoctors();
     this.props.getGenderStart();
+    this.props.getBranchStart();
+    this.props.getServiceStart();
   }
 
   getAllDoctorsFromDB = async () => {
@@ -397,8 +398,8 @@ class DoctorManage extends Component {
                       <td>{item.userId}</td>
                       <td>{item.firstName}</td>
                       <td>{item.lastName}</td>
-                      <td>{renderService(serviceList, item.serviceId)}</td>
-                      <td>{renderBranch(branchList, item.branchId)}</td>
+                      <td>{renderClinicInfo(this.props.services, item.serviceId)}</td>
+                      <td>{renderClinicInfo(this.props.branches, item.branchId)}</td>
                       <td className="limited-word">{item.about}</td>
                       <td>{renderAllCode(this.props.gender, item.gender)}</td>
                       <td>
@@ -421,12 +422,19 @@ class DoctorManage extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return { userInfo: state.user.userInfo, gender: state.code.gender, role: state.code.role, time: state.code.time, action: state.code.action, status: state.code.status };
+  return {
+    userInfo: state.user.userInfo,
+    gender: state.code.gender,
+    branches: state.clinicInfo.branches,
+    services: state.clinicInfo.services,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     getGenderStart: () => dispatch(actions.fetchGenderStart()),
+    getBranchStart: () => dispatch(actions.fetchBranchStart()),
+    getServiceStart: () => dispatch(actions.fetchServiceStart()),
   };
 };
 
