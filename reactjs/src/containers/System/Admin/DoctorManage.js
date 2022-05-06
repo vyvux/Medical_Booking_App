@@ -26,8 +26,6 @@ class DoctorManage extends Component {
       query: "",
       branch: "",
       service: "",
-      branchList: [],
-      serviceList: [],
       unregisteredDoctors: [],
       userInfo: this.props.userInfo,
     };
@@ -47,16 +45,6 @@ class DoctorManage extends Component {
       this.setState({
         arrDoctors: response.doctors,
         filteredDoctorList: response.doctors,
-      });
-    }
-
-    // retrieve services and branches info for rendering name
-    let serviceResponse = await getAllServices("ALL");
-    let branchResponse = await getAllBranches("ALL");
-    if (serviceResponse && branchResponse && (serviceResponse.errCode === 0) & (branchResponse.errCode === 0)) {
-      this.setState({
-        serviceList: serviceResponse.services,
-        branchList: branchResponse.branches,
       });
     }
   };
@@ -250,37 +238,19 @@ class DoctorManage extends Component {
 
   render() {
     let filteredDoctorList = this.state.filteredDoctorList;
-    let serviceList = this.state.serviceList;
-    let branchList = this.state.branchList;
 
     return (
       <div className="users-container mx-1">
-        <DoctorModal
-          isOpen={this.state.isOpenModalDoctor}
-          toggleModalFromParent={this.toggleDoctorModal}
-          createNewDoctor={this.createNewDoctor}
-          doctorList={this.state.unregisteredDoctors}
-          serviceList={this.state.serviceList}
-          branchList={this.state.branchList}
-        />
+        <DoctorModal isOpen={this.state.isOpenModalDoctor} toggleModalFromParent={this.toggleDoctorModal} createNewDoctor={this.createNewDoctor} doctorList={this.state.unregisteredDoctors} />
 
         <DoctorDeleteModal
           isOpen={this.state.isOpenModalDeleteDoctorConfirm}
           toggleModalFromParent={this.toggleModalDeleteDoctorConfirm}
           deleteDoctor={this.handleDeleteDoctor}
           doctor={this.state.doctorInEffect}
-          serviceList={this.state.serviceList}
-          branchList={this.state.branchList}
         />
 
-        <DoctorEditModal
-          isOpen={this.state.isOpenModalEditDoctor}
-          toggleModalFromParent={this.toggleModalEditDoctor}
-          editDoctor={this.handleEditDoctor}
-          doctor={this.state.doctorInEffect}
-          serviceList={this.state.serviceList}
-          branchList={this.state.branchList}
-        />
+        <DoctorEditModal isOpen={this.state.isOpenModalEditDoctor} toggleModalFromParent={this.toggleModalEditDoctor} editDoctor={this.handleEditDoctor} doctor={this.state.doctorInEffect} />
 
         <div className="title text-center">Manage doctors</div>
 
@@ -330,8 +300,8 @@ class DoctorManage extends Component {
                     }}
                   >
                     <option value="">All Services</option>
-                    {serviceList &&
-                      serviceList.map((item, index) => {
+                    {this.props.services &&
+                      this.props.services.map((item, index) => {
                         return (
                           <option value={item.id} key={item.id}>
                             {item.name}
@@ -359,8 +329,8 @@ class DoctorManage extends Component {
                     }}
                   >
                     <option value="">All Branches</option>
-                    {branchList &&
-                      branchList.map((item, index) => {
+                    {this.props.branches &&
+                      this.props.branches.map((item, index) => {
                         return (
                           <option value={item.id} key={item.id}>
                             {item.name}

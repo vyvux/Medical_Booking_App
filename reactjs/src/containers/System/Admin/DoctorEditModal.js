@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { toast } from "react-toastify";
 import _ from "lodash";
+import * as actions from "../../../store/actions";
 class DoctorEditModal extends Component {
   constructor(props) {
     super(props);
@@ -18,7 +19,10 @@ class DoctorEditModal extends Component {
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.props.getBranchStart();
+    this.props.getServiceStart();
+  }
 
   // change state when new data row is selected
   componentDidUpdate() {
@@ -73,8 +77,6 @@ class DoctorEditModal extends Component {
   };
 
   render() {
-    let services = this.props.serviceList;
-    let branches = this.props.branchList;
     return (
       <Modal
         isOpen={this.props.isOpen}
@@ -145,8 +147,8 @@ class DoctorEditModal extends Component {
                   value={this.state.serviceId}
                 >
                   <option value="">Choose...</option>
-                  {services &&
-                    services.map((service, index) => {
+                  {this.props.services &&
+                    this.props.services.map((service, index) => {
                       return (
                         <option value={service.id} key={service.id}>
                           {service.name}
@@ -171,8 +173,8 @@ class DoctorEditModal extends Component {
                   value={this.state.branchId}
                 >
                   <option value="">Choose...</option>
-                  {branches &&
-                    branches.map((branch, index) => {
+                  {this.props.branches &&
+                    this.props.branches.map((branch, index) => {
                       return (
                         <option value={branch.id} key={branch.id}>
                           {branch.name}
@@ -227,11 +229,17 @@ class DoctorEditModal extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {};
+  return {
+    branches: state.clinicInfo.branches,
+    services: state.clinicInfo.services,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    getBranchStart: () => dispatch(actions.fetchBranchStart()),
+    getServiceStart: () => dispatch(actions.fetchServiceStart()),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DoctorEditModal);

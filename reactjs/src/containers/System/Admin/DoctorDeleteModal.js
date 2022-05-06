@@ -2,14 +2,19 @@ import React, { Component } from "react";
 // import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import { renderGender, renderBranch, renderService } from "../AllCode";
+import { renderGender, renderAllCode, renderClinicInfo } from "../AllCode";
+import * as actions from "../../../store/actions";
 class DoctorDeleteModal extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.props.getBranchStart();
+    this.props.getServiceStart();
+    this.props.getGenderStart();
+  }
 
   toggle = () => {
     this.props.toggleModalFromParent();
@@ -75,7 +80,7 @@ class DoctorDeleteModal extends Component {
                   Service
                 </label>
                 <select className="form-select" id="service" value={doctor.serviceId} readOnly>
-                  <option value={doctor.serviceId}>{renderService(this.props.serviceList, doctor.serviceId)}.</option>
+                  <option value={doctor.serviceId}>{renderClinicInfo(this.props.services, doctor.serviceId)}.</option>
                 </select>
               </div>
             </div>
@@ -86,7 +91,7 @@ class DoctorDeleteModal extends Component {
                   Branch
                 </label>
                 <select className="form-select" id="branch" value={doctor.branchId} readOnly>
-                  <option value={doctor.branchId}>{renderBranch(this.props.branchList, doctor.branchId)}</option>
+                  <option value={doctor.branchId}>{renderClinicInfo(this.props.branches, doctor.branchId)}</option>
                 </select>
               </div>
             </div>
@@ -127,11 +132,19 @@ class DoctorDeleteModal extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {};
+  return {
+    gender: state.code.gender,
+    branches: state.clinicInfo.branches,
+    services: state.clinicInfo.services,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    getGenderStart: () => dispatch(actions.fetchGenderStart()),
+    getBranchStart: () => dispatch(actions.fetchBranchStart()),
+    getServiceStart: () => dispatch(actions.fetchServiceStart()),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DoctorDeleteModal);
