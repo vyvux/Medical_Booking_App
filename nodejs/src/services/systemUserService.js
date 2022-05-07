@@ -205,19 +205,29 @@ let checkValidPatientId = (patientId) => {
     try {
       let patient = await db.Patient.findOne({
         where: { id: patientId },
+        raw: false,
       });
       if (patient) {
         // patient exists
         if (patient.userId === null) {
           // no associated system user for this patient
-          resolve(true);
+          resolve({
+            valid: true,
+            patient: patient,
+          });
         } else {
           // patient profile has been linked with another system user
-          resolve(false);
+          resolve({
+            valid: false,
+            patient: {},
+          });
         }
       } else {
         // patient doesnt exist
-        resolve(false);
+        resolve({
+          valid: false,
+          patient: {},
+        });
       }
     } catch (e) {
       reject(e);

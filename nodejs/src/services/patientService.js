@@ -1,4 +1,4 @@
-import db, { sequelize } from "../models/index";
+// import db, { sequelize } from "../models/index";
 import { checkUserEmail, hashUserPassword, createNewUser, createNewPatient, checkValidPatientId } from "./systemUserService";
 
 // function creating new user and new patient profile
@@ -7,19 +7,26 @@ let registerNewUserWithNewPatient = (data) => {
     try {
       let isExistingEmail = await checkUserEmail(data.email);
       if (isExistingEmail === false) {
-        // Email hasn't been registered
+        // Email ready to use
         let hashPasswordFromBcrypt = await hashUserPassword(data.password);
         // create new user
         let newUser = await createNewUser(data, hashPasswordFromBcrypt);
 
         // create new patient
-
         let newPatient = await createNewPatient(data, newUser.id);
 
-        resolve("new user and profile were created");
+        resolve({
+          errCode: 0,
+          message: "new user and profile were created",
+          user: newUser,
+          patient: newPatient,
+        });
       } else {
         // Email was registered
-        resolve("Email has already been registered");
+        resolve({
+          errCode: 1,
+          errMessage: "Email has already been registered.",
+        });
       }
     } catch (e) {
       reject(e);
@@ -31,41 +38,62 @@ let registerNewUserWithNewPatient = (data) => {
 let registerNewUserWithExistingPatient = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
+      if (!data.email) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing required parameters!",
+        });
+      }
       // check unique email
       let isExistingEmail = await checkUserEmail(data.email);
+      // Email was registered
+      if (isExistingEmail) {
+        resolve({
+          errCode: 2,
+          errMessage: "Email has already been registered.",
+        });
+      }
 
-      if (!isExistingEmail) {
-        // Email hasn't been registered
-        if (data.patientId) {
-          let isValidPatientId = await checkValidPatientId(data.patientId);
-          if (isValidPatientId) {
-            // patientID not associated with any user
+      // Email hasn't been registered
 
-            let hashPasswordFromBcrypt = await hashUserPassword(data.password);
-            // create new user
-            let newUser = await createNewUser(data, hashPasswordFromBcrypt);
-            //assign userId to patient profile
-            let patient = await db.Patient.findOne({
-              where: { id: data.patientId },
-            });
-            if (patient) {
-              patient.userId = newUser.id;
-              await patient.save();
+      // check params patient id + patient name
+      if (!data.patientId && !data.patientName) {
+        resolve({
+          errCode: 3,
+          errMessage: "Missing patient information.",
+        });
+      }
 
-              resolve("registered new user with patient profile");
-            } else {
-              resolve("patient profile not found");
-            }
-          } else {
-            // patientID was associated with another user
-            resolve("Patient ID was incorrect or was registered by another user.");
-          }
-        } else {
-          resolve("not receive patientID");
-        }
+      let patientCheck = await checkValidPatientId(data.patientId);
+      // patient profile not found
+      if (!patientCheck.valid) {
+        resolve({
+          errCode: 4,
+          errMessage: "Patient ID was incorrect or was registered with another user.",
+        });
+      }
+
+      let foundPatient = patientCheck.patient;
+      console.log("check length: ", foundPatient.length);
+      // patientID not associated with any user
+      if (foundPatient && foundPatient.firstName === data.patientName) {
+        let hashPasswordFromBcrypt = await hashUserPassword(data.password);
+        // create new user
+        let newUser = await createNewUser(data, hashPasswordFromBcrypt);
+
+        // assign userId to patient profile
+        foundPatient.userId = newUser.id;
+        await foundPatient.save();
+
+        resolve({
+          errCode: 0,
+          errMessage: "Register new user with existing patient.",
+        });
       } else {
-        // Email was registered
-        resolve("Email has already been registered");
+        resolve({
+          errCode: 5,
+          errMessage: "Incorrect patient information.",
+        });
       }
     } catch (e) {
       reject(e);

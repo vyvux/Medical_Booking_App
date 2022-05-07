@@ -268,12 +268,12 @@ class UserManage extends Component {
                     <option value="">All Roles</option>
                     {this.props.role &&
                       this.props.role.map((item, index) => {
-                        return <option value={item.key}>{item.value}</option>;
+                        return (
+                          <option value={item.key} key={item.key}>
+                            {item.value}
+                          </option>
+                        );
                       })}
-                    {/* <option value="R1">Admin</option>
-                    <option value="R2">Doctor</option>
-                    <option value="R4">Medical Staff</option>
-                    <option value="R3">Patient</option> */}
                   </Input>
                 </Col>
               </Container>
