@@ -7,6 +7,7 @@ import { adminMenu, doctorMenu, medicalStaffMenu } from "./menuApp";
 import "./Header.scss";
 import _ from "lodash";
 import { USER_ROLE } from "../../utils/constant";
+import Logo from "../Logo/Logo";
 
 class Header extends Component {
   constructor(props) {
@@ -59,9 +60,11 @@ class Header extends Component {
           <Navigator menus={this.state.menuApp} />
         </div>
 
+        <Logo lightBg={false} smallSize={true} className="logo" />
+
         <div className="container">
           <div className="row justify-content-end align-items-center">
-            <div className="col-1 col-sm-1 text-right">
+            <div className="col-3 col-sm-1 text-right">
               <i className="fas fa-user-circle fa-2x"></i>
             </div>
             <div className="col-6 offset-1 col-sm-2 offset-sm-0 text-left">

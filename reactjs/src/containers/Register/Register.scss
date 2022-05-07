@@ -1,14 +1,4 @@
-.login-background {
-  // background: rgb(34, 193, 195);
-  // background: linear-gradient(
-  //   204deg,
-  //   rgba(34, 193, 195, 1) 0%,
-  //   rgba(234, 45, 253, 1) 100%
-  // );
-  // background: rgb(34, 193, 195);
-  // background: linear-gradient(204deg, rgba(34, 193, 195, 1) 0%, rgba(205, 67, 155, 1) 100%);
-  // height: 100vh;
-  // background: #00c087;
+.register-background {
   background: #3743ab;
   position: relative;
   height: 100vh;
@@ -17,11 +7,11 @@
   align-items: center;
   justify-content: center;
 
-  .login-container {
+  .register-container {
     border-radius: 7px;
     background-color: whitesmoke;
     width: 350px;
-    height: 450px;
+    height: 70vh;
     margin: auto;
     position: absolute;
     top: 0;
@@ -29,7 +19,7 @@
     right: 0;
     left: 0;
 
-    .login-content {
+    .register-content {
       padding: 20px 35px;
 
       input:focus {
@@ -50,6 +40,13 @@
         margin-bottom: 15px;
       }
 
+      .form-check {
+        margin: 10px auto;
+        .form-check-input {
+          margin-right: 5px;
+        }
+      }
+
       .login-input {
         margin: 10px 0;
 
@@ -65,7 +62,7 @@
         }
       }
 
-      .btn-login {
+      .btn-register {
         width: 60%;
         margin: 10px 0;
         height: 35px;
@@ -78,25 +75,26 @@
         margin-top: 20px;
       }
 
-      .btn-login:hover {
+      .btn-register:hover {
         background: #4b57ca;
       }
-      .forgot-password {
-        font-size: 12px;
-      }
 
-      .signup {
+      .link-text {
+        font-size: 12px;
+        color: #3743ab;
+      }
+      .nav-login {
         font-size: 12px;
       }
     }
   }
 }
 
-.login-background::before {
+.register-background::before {
   content: "";
-  background: url("../../assets/images/login-bg.jpg") center left no-repeat;
+  background: url("../../assets/images/register.jpg") left center no-repeat;
   background-size: cover;
   width: 100vw;
   height: 100vh;
-  opacity: 0.85;
+  opacity: 0.75;
 }

@@ -17,6 +17,7 @@ import Doctor from "../routes/Doctor";
 import MedStaff from "../routes/MedStaff";
 
 import HomePage from "./HomePage/HomePage";
+import Register from "./Register/Register";
 
 import { CustomToastCloseButton } from "../components/CustomToast";
 import ConfirmModal from "../components/ConfirmModal";
@@ -53,6 +54,7 @@ class App extends Component {
                 <Switch>
                   <Route path={path.HOME} exact component={Home} />
                   <Route path={path.HOMEPAGE} component={userIsNotAuthenticated(HomePage)} />
+                  <Route path={path.REGISTER} component={userIsNotAuthenticated(Register)} />
                   <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
                   <Route path={path.SYSTEM} component={userIsAuthenticated(System)} />
                   <Route path={path.DOCTOR} component={userIsAuthenticated(Doctor)} />

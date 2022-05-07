@@ -35,7 +35,7 @@ class HomeHeader extends Component {
       <div className="home-header-container justif-items-between">
         <Navbar color="light" light expand="md" className="px-auto px-md-5">
           <NavbarBrand href="/home">
-            <Logo />
+            <Logo lightBg={true} smallSize={false} />
           </NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>

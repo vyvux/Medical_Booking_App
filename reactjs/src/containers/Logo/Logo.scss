@@ -1,11 +1,40 @@
-.logo {
-  font-family: "Hammersmith One";
-  font-weight: 700;
-  font-size: xx-large;
-  color: #3743ab;
-  span {
+.light {
+  .logo {
+    font-family: "Hammersmith One";
+    font-weight: 700;
+    color: #3743ab;
+    span {
+      color: #e89221;
+      font-size: 30x;
+    }
+  }
+
+  .normal {
+    font-size: xx-large;
+  }
+
+  .small {
+    font-size: medium;
+  }
+}
+
+.dark {
+  .logo {
+    font-family: "Hammersmith One";
+    font-weight: 700;
     color: #e89221;
-    font-size: 30x;
+    span {
+      color: #bee48c;
+      font-size: 30x;
+    }
+  }
+
+  .normal {
+    font-size: xx-large;
+  }
+
+  .small {
+    font-size: x-large;
   }
 }
 
