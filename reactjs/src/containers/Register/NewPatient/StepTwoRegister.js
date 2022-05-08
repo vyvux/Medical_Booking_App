@@ -1,30 +1,13 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import "../Register.scss";
+import { toast } from "react-toastify";
 
 class StepTwoRegister extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      dob: "",
-      gender: "",
-      phoneNumber: "",
-      address: "",
-    };
+    this.state = {};
   }
-
-  handleOnChangeInput = (event, id) => {
-    let copyState = { ...this.state };
-    copyState[id] = event.target.value;
-    this.setState(
-      {
-        ...copyState,
-      },
-      () => {
-        console.log("check state: ", this.state);
-      }
-    );
-  };
 
   setToday = () => {
     let today = new Date();
@@ -53,9 +36,9 @@ class StepTwoRegister extends Component {
             max={today}
             className="form-control"
             placeholder="Enter your email"
-            value={this.state.dob}
+            value={this.props.getStateInput("dob")}
             onChange={(event) => {
-              this.handleOnChangeInput(event, "dob");
+              this.props.handleOnChangeInput(event, "dob");
             }}
           />
         </div>
@@ -68,9 +51,9 @@ class StepTwoRegister extends Component {
             className="form-control"
             id="gender"
             onChange={(event) => {
-              this.handleOnChangeInput(event, "gender");
+              this.props.handleOnChangeInput(event, "gender");
             }}
-            value={this.state.gender}
+            value={this.props.getStateInput("gender")}
           >
             <option value="">Choose...</option>
             <option value="1">Male</option>
@@ -86,9 +69,9 @@ class StepTwoRegister extends Component {
             id="phone"
             className="form-control"
             placeholder="Enter your phone number"
-            value={this.state.phoneNumber}
+            value={this.props.getStateInput("phoneNumber")}
             onChange={(event) => {
-              this.handleOnChangeInput(event, "phoneNumber");
+              this.props.handleOnChangeInput(event, "phoneNumber");
             }}
           />
         </div>
@@ -102,9 +85,9 @@ class StepTwoRegister extends Component {
             id="phone"
             className="form-control"
             placeholder="Enter your address"
-            value={this.state.address}
+            value={this.props.getStateInput("address")}
             onChange={(event) => {
-              this.handleOnChangeInput(event, "address");
+              this.props.handleOnChangeInput(event, "address");
             }}
           />
         </div>

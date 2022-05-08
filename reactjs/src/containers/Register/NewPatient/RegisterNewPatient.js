@@ -12,8 +12,8 @@ class RegisterNewPatient extends Component {
   }
   render() {
     const steps = [
-      { name: "1", component: <StepOneRegister /> },
-      { name: "2", component: <StepTwoRegister /> },
+      { name: "1", component: <StepOneRegister handleOnChangeInput={this.props.handleOnChangeInput} getStateInput={this.props.getStateInput} /> },
+      { name: "2", component: <StepTwoRegister handleOnChangeInput={this.props.handleOnChangeInput} getStateInput={this.props.getStateInput} /> },
     ];
     return (
       <div className="multi-step">

@@ -8,6 +8,7 @@ import { FormattedMessage } from "react-intl";
 import { addLog } from "../../services/adminService";
 import Logo from "../Logo/Logo";
 import RegisterNewPatient from "./NewPatient/RegisterNewPatient";
+import RegisterExistingPatient from "./ExistingPatient/RegisterExistingPatient";
 
 class Register extends Component {
   constructor(props) {
@@ -16,7 +17,7 @@ class Register extends Component {
       isExistingPatient: false,
       email: "",
       password: "",
-      showPassword: false,
+      // showPassword: false,
       errMessage: "",
       roleId: "R3",
       firstName: "",
@@ -33,50 +34,85 @@ class Register extends Component {
   handleOnChangeInput = (event, id) => {
     let copyState = { ...this.state };
     copyState[id] = event.target.value;
+    this.setState(
+      {
+        ...copyState,
+      },
+      () => {
+        console.log("check state: ", this.state);
+      }
+    );
+  };
+
+  getStateInput = (id) => {
+    return this.state[id];
+  };
+
+  newPatientvalidateInputs = () => {
+    console.log("check valid new patient fields");
+    let isValid = true;
+    let arrInputs = ["email", "password", "firstName", "lastName", "dob", "phoneNumber", "address", "gender"];
+    for (let i = 0; i < arrInputs.length; i++) {
+      if (!this.state[arrInputs[i]]) {
+        isValid = false;
+        this.setState({
+          errMessage: "Missing field: " + arrInputs[i],
+        });
+        break;
+      }
+    }
+    return isValid;
+  };
+
+  existingPatientvalidateInputs = () => {
+    console.log("check valid existing patient fields");
+    let isValid = true;
+    let arrInputs = ["email", "password", "firstName", "lastName", "patientId", "patientName"];
+    for (let i = 0; i < arrInputs.length; i++) {
+      if (!this.state[arrInputs[i]]) {
+        isValid = false;
+        this.setState({
+          errMessage: "Missing field: " + arrInputs[i],
+        });
+        break;
+      }
+    }
+    return isValid;
+  };
+
+  resetState = () => {
     this.setState({
-      ...copyState,
+      firstName: "",
+      lastName: "",
+      dob: "",
+      phoneNumber: "",
+      address: "",
+      gender: "",
+      patientId: "",
+      patientName: "",
+      errMessage: "",
     });
   };
 
-  handleShowHidePassword = () => {
-    this.setState({
-      showPassword: !this.state.showPassword,
-    });
+  togglePatientForm = () => {
+    this.setState(
+      {
+        isExistingPatient: !this.state.isExistingPatient,
+      },
+      () => {
+        this.resetState();
+      }
+    );
   };
 
-  //   handleLogin = async () => {
-  //     this.setState({
-  //       errMessage: "",
-  //     });
-
-  //     try {
-  //       let data = await handleLoginApi(this.state.email, this.state.password);
-  //       if (data && data.errCode !== 0) {
-  //         // error while login
-  //         this.setState({
-  //           errMessage: data.message,
-  //         });
-  //       }
-
-  //       if (data && data.errCode === 0) {
-  //         // add log
-  //         let logInfo = {
-  //           userId: data.user.id,
-  //           actionType: "A8",
-  //           message: `User ${data.user.id} - ${data.user.firstName} ${data.user.lastName} (${this.renderRole(data.user.roleId)}) log into system`,
-  //         };
-  //         addLog(logInfo);
-  //       }
-  //     } catch (e) {
-  //       if (e.response) {
-  //         if (e.response.data) {
-  //           this.setState({
-  //             errMessage: e.response.data.message,
-  //           });
-  //         }
-  //       }
-  //     }
-  //   };
+  handlePatientRegister = () => {
+    if (this.isExistingPatient && this.existingPatientvalidateInputs()) {
+      console.log("proceed register existing patient");
+    }
+    if (!this.isExistingPatient && this.newPatientvalidateInputs()) {
+      console.log("proceed register new patient");
+    }
+  };
 
   render() {
     return (
@@ -89,26 +125,37 @@ class Register extends Component {
             <div className="col-12 text-login">Patient Register</div>
 
             <div className="form-group form-check d-flex justify-content-center">
-              <input type="checkbox" className="form-check-input" id="existingPatientCheck" />
+              <input
+                type="checkbox"
+                className="form-check-input"
+                id="existingPatientCheck"
+                onChange={() => {
+                  this.togglePatientForm();
+                }}
+              />
               <label className="form-check-label" htmlFor="existingPatientCheck">
                 I'm an existing patient
               </label>
             </div>
 
-            <RegisterNewPatient />
+            {this.state.isExistingPatient ? (
+              <RegisterExistingPatient handleOnChangeInput={this.handleOnChangeInput} getStateInput={this.getStateInput} />
+            ) : (
+              <RegisterNewPatient handleOnChangeInput={this.handleOnChangeInput} getStateInput={this.getStateInput} />
+            )}
 
             {/* Error message*/}
             <div className="col-12" style={{ color: "red" }}>
               {this.state.errMessage}
             </div>
 
-            {/* LOGIN BUTTON*/}
+            {/* REGISTER BUTTON*/}
             <div className="col-12 text-center">
               <button
                 className="btn-register"
-                // onClick={() => {
-                //   this.handleLogin();
-                // }}
+                onClick={() => {
+                  this.handlePatientRegister();
+                }}
               >
                 Register
               </button>
