@@ -3,6 +3,7 @@ import Multistep from "react-multistep";
 import ReactDOM from "react-dom";
 import "../RegisterComponents.scss";
 import StepOneRegister from "./StepOneRegister";
+import StepTwoRegister from "./StepTwoRegister";
 
 class RegisterNewPatient extends Component {
   constructor(props) {
@@ -12,7 +13,7 @@ class RegisterNewPatient extends Component {
   render() {
     const steps = [
       { name: "1", component: <StepOneRegister /> },
-      { name: "2", component: <div>StepTwo</div> },
+      { name: "2", component: <StepTwoRegister /> },
     ];
     return (
       <div className="multi-step">

@@ -22,7 +22,8 @@
     .register-content {
       padding: 20px 50px;
 
-      input:focus {
+      input:focus,
+      select:focus {
         border-color: #3743ab; //#28a745
         box-shadow: 0 0 0 0.2rem #9fa2c0;
       }
@@ -49,7 +50,7 @@
 
       .login-input {
         margin: 10px 0;
-        margin-bottom: 20px !important;
+        margin-bottom: 10px !important;
         text-align: left !important;
         label {
           margin-bottom: 5px;

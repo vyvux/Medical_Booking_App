@@ -33,7 +33,7 @@ class StepOneRegister extends Component {
         <div className="col-12 form-group login-input">
           <label>Email</label>
           <input
-            type="text"
+            type="email"
             className="form-control"
             placeholder="Enter your email"
             value={this.state.email}
