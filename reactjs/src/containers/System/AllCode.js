@@ -36,7 +36,11 @@ const renderClinicInfo = (clinicInfo, infoId) => {
 
 // render role - all code
 const renderAllCode = (allCode, keyCode) => {
-  let item = allCode.find(({ key }) => key === keyCode.toString());
+  if (keyCode && typeof keyCode !== "string") {
+    keyCode = keyCode.toString();
+  }
+
+  let item = allCode.find(({ key }) => key === keyCode);
   if (item) {
     return item.value;
   } else {

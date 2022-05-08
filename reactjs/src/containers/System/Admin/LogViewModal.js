@@ -2,13 +2,18 @@ import React, { Component } from "react";
 // import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { renderAllCode } from "../AllCode";
+import * as actions from "../../../store/actions";
+
 class LogViewModal extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.props.getActionStart();
+  }
 
   toggle = () => {
     this.props.toggleModalFromParent();
@@ -46,7 +51,15 @@ class LogViewModal extends Component {
               </div>
               <div className="col-md-6 col-sm-12">
                 <div className="form-floating mb-3">
-                  <input type="text" className="form-control" id="floatingPhone" placeholder="Address" autoComplete="off" value={this.props.log.actionType} readOnly />
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingPhone"
+                    placeholder="Address"
+                    autoComplete="off"
+                    value={renderAllCode(this.props.action, this.props.log.actionType)}
+                    readOnly
+                  />
                   <label htmlFor="floatingAddress">Action Type</label>
                 </div>
               </div>
@@ -85,11 +98,11 @@ class LogViewModal extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {};
+  return { action: state.code.action };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return { getActionStart: () => dispatch(actions.fetchActionStart()) };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LogViewModal);
