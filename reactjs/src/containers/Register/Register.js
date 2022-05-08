@@ -7,6 +7,7 @@ import "./Register.scss";
 import { FormattedMessage } from "react-intl";
 import { addLog } from "../../services/adminService";
 import Logo from "../Logo/Logo";
+import RegisterNewPatient from "./NewPatient/RegisterNewPatient";
 
 class Register extends Component {
   constructor(props) {
@@ -93,42 +94,8 @@ class Register extends Component {
                 I'm an existing patient
               </label>
             </div>
-            {/* EMAIL INPUT*/}
-            <div className="col-12 form-group login-input">
-              <label>Email</label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Enter your email"
-                value={this.state.email}
-                onChange={(event) => {
-                  this.handleOnChangeInput(event, "email");
-                }}
-              />
-            </div>
 
-            {/* PASSWORD INPUT*/}
-            <div className="col-12 form-group login-input">
-              <label>Password</label>
-              <div className="custom-input-password">
-                <input
-                  type={this.state.showPassword ? "text" : "password"}
-                  className="form-control"
-                  placeholder="Enter your password"
-                  onChange={(event) => {
-                    this.handleOnChangeInput(event, "password");
-                  }}
-                />
-                {/* SHOW PASSWORD ICON */}
-                <span
-                  onClick={() => {
-                    this.handleShowHidePassword();
-                  }}
-                >
-                  <i className={this.state.showPassword ? "fas fa-eye" : "fas fa-eye-slash"}></i>
-                </span>
-              </div>
-            </div>
+            <RegisterNewPatient />
 
             {/* Error message*/}
             <div className="col-12" style={{ color: "red" }}>
