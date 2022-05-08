@@ -13,18 +13,20 @@ class RegisterSuccess extends Component {
     let existingPatient = `You have successfully register a patient account with Patient ID ${this.props.patientId}. Please log into MedCare system for making medical appointment.`;
 
     return (
-      <div className="patient-register-success">
+      <div>
         <Modal centered isOpen={this.props.isOpen} returnFocusAfterClose={false}>
           <ModalBody>{this.props.isExistingPatient ? existingPatient : newPatient}</ModalBody>
           <ModalFooter>
-            <Button
-              color="primary"
-              onClick={() => {
-                this.props.history.push("/login");
-              }}
-            >
-              Log in
-            </Button>
+            <div className="patient-register-success">
+              <Button
+                color="primary"
+                onClick={() => {
+                  this.props.history.push("/login");
+                }}
+              >
+                Log in
+              </Button>
+            </div>
           </ModalFooter>
         </Modal>
       </div>

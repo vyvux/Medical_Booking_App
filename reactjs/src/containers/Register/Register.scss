@@ -105,8 +105,9 @@
   opacity: 0.75;
 }
 
-.patient-register-success {
-  .modal-footer {
+// button navigating to login page in register success modal
+.modal-footer {
+  .patient-register-success {
     .btn {
       width: 65px;
       margin: 10px 0;

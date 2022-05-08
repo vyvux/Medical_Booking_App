@@ -88,6 +88,8 @@ let registerNewUserWithExistingPatient = (data) => {
         resolve({
           errCode: 0,
           errMessage: "Register new user with existing patient.",
+          patient: foundPatient,
+          user: newUser,
         });
       } else {
         resolve({

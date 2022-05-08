@@ -169,6 +169,16 @@ class Register extends Component {
         }
 
         if (response && response.errCode === 0) {
+          let newUser = response.user;
+          let existingPatient = response.patient;
+          // add log
+          let logInfo = {
+            userId: newUser.id,
+            actionType: "A3",
+            message: `User ${newUser.id} - ${newUser.firstName} ${newUser.lastName} register new patient account with existing patient profile (Patient ID: ${existingPatient.id} - ${existingPatient.firstName} ${existingPatient.lastName})`,
+          };
+          addLog(logInfo);
+
           this.toggleRegisterSuccess();
         }
       } catch (e) {
@@ -199,6 +209,15 @@ class Register extends Component {
         }
 
         if (response && response.errCode === 0) {
+          let newUser = response.user;
+          let newPatient = response.patient;
+          // add log
+          let logInfo = {
+            userId: newUser.id,
+            actionType: "A3",
+            message: `User ${newUser.id} - ${newUser.firstName} ${newUser.lastName} register new patient account and new patient profile (Patient ID: ${newPatient.id} - ${newPatient.firstName} ${newPatient.lastName})`,
+          };
+          addLog(logInfo);
           this.toggleRegisterSuccess();
         }
       } catch (e) {
@@ -272,9 +291,7 @@ class Register extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {
-    language: state.app.language,
-  };
+  return {};
 };
 
 const mapDispatchToProps = (dispatch) => {
