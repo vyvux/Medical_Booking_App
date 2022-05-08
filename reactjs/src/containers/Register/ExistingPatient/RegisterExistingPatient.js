@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import Multistep from "react-multistep";
-import ReactDOM from "react-dom";
 import "../Register.scss";
+import StepOneRegister from "../NewPatient/StepOneRegister";
+import StepTwoPatientCheck from "./StepTwoPatientCheck";
 
 class RegisterExistingPatient extends Component {
   constructor(props) {
@@ -10,12 +11,12 @@ class RegisterExistingPatient extends Component {
   }
   render() {
     const steps = [
-      { name: "1", component: <div>StepOne</div> },
-      { name: "2", component: <div>StepTwo</div> },
+      { name: "1", component: <StepOneRegister handleOnChangeInput={this.props.handleOnChangeInput} getStateInput={this.props.getStateInput} /> },
+      { name: "2", component: <StepTwoPatientCheck handleOnChangeInput={this.props.handleOnChangeInput} getStateInput={this.props.getStateInput} /> },
     ];
     return (
       <div className="multi-step">
-        <Multistep activeStep={1} showNavigation={true} steps={steps} />
+        <Multistep activeStep={0} showNavigation={true} steps={steps} />
       </div>
     );
   }

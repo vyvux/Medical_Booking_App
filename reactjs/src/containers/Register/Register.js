@@ -9,17 +9,18 @@ import { addLog } from "../../services/adminService";
 import Logo from "../Logo/Logo";
 import RegisterNewPatient from "./NewPatient/RegisterNewPatient";
 import RegisterExistingPatient from "./ExistingPatient/RegisterExistingPatient";
+import RegisterSuccess from "./RegisterSuccess";
+import { registerNewPatient, registerExistingPatient } from "../../services/patientService";
 
 class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isExistingPatient: false,
+      isOpenRegisterSuccess: false,
       email: "",
       password: "",
-      // showPassword: false,
       errMessage: "",
-      roleId: "R3",
       firstName: "",
       lastName: "",
       dob: "",
@@ -51,13 +52,11 @@ class Register extends Component {
   newPatientvalidateInputs = () => {
     console.log("check valid new patient fields");
     let isValid = true;
-    let arrInputs = ["email", "password", "firstName", "lastName", "dob", "phoneNumber", "address", "gender"];
+    let arrInputs = ["email", "password", "firstName", "lastName", "dob", "gender", "phoneNumber", "address"];
     for (let i = 0; i < arrInputs.length; i++) {
       if (!this.state[arrInputs[i]]) {
         isValid = false;
-        this.setState({
-          errMessage: "Missing field: " + arrInputs[i],
-        });
+        this.setErrMessage(arrInputs[i]);
         break;
       }
     }
@@ -71,13 +70,50 @@ class Register extends Component {
     for (let i = 0; i < arrInputs.length; i++) {
       if (!this.state[arrInputs[i]]) {
         isValid = false;
-        this.setState({
-          errMessage: "Missing field: " + arrInputs[i],
-        });
+        this.setErrMessage(arrInputs[i]);
         break;
       }
     }
     return isValid;
+  };
+
+  setErrMessage = (input) => {
+    let field = "";
+    switch (input) {
+      case "email":
+        field = "Email";
+        break;
+      case "password":
+        field = "Password";
+        break;
+      case "firstName":
+        field = "First Name";
+        break;
+      case "lastName":
+        field = "Last Name";
+        break;
+      case "dob":
+        field = "Date of Birth";
+        break;
+      case "gender":
+        field = "Gender";
+        break;
+      case "phoneNumber":
+        field = "Phone Number";
+        break;
+      case "address":
+        field = "Address";
+        break;
+      case "patientId":
+        field = "Patient ID";
+        break;
+      case "patientName":
+        field = "Patient First Name";
+        break;
+    }
+    this.setState({
+      errMessage: `${field} cannot be empty`,
+    });
   };
 
   resetState = () => {
@@ -105,18 +141,77 @@ class Register extends Component {
     );
   };
 
-  handlePatientRegister = () => {
-    if (this.isExistingPatient && this.existingPatientvalidateInputs()) {
-      console.log("proceed register existing patient");
+  toggleRegisterSuccess = () => {
+    this.setState({
+      isOpenRegisterSuccess: true,
+    });
+  };
+
+  handlePatientRegister = async () => {
+    // existing patient sign up
+    if (this.state.isExistingPatient && this.existingPatientvalidateInputs()) {
+      let patient = {
+        email: this.state.email,
+        password: this.state.password,
+        roleId: "R3",
+        firstName: this.state.firstName,
+        lastName: this.state.lastName,
+        patientId: this.state.patientId,
+        patientName: this.state.patientName,
+      };
+
+      try {
+        let response = await registerExistingPatient(patient);
+        if (response && response.errCode !== 0) {
+          this.setState({
+            errMessage: response.errMessage,
+          });
+        }
+
+        if (response && response.errCode === 0) {
+          this.toggleRegisterSuccess();
+        }
+      } catch (e) {
+        console.log(e);
+      }
     }
-    if (!this.isExistingPatient && this.newPatientvalidateInputs()) {
-      console.log("proceed register new patient");
+
+    // new patient sign up
+    if (!this.state.isExistingPatient && this.newPatientvalidateInputs()) {
+      let patient = {
+        email: this.state.email,
+        password: this.state.password,
+        roleId: "R3",
+        firstName: this.state.firstName,
+        lastName: this.state.lastName,
+        dob: this.state.dob,
+        gender: this.state.gender,
+        phoneNumber: this.state.phoneNumber,
+        address: this.state.address,
+      };
+
+      try {
+        let response = await registerNewPatient(patient);
+        if (response && response.errCode !== 0) {
+          this.setState({
+            errMessage: response.errMessage,
+          });
+        }
+
+        if (response && response.errCode === 0) {
+          this.toggleRegisterSuccess();
+        }
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
 
   render() {
     return (
       <div className="register-background">
+        <RegisterSuccess isOpen={this.state.isOpenRegisterSuccess} isExistingPatient={this.state.isExistingPatient} patientId={this.state.patientId} />
+
         <div className="register-container">
           <div className="register-content row">
             <Logo className="logo" lightBg={true} smallSize={false} />
@@ -124,6 +219,7 @@ class Register extends Component {
 
             <div className="col-12 text-login">Patient Register</div>
 
+            {/* existing patient checkbox */}
             <div className="form-group form-check d-flex justify-content-center">
               <input
                 type="checkbox"
@@ -138,6 +234,7 @@ class Register extends Component {
               </label>
             </div>
 
+            {/* switch form based on patient type  */}
             {this.state.isExistingPatient ? (
               <RegisterExistingPatient handleOnChangeInput={this.handleOnChangeInput} getStateInput={this.getStateInput} />
             ) : (
@@ -145,7 +242,7 @@ class Register extends Component {
             )}
 
             {/* Error message*/}
-            <div className="col-12" style={{ color: "red" }}>
+            <div className="col-12 text-center mt-2" style={{ color: "red" }}>
               {this.state.errMessage}
             </div>
 

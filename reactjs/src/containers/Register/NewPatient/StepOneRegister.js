@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
 import "../Register.scss";
-import { toast } from "react-toastify";
 
 class StepOneRegister extends Component {
   constructor(props) {

@@ -104,3 +104,24 @@
   height: 100vh;
   opacity: 0.75;
 }
+
+.patient-register-success {
+  .modal-footer {
+    .btn {
+      width: 65px;
+      margin: 10px 0;
+      height: 35px;
+      border-radius: 15px;
+      outline: none;
+      border: none;
+      background: #3743ab;
+      color: whitesmoke;
+      font-size: 13px;
+      margin-top: 20px;
+    }
+
+    .btn:hover {
+      background: #4b57ca;
+    }
+  }
+}
