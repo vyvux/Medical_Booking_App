@@ -16,7 +16,7 @@ class RegisterNewPatient extends Component {
     ];
     return (
       <div className="multi-step">
-        <Multistep activeStep={1} showNavigation={true} steps={steps} />
+        <Multistep activeStep={0} showNavigation={true} steps={steps} />
       </div>
     );
   }

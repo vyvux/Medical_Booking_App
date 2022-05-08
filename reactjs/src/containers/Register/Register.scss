@@ -11,7 +11,7 @@
     border-radius: 7px;
     background-color: whitesmoke;
     width: 350px;
-    height: 70vh;
+    height: fit-content;
     margin: auto;
     position: absolute;
     top: 0;
@@ -20,7 +20,7 @@
     left: 0;
 
     .register-content {
-      padding: 20px 35px;
+      padding: 20px 50px;
 
       input:focus {
         border-color: #3743ab; //#28a745
@@ -49,6 +49,11 @@
 
       .login-input {
         margin: 10px 0;
+        margin-bottom: 20px !important;
+        text-align: left !important;
+        label {
+          margin-bottom: 5px;
+        }
 
         .custom-input-password {
           position: relative;
