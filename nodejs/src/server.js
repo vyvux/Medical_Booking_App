@@ -4,6 +4,7 @@ import viewEngine from "./config/viewEngine";
 import initWebRoutes from "./route/web";
 import initWebRoutesAdmin from "./route/admin_route";
 import initWebroutesPatient from "./route/patient-route";
+import initWebRoutesDoctor from "./route/doctor-route";
 import connectDB from "./config/connectDB";
 import cors from "cors";
 
@@ -21,6 +22,7 @@ viewEngine(app);
 initWebRoutes(app);
 initWebRoutesAdmin(app);
 initWebroutesPatient(app);
+initWebRoutesDoctor(app);
 
 connectDB();
 
