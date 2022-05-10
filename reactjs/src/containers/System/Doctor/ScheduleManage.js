@@ -2,7 +2,6 @@ import React, { Component } from "react";
 // import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
 // import "../UserManage.scss";
-import "./ScheduleManage.scss";
 import { toast } from "react-toastify";
 // import { values } from "lodash";
 
