@@ -125,7 +125,7 @@ let bulkCreateDoctorSchedule = (data) => {
         // retrieve existing doctor schedule for that day in DB
         let existing = await db.Availability.findAll({
           where: { doctorId: data.doctorId, date: data.date },
-          attributes: ["doctorId", "date", "time", "maxNumber"],
+          attributes: ["id", "doctorId", "date", "time", "maxNumber"],
           raw: true,
         });
 
@@ -140,11 +140,20 @@ let bulkCreateDoctorSchedule = (data) => {
         // find only new schedule
         let toCreate = schedule.filter((hour1) => existing.filter((hour2) => hour2.time === hour1.time).length === 0);
 
+        // find only new schedule
+        let toDelete = existing.filter((hour1) => schedule.filter((hour2) => hour2.time === hour1.time).length === 0);
+        let deleteIds = [];
+        toDelete.map((item) => deleteIds.push(item.id));
+
         // add only new schedule to DB
         if (toCreate && toCreate.length > 0) {
           await db.Availability.bulkCreate(toCreate);
-          // console.log("toscreate ===================");
-          // console.log(toCreate);
+        }
+
+        if (toDelete && toDelete.length > 0) {
+          await db.Availability.destroy({
+            where: { id: deleteIds },
+          });
         }
 
         resolve({
