@@ -118,10 +118,35 @@ let bulkCreateDoctorSchedule = (data) => {
       if (schedule && schedule.length > 0) {
         schedule.map((item) => {
           item.maxNumber = MAX_NUMBER_SCHEDULE;
+          item.currentNumber = 0;
           return item;
         });
 
-        await db.Availability.bulkCreate(schedule);
+        // retrieve existing doctor schedule for that day in DB
+        let existing = await db.Availability.findAll({
+          where: { doctorId: data.doctorId, date: data.date },
+          attributes: ["doctorId", "date", "time", "maxNumber"],
+          raw: true,
+        });
+
+        // format date before comparing
+        if (existing && existing.length > 0) {
+          existing = existing.map((item) => {
+            item.date = new Date(item.date).getTime();
+            return item;
+          });
+        }
+
+        // find only new schedule
+        let toCreate = schedule.filter((hour1) => existing.filter((hour2) => hour2.time === hour1.time).length === 0);
+
+        // add only new schedule to DB
+        if (toCreate && toCreate.length > 0) {
+          await db.Availability.bulkCreate(toCreate);
+          // console.log("toscreate ===================");
+          // console.log(toCreate);
+        }
+
         resolve({
           errCode: 0,
           message: "OK",
