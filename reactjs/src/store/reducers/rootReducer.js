@@ -5,6 +5,7 @@ import appReducer from "./appReducer";
 import userReducer from "./userReducer";
 import codeReducer from "./codeReducer";
 import clinicInfoReducer from "./clinicInfoReducer";
+import doctorReducer from "./doctorReducer";
 
 import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
 import storage from "redux-persist/lib/storage";
@@ -28,4 +29,5 @@ export default (history) =>
     app: appReducer,
     code: codeReducer,
     clinicInfo: clinicInfoReducer,
+    doctor: doctorReducer,
   });
