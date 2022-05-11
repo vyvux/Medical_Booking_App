@@ -167,6 +167,36 @@ let bulkCreateDoctorSchedule = (data) => {
   });
 };
 
+let getDoctorSchedule = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.date || !data.doctorId) {
+        //!data.doctorId ||
+        resolve({
+          errCode: 1,
+          errMessage: "Missing required parameters",
+        });
+      }
+
+      // retrieve existing doctor schedule for that day in DB
+      let existingSchedules = await db.Availability.findAll({
+        where: { doctorId: data.doctorId, date: data.date },
+        attributes: ["id", "doctorId", "date", "time", "maxNumber"],
+        raw: true,
+      });
+
+      resolve({
+        errCode: 0,
+        message: "OK",
+        schedule: existingSchedules,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   bulkCreateDoctorSchedule: bulkCreateDoctorSchedule,
+  getDoctorSchedule: getDoctorSchedule,
 };
