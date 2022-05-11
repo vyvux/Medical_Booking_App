@@ -6,6 +6,7 @@ import "../UserManage.scss";
 import "./StaffScheduleManage.scss";
 import { toast } from "react-toastify";
 import * as actions from "../../../store/actions";
+import { bulkCreateDoctorSchedule, getDoctorSchedule } from "../../../services/doctorService";
 // import { values } from "lodash";
 
 class StaffScheduleManage extends Component {
@@ -15,6 +16,7 @@ class StaffScheduleManage extends Component {
       doctorId: "",
       date: "",
       arrSchedule: [],
+      timeSelect: [],
     };
   }
 
@@ -23,12 +25,75 @@ class StaffScheduleManage extends Component {
     this.props.getTimeStart();
   }
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevState.timeSelect !== this.props.time) {
+      let time = this.props.time;
+      if (time && time.length > 0) {
+        time = time.map((item) => {
+          item.isSelected = false;
+          return item;
+        });
+      }
+      this.setState({
+        timeSelect: this.props.time,
+      });
+    }
+  }
+
+  resetTime = () => {
+    let time = this.state.timeSelect.map((item) => {
+      item.isSelected = false;
+    });
+    this.setState({
+      timeSelect: time,
+    });
+  };
+
   handleOnChangeInput = (event, id) => {
     let copyState = { ...this.state };
     copyState[id] = event.target.value;
     this.setState({
       ...copyState,
     });
+  };
+
+  handleScheduleSearch = async () => {
+    try {
+      let { doctorId, date } = this.state;
+
+      let fmDate = this.formatDate(date);
+      let data = {
+        doctorId: doctorId,
+        date: fmDate,
+      };
+      let response = await getDoctorSchedule(data);
+      if (response && response.errCode !== 0) {
+        toast.error(response.errMessage);
+      } else {
+        let { timeSelect } = this.state;
+        let schedules = response.schedule;
+        if (schedules && schedules.length > 0) {
+          let setTimeSelect = timeSelect.map((timeItem) => {
+            if (schedules && schedules.length > 0) {
+              let setSchedule = schedules.map((scheduleItem) => {
+                if (scheduleItem.time === timeItem.key) {
+                  timeItem.isSelected = true;
+                }
+                return scheduleItem;
+              });
+            }
+            return timeItem;
+          });
+
+          this.setState({
+            arrSchedule: schedules,
+            timeSelect: setTimeSelect,
+          });
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   setToday = () => {
@@ -45,17 +110,37 @@ class StaffScheduleManage extends Component {
     return `${yyyy}-${mm}-${dd}`;
   };
 
+  formatDate = (date) => {
+    return new Date(date).getTime();
+  };
+
+  // handleSaveChangesDoctorSchedule = async () => {
+  //   let date = this.formatDate(this.state.date);
+  //   let data = {
+  //     doctorId: this.state.doctorId,
+  //     date: date,
+  //     arrSchedule: [
+  //       { doctorId: this.state.doctorId, date: date, time: "T1" },
+  //       { doctorId: this.state.doctorId, date: date, time: "T2" },
+  //       { doctorId: this.state.doctorId, date: date, time: "T3" },
+  //       { doctorId: this.state.doctorId, date: date, time: "T6" },
+  //       { doctorId: this.state.doctorId, date: date, time: "T7" },
+  //     ],
+  //   };
+  //   let res = await bulkCreateDoctorSchedule(data);
+  //   console.log("save changes: ", res);
+  // };
+
   render() {
     let doctorList = this.props.doctors;
-    let timeList = this.props.time;
-    console.log(timeList);
+    let timeList = this.state.timeSelect;
 
     return (
       <div className="schedule-manage-container">
-        <div className="title text-center">Doctor Schedule Manage</div>
+        <div className="title text-center mb-4">Doctor Schedule Manage</div>
 
         <div className="container">
-          <div className="row g-2">
+          <div className="row">
             {/* Doctor select */}
             <div className="col-md-6 col-sm-12  form-group">
               <div className="input-group mb-3">
@@ -84,7 +169,7 @@ class StaffScheduleManage extends Component {
             </div>
 
             {/* Date select */}
-            <div className="col-md-6 col-sm-12  form-group">
+            <div className="col-md-4 col-sm-9  form-group">
               <div className="input-group mb-3">
                 <label className="input-group-text" htmlFor="dateSelect">
                   Select Date
@@ -102,16 +187,28 @@ class StaffScheduleManage extends Component {
               </div>
             </div>
 
+            {/* search button */}
+            <div className="col-md-2 col-sm-3 d-flex justify-content-center">
+              <button
+                className="btn btn-info px-3"
+                onClick={() => {
+                  this.handleScheduleSearch();
+                }}
+              >
+                Search
+              </button>
+            </div>
+
             {/* Pick doctor hours */}
-            <div className="col-12 pick-hours-container">
+            <div className="col-12 pick-hours-container my-4">
               <label>Select available hours</label>
-              <div className="hours">
+              <div className="hours px-4">
                 <div className="row">
                   {timeList &&
                     timeList.map((item, index) => {
                       return (
-                        <div className="col-12 col-md-3" key={item.key}>
-                          <button className="btn btn-info">{item.value}</button>
+                        <div className="col-6 col-md-3 p-3" key={item.key}>
+                          <button className={item.isSelected ? "btn btn-outline-success btn-select" : "btn btn-outline-success"}>{item.value}</button>
                         </div>
                       );
                     })}
@@ -125,6 +222,7 @@ class StaffScheduleManage extends Component {
                 className="btn btn-success px-3"
                 onClick={() => {
                   console.log("check schedule state: ", this.state);
+                  // this.handleSaveChangesDoctorSchedule();
                 }}
               >
                 Save Schedule
@@ -138,7 +236,7 @@ class StaffScheduleManage extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return { doctors: state.doctor.doctors, time: state.code.time };
+  return { doctors: state.doctor.doctors, time: state.code.time, schedules: state.doctor.schedules };
 };
 
 const mapDispatchToProps = (dispatch) => {

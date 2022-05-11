@@ -2,7 +2,30 @@
   .pick-hours-container {
     .hours {
       border: 1px solid rgb(207, 207, 207);
-      height: 60px;
+      height: fit-content;
+
+      .btn {
+        width: 150px;
+        border: 1px solid #004953;
+        color: #004953;
+      }
+
+      .btn:hover {
+        background-color: #8fbc8b;
+        // color: white;
+        border: none;
+      }
+
+      .btn-select {
+        width: 150px;
+        border: none;
+        color: white;
+        background-color: #dc8d2d;
+      }
+
+      .btn-select:hover {
+        background-color: #a17238;
+      }
     }
   }
 }

@@ -60,14 +60,16 @@ class Header extends Component {
           <Navigator menus={this.state.menuApp} />
         </div>
 
-        <Logo lightBg={false} smallSize={true} className="logo" />
+        <div className="d-flex align-items-center">
+          <Logo lightBg={false} smallSize={true} className="logo" />
+        </div>
 
         <div className="container">
           <div className="row justify-content-end align-items-center">
-            <div className="col-3 col-sm-1 text-right">
+            <div className="col-3 col-sm-1 text-right d-none d-sm-block">
               <i className="fas fa-user-circle fa-2x"></i>
             </div>
-            <div className="col-6 offset-1 col-sm-2 offset-sm-0 text-left">
+            <div className="col-8 offset-1 col-sm-2 offset-sm-0 text-left">
               <div className="column">
                 <div className="row name-title">
                   {userInfo.firstName} {userInfo.lastName}
