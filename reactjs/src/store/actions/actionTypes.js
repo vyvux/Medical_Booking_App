@@ -43,6 +43,11 @@ const actionTypes = Object.freeze({
   GET_DOCTOR_START: "GET_DOCTOR_START",
   GET_DOCTOR_SUCCESS: "GET_DOCTOR_SUCCESS",
   GET_DOCTOR_FAIL: "GET_DOCTOR_FAIL",
+
+  // registered doctor schedule by date and doctorId
+  GET_SCHEDULE_START: "GET_SCHEDULE_START",
+  GET_SCHEDULE_SUCCESS: "GET_SCHEDULE_SUCCESS",
+  GET_SCHEDULE_FAIL: "GET_SCHEDULE_FAIL",
 });
 
 export default actionTypes;
