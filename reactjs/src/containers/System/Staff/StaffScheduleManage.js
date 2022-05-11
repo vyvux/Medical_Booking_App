@@ -26,7 +26,7 @@ class StaffScheduleManage extends Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevState.timeSelect !== this.props.time) {
+    if (prevProps.time !== this.props.time) {
       let time = this.props.time;
       if (time && time.length > 0) {
         time = time.map((item) => {
@@ -43,6 +43,7 @@ class StaffScheduleManage extends Component {
   resetTime = () => {
     let time = this.state.timeSelect.map((item) => {
       item.isSelected = false;
+      return item;
     });
     this.setState({
       timeSelect: time,
@@ -114,22 +115,56 @@ class StaffScheduleManage extends Component {
     return new Date(date).getTime();
   };
 
-  // handleSaveChangesDoctorSchedule = async () => {
-  //   let date = this.formatDate(this.state.date);
-  //   let data = {
-  //     doctorId: this.state.doctorId,
-  //     date: date,
-  //     arrSchedule: [
-  //       { doctorId: this.state.doctorId, date: date, time: "T1" },
-  //       { doctorId: this.state.doctorId, date: date, time: "T2" },
-  //       { doctorId: this.state.doctorId, date: date, time: "T3" },
-  //       { doctorId: this.state.doctorId, date: date, time: "T6" },
-  //       { doctorId: this.state.doctorId, date: date, time: "T7" },
-  //     ],
-  //   };
-  //   let res = await bulkCreateDoctorSchedule(data);
-  //   console.log("save changes: ", res);
-  // };
+  handleScheduleClick = (timeValue) => {
+    // set isSelected to true or false
+    let isRemove = true;
+    let setTime = this.state.timeSelect.map((item) => {
+      if (item.key === timeValue) {
+        item.isSelected = !item.isSelected;
+        if (item.isSelected) {
+          isRemove = false;
+        }
+      }
+      return item;
+    });
+
+    this.setState({
+      timeSelect: setTime,
+    });
+  };
+
+  handleSaveChangesDoctorSchedule = async () => {
+    // validate doctor + date
+    let { doctorId, date } = this.state;
+    if (!doctorId || !date) {
+      toast.error("Please select Doctor and Date before making changes");
+    } else {
+      // process save data
+      let newArrSchedule = [];
+      let fmDate = this.formatDate(this.state.date);
+      this.state.timeSelect.map((item) => {
+        if (item.isSelected) {
+          let selectTimeSlot = {
+            doctorId: doctorId,
+            date: fmDate,
+            time: item.key,
+          };
+          newArrSchedule.push(selectTimeSlot);
+        }
+      });
+      let data = {
+        doctorId: doctorId,
+        date: fmDate,
+        arrSchedule: newArrSchedule,
+      };
+      let res = await bulkCreateDoctorSchedule(data);
+      if (res && res.errCode === 0) {
+        toast.success(res.message);
+      } else {
+        toast.error(res.errMessage);
+      }
+    }
+  };
 
   render() {
     let doctorList = this.props.doctors;
@@ -192,6 +227,7 @@ class StaffScheduleManage extends Component {
               <button
                 className="btn btn-info px-3"
                 onClick={() => {
+                  this.resetTime();
                   this.handleScheduleSearch();
                 }}
               >
@@ -208,7 +244,14 @@ class StaffScheduleManage extends Component {
                     timeList.map((item, index) => {
                       return (
                         <div className="col-6 col-md-3 p-3" key={item.key}>
-                          <button className={item.isSelected ? "btn btn-outline-success btn-select" : "btn btn-outline-success"}>{item.value}</button>
+                          <button
+                            className={item.isSelected ? "btn btn-outline-success btn-select" : "btn btn-outline-success"}
+                            onClick={() => {
+                              this.handleScheduleClick(item.key);
+                            }}
+                          >
+                            {item.value}
+                          </button>
                         </div>
                       );
                     })}
@@ -221,8 +264,7 @@ class StaffScheduleManage extends Component {
               <button
                 className="btn btn-success px-3"
                 onClick={() => {
-                  console.log("check schedule state: ", this.state);
-                  // this.handleSaveChangesDoctorSchedule();
+                  this.handleSaveChangesDoctorSchedule();
                 }}
               >
                 Save Schedule
