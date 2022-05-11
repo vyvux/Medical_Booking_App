@@ -158,7 +158,7 @@ let bulkCreateDoctorSchedule = (data) => {
 
         resolve({
           errCode: 0,
-          message: "OK",
+          message: "Create doctor schedules successfully",
         });
       }
     } catch (e) {
