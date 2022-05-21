@@ -48,6 +48,12 @@
         "patient-manage": "Patient Manage",
         "schedule-manage": "Doctor Availability Manage"
       },
+      "patient": {
+        "header": "Patient System",
+        "appointment-manage": "Appointment Manage",
+        "view-doctor": "Search Doctor",
+        "profile": "Profile"
+      },
       "system-parameter": {
         "header": "System-parameter"
       }

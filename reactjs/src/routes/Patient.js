@@ -4,9 +4,12 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import StaffAppointmentManage from "../containers/System/Staff/StaffAppointmentManage";
 import StaffPatientManage from "../containers/System/Staff/StaffPatientManage";
 import StaffScheduleManage from "../containers/System/Staff/StaffScheduleManage";
+import PatientAppointment from "../containers/System/Patient/PatientAppointment";
+import Profile from "../containers/System/Patient/Profile";
+import ViewDoctor from "../containers/System/Patient/ViewDoctor";
 
 import Header from "../containers/Header/Header";
-class MedStaff extends Component {
+class Patient extends Component {
   render() {
     const { isLoggedIn, systemMenuPath, userInfo } = this.props;
     return (
@@ -15,9 +18,9 @@ class MedStaff extends Component {
         <div className="system-container">
           <div className="system-list">
             <Switch>
-              <Route path="/staff/appointment-manage" component={StaffAppointmentManage} />
-              <Route path="/staff/patient-manage" component={StaffPatientManage} />
-              <Route path="/staff/schedule-manage" component={StaffScheduleManage} />
+              <Route path="/patient/appointment-manage" component={PatientAppointment} />
+              <Route path="/patient/view-doctor" component={ViewDoctor} />
+              <Route path="/patient/profile" component={Profile} />
             </Switch>
           </div>
         </div>
@@ -38,4 +41,4 @@ const mapDispatchToProps = (dispatch) => {
   return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MedStaff);
+export default connect(mapStateToProps, mapDispatchToProps)(Patient);

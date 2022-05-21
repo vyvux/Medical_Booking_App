@@ -7,6 +7,7 @@ export const path = {
   SYSTEM: "/admin",
   DOCTOR: "/doctor",
   MEDICAL_STAFF: "/staff",
+  PATIENT: "/patient",
 };
 
 export const languages = {

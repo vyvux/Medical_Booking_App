@@ -15,6 +15,7 @@ import Login from "./Authenticate/Login";
 import System from "../routes/System";
 import Doctor from "../routes/Doctor";
 import MedStaff from "../routes/MedStaff";
+import Patient from "../routes/Patient";
 
 import HomePage from "./HomePage/HomePage";
 import Register from "./Register/Register";
@@ -59,6 +60,7 @@ class App extends Component {
                   <Route path={path.SYSTEM} component={userIsAuthenticated(System)} />
                   <Route path={path.DOCTOR} component={userIsAuthenticated(Doctor)} />
                   <Route path={path.MEDICAL_STAFF} component={userIsAuthenticated(MedStaff)} />
+                  <Route path={path.PATIENT} component={userIsAuthenticated(Patient)} />
                 </Switch>
               </CustomScrollbars>
             </div>

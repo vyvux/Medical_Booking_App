@@ -69,3 +69,23 @@ export const medicalStaffMenu = [
     ],
   },
 ];
+
+export const patientMenu = [
+  {
+    name: "menu.system.header",
+    menus: [
+      {
+        name: "menu.system.patient.appointment-manage",
+        link: "/patient/appointment-manage",
+      },
+      {
+        name: "menu.system.patient.view-doctor",
+        link: "/patient/view-doctor",
+      },
+      {
+        name: "menu.system.patient.profile",
+        link: "/patient/profile",
+      },
+    ],
+  },
+];

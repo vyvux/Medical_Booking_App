@@ -186,6 +186,7 @@ class StaffScheduleManage extends Component {
     let timeList = this.state.timeSelect;
     let { doctorId } = this.state;
     let { userInfo } = this.props;
+    console.log(this.formatDate("2022-05-23"));
 
     return (
       <div className="schedule-manage-container">
