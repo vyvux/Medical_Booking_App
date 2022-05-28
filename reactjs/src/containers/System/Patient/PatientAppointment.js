@@ -4,7 +4,11 @@ import { connect } from "react-redux";
 import { Label, Input, Col, Container, InputGroup, InputGroupText } from "reactstrap";
 import "../UserManage.scss";
 import { toast } from "react-toastify";
+import { getAllDoctors, createNewDoctor, editDoctor, deleteDoctor, getAllBranches, getAllServices, getAllUsers, addLog } from "../../../services/adminService";
+import { renderPatient, renderDoctor, renderClinicInfo } from "../AllCode";
+import { getAllPatients } from "../../../services/userService";
 import * as actions from "../../../store/actions";
+import CreateAppointmentModal from "./CreateAppointmentModal";
 // import { values } from "lodash";
 
 class PatientAppointment extends Component {
@@ -18,36 +22,55 @@ class PatientAppointment extends Component {
       isOpenModalCancelAppointment: false,
       appointmentInEffect: {},
       status: "",
+      doctorList: [],
+      patientList: [],
     };
   }
 
   async componentDidMount() {
+    this.getAllDoctorFromDB();
     this.props.getStatusStart();
+    this.props.getBranchStart();
+    this.props.getServiceStart();
   }
 
-  //   getAllUsersFromDB = async () => {
-  //     let response = await getAllUsers("ALL");
-  //     if (response && response.errCode === 0) {
-  //       this.setState({
-  //         arrUsers: response.users,
-  //         filteredUserList: response.users,
-  //       });
-  //     }
-  //   };
+  getAllDoctorFromDB = async () => {
+    let response = await getAllDoctors("ALL");
+    if (response && response.errCode === 0) {
+      this.setState({
+        doctorList: response.doctors,
+      });
+    }
+  };
 
-  //   handleAddNewUser = () => {
+  getPatientsFromDB = async () => {
+    let response = await getAllPatients("ALL");
+    if (response && response.errCode === 0) {
+      this.setState({
+        patientList: response.patients,
+      });
+    }
+  };
+
+  //   handleAddNewAppointment = () => {
   //     this.setState({
   //       isOpenModalUser: true,
   //     });
   //   };
 
-  //   toggleUserModal = () => {
-  //     this.setState({
-  //       isOpenModalUser: !this.state.isOpenModalUser,
-  //     });
-  //   };
+  toggleAppointmentModal = () => {
+    this.setState({
+      isOpenModalBookAppointment: !this.state.isOpenModalBookAppointment,
+    });
+  };
 
-  //   createNewUser = async (data) => {
+  openAddNewDoctorModal = () => {
+    this.setState({
+      isOpenModalBookAppointment: true,
+    });
+  };
+
+  //   createNewAppointment = async (data) => {
   //     let success = false;
   //     try {
   //       let response = await createNewUserByAdmin(data);
@@ -67,20 +90,20 @@ class PatientAppointment extends Component {
   //     return success;
   //   };
 
-  //   toggleModalDeleteUserConfirm = () => {
+  //   toggleModalCancelAppointmentConfirm = () => {
   //     this.setState({
   //       isOpenModalDeleteUserConfirm: !this.state.isOpenModalDeleteUserConfirm,
   //     });
   //   };
 
-  //   openDeleteConfirmModal = (user) => {
+  //   openCancelConfirmModal = (user) => {
   //     this.setState({
   //       isOpenModalDeleteUserConfirm: true,
   //       userInEffect: user,
   //     });
   //   };
 
-  //   handleDeleteUser = async (user) => {
+  //   handleCancelAppointment = async (user) => {
   //     try {
   //       let response = await deleteUserByAdmin(user.id);
   //       if (response && response.errCode !== 0) {
@@ -97,85 +120,55 @@ class PatientAppointment extends Component {
   //     }
   //   };
 
-  //   toggleModalEditUser = () => {
-  //     this.setState({
-  //       isOpenModalEditUser: !this.state.isOpenModalEditUser,
-  //     });
-  //   };
-
-  //   openEditUserModal = (user) => {
-  //     this.setState({
-  //       isOpenModalEditUser: true,
-  //       userInEffect: user,
-  //     });
-  //   };
-
-  //   handleEditUser = async (user) => {
-  //     try {
-  //       let response = await editUserByAdmin(user);
-  //       if (response && response.errCode === 0) {
-  //         await this.getAllUsersFromDB();
-  //         toast.success(response.message);
-  //       } else {
-  //         toast.error(response.errMessage);
-  //       }
-  //       this.setState({
-  //         isOpenModalEditUser: false,
-  //       });
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //   };
-
   handleOnChangeInput = (event, id) => {
     let copyState = { ...this.state };
     copyState[id] = event.target.value;
     this.setState(
       {
         ...copyState,
+      },
+      () => {
+        this.handleFilterAppointment();
       }
-      //   () => {
-      //     this.handleFilterUser();
-      //   }
     );
   };
 
-  //   checkRole = (user) => {
-  //     let role = this.state.role;
-  //     if (role) {
-  //       return user.roleId === this.state.role;
-  //     }
-  //     return true;
-  //   };
-
-  //   checkTerm = (user) => {
-  //     let term = this.state.query.toLowerCase();
-  //     if (term) {
-  //       return user.email.toLowerCase().includes(term) || user.firstName.toLowerCase().includes(term) || user.lastName.toLowerCase().includes(term);
-  //     }
-  //     return true;
-  //   };
-
-  //   handleFilterUser = () => {
-  //     this.setState({
-  //       filteredUserList: this.state.arrUsers.filter((user) => {
-  //         return this.checkRole(user) && this.checkTerm(user);
-  //       }),
-  //     });
-  //   };
+  checkStatus = (appointment) => {
+    let { status } = this.state;
+    if (status) {
+      return appointment.status == status;
+    }
+    return true;
+  };
+  handleFilterAppointment = () => {
+    this.setState({
+      filteredAppointments: this.state.arrAppointments.filter((appointment) => {
+        return this.checkStatus(appointment);
+      }),
+    });
+  };
 
   render() {
-    // let filteredUserList = this.state.filteredUserList;
+    let { filteredAppointments, patientList, doctorList } = this.state;
 
     return (
       <div className="users-container mx-1">
+        <CreateAppointmentModal isOpen={this.state.isOpenModalBookAppointment} toggleModalFromParent={this.toggleAppointmentModal} />
+
         <div className="title text-center">Appointment Manage</div>
 
         <div className="mt-1 mt-md-4 container">
           <div className="row justify-content-center ">
             {/* book appointment button */}
             <div className="col-6">
-              <button className="btn btn-success px-3 py-1 book-app">Book Appointment</button>
+              <button
+                className="btn btn-success px-3 py-1 book-app"
+                onClick={() => {
+                  this.openAddNewDoctorModal();
+                }}
+              >
+                Book Appointment
+              </button>
             </div>
 
             <div className="col-6 col-md-3">
@@ -208,6 +201,53 @@ class PatientAppointment extends Component {
               </Container>
             </div>
           </div>
+
+          <div className="list-length-label mt-md-3 mx-3">{filteredAppointments.length} appointments found</div>
+
+          <div className="users-table mx-1">
+            <table id="customers">
+              <thead>
+                <tr>
+                  <th>Appointment ID</th>
+                  <th>Patient ID-Name</th>
+                  <th>Doctor ID-Name</th>
+                  <th>Service</th>
+                  <th>Branch</th>
+                  <th>Reason</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {filteredAppointments &&
+                  filteredAppointments.map((item, index) => {
+                    return (
+                      <tr key={item.id}>
+                        <td>{item.id}</td>
+                        <td>{renderPatient(patientList, item.patientId)}</td>
+                        <td>{renderDoctor(doctorList, item.doctorId)}</td>
+                        <td>service</td>
+                        <td>branch</td>
+                        <td className="limited-word">{item.reason}</td>
+                        <td className="limited-word">{item.reason}</td>
+                        <td>
+                          {/* <button className="btn-edit" onClick={() => this.openEditDoctorModal(item)}>
+                            <i className="fas fa-pencil-alt fa-lg"></i>
+                          </button> */}
+                          {(this.state.status === "S1" || this.state.status === "S1") && (
+                            <button className="btn-delete">
+                              <i className="fas fa-trash-alt fa-lg"></i> Cancel
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     );
@@ -215,11 +255,11 @@ class PatientAppointment extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return { status: state.code.status };
+  return { status: state.code.status, branches: state.clinicInfo.branches, services: state.clinicInfo.services };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return { getStatusStart: () => dispatch(actions.fetchStatusStart()) };
+  return { getStatusStart: () => dispatch(actions.fetchStatusStart()), getBranchStart: () => dispatch(actions.fetchBranchStart()), getServiceStart: () => dispatch(actions.fetchServiceStart()) };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PatientAppointment);

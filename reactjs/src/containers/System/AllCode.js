@@ -48,10 +48,29 @@ const renderAllCode = (allCode, keyCode) => {
   }
 };
 
+const renderPatient = (patientList, patientId) => {
+  let patient = patientList.find(({ id }) => id === patientId);
+  if (patient) {
+    return `ID ${patient.id} - ${patient.firstName} ${patient.lastName}`;
+  } else {
+    return "Unknown patient";
+  }
+};
+const renderDoctor = (doctorList, doctorId) => {
+  let doctor = doctorList.find(({ id }) => id === doctorId);
+  if (doctor) {
+    return `ID ${doctor.id} - ${doctor.firstName} ${doctor.lastName}`;
+  } else {
+    return "Unknown doctor";
+  }
+};
+
 module.exports = {
   renderGender: renderGender,
   renderService: renderService,
   renderBranch: renderBranch,
   renderAllCode: renderAllCode,
   renderClinicInfo: renderClinicInfo,
+  renderPatient: renderPatient,
+  renderDoctor: renderDoctor,
 };
