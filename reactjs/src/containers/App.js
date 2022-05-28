@@ -54,7 +54,7 @@ class App extends Component {
               <CustomScrollbars style={{ height: "100vh", width: "100%" }}>
                 <Switch>
                   <Route path={path.HOME} exact component={Home} />
-                  <Route path={path.HOMEPAGE} component={userIsNotAuthenticated(HomePage)} />
+                  <Route path={path.HOMEPAGE} component={HomePage} />
                   <Route path={path.REGISTER} component={userIsNotAuthenticated(Register)} />
                   <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
                   <Route path={path.SYSTEM} component={userIsAuthenticated(System)} />

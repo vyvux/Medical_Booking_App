@@ -9,10 +9,10 @@ const getAllCodes = (type) => {
 };
 
 const getAllPatients = (patientId) => {
-  return axios.get(`/api/get-all-patients?id=${patientId}`);
+  return axios.get(`/api/get-all-patients?id=${patientId}`, { headers: { accessToken: localStorage.getItem("accessToken") } });
 };
 
 const editPatient = (data) => {
-  return axios.put("/api/edit-patient", data);
+  return axios.put("/api/edit-patient", data, { headers: { accessToken: localStorage.getItem("accessToken") } });
 };
 export { handleLoginApi, getAllCodes, getAllPatients, editPatient };

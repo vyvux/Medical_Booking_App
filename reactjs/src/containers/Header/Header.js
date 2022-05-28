@@ -84,7 +84,13 @@ class Header extends Component {
         </div>
 
         {/* logout button */}
-        <div className="btn btn-logout" onClick={processLogout}>
+        <div
+          className="btn btn-logout"
+          onClick={() => {
+            processLogout();
+            localStorage.removeItem("accessToken");
+          }}
+        >
           <i className="fas fa-sign-out-alt"></i>
         </div>
       </div>

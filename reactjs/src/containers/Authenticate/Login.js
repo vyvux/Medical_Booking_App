@@ -56,6 +56,8 @@ class Login extends Component {
       if (data && data.errCode === 0) {
         // login success
         this.props.userLoginSuccess(data.user);
+        // session storage
+        localStorage.setItem("accessToken", data.accessToken);
         // add log
         let logInfo = {
           userId: data.user.id,
