@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import e from "express";
 import db, { sequelize } from "../models/index";
+import { sign } from "jsonwebtoken";
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -19,10 +20,17 @@ let handleUserLogin = (email, password) => {
 
         if (user) {
           // compare password
-          let check = await bcrypt.compareSync(password, user.password);
+          let check = bcrypt.compareSync(password, user.password);
           if (check) {
             userData.errCode = 0;
-            userData.errMessage = "Ok";
+            userData.errMessage = "Ok edited";
+            let token = sign({ email: user.email, id: user.id, roleId: user.roleId }, "highlysecurity");
+            if (!token) {
+              console.log("no token");
+            } else {
+              userData.accessToken = token;
+            }
+
             delete user.password; // delete password key from object
             userData.user = user;
           } else {
