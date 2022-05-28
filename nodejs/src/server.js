@@ -5,6 +5,7 @@ import initWebRoutes from "./route/web";
 import initWebRoutesAdmin from "./route/admin_route";
 import initWebroutesPatient from "./route/patient-route";
 import initWebRoutesDoctor from "./route/doctor-route";
+import initWebRoutesAppointment from "./route/appointment-route";
 import connectDB from "./config/connectDB";
 import cors from "cors";
 
@@ -23,6 +24,7 @@ initWebRoutes(app);
 initWebRoutesAdmin(app);
 initWebroutesPatient(app);
 initWebRoutesDoctor(app);
+initWebRoutesAppointment(app);
 
 connectDB();
 
