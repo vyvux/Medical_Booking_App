@@ -10,6 +10,8 @@ let validateToken = (req, res, next) => {
     let validToken = verify(accessToken, "highlysecurity");
     if (validToken) {
       return next();
+    } else {
+      return res.json({ error: "Unauthenticated action" });
     }
   } catch (e) {
     return res.json({ error: e });
