@@ -11,6 +11,7 @@ import RegisterNewPatient from "./NewPatient/RegisterNewPatient";
 import RegisterExistingPatient from "./ExistingPatient/RegisterExistingPatient";
 import RegisterSuccess from "./RegisterSuccess";
 import { registerNewPatient, registerExistingPatient } from "../../services/patientService";
+import { sendRegistrationConfirm } from "../../services/emailService";
 
 class Register extends Component {
   constructor(props) {
@@ -35,14 +36,9 @@ class Register extends Component {
   handleOnChangeInput = (event, id) => {
     let copyState = { ...this.state };
     copyState[id] = event.target.value;
-    this.setState(
-      {
-        ...copyState,
-      },
-      () => {
-        console.log("check state: ", this.state);
-      }
-    );
+    this.setState({
+      ...copyState,
+    });
   };
 
   getStateInput = (id) => {
@@ -50,7 +46,6 @@ class Register extends Component {
   };
 
   newPatientvalidateInputs = () => {
-    console.log("check valid new patient fields");
     let isValid = true;
     let arrInputs = ["email", "password", "firstName", "lastName", "dob", "gender", "phoneNumber", "address"];
     for (let i = 0; i < arrInputs.length; i++) {
@@ -179,6 +174,12 @@ class Register extends Component {
           };
           addLog(logInfo);
 
+          // send confirmation email
+          let send = await sendRegistrationConfirm(newUser.email);
+          if (send.errCode !== 0) {
+            console.log("confirmation email:", send);
+          }
+
           this.toggleRegisterSuccess();
         }
       } catch (e) {
@@ -218,6 +219,13 @@ class Register extends Component {
             message: `User ${newUser.id} - ${newUser.firstName} ${newUser.lastName} register new patient account and new patient profile (Patient ID: ${newPatient.id} - ${newPatient.firstName} ${newPatient.lastName})`,
           };
           addLog(logInfo);
+
+          // send confirmation email
+          let send = await sendRegistrationConfirm(newUser.email);
+          if (send.errCode !== 0) {
+            console.log("confirmation email:", send);
+          }
+
           this.toggleRegisterSuccess();
         }
       } catch (e) {
