@@ -65,6 +65,8 @@ class Login extends Component {
           message: `User ${data.user.id} - ${data.user.firstName} ${data.user.lastName} (${this.renderRole(data.user.roleId)}) log into system`,
         };
         addLog(logInfo);
+        //redirect user
+        this.redirectUser(data.user.roleId);
       }
     } catch (e) {
       if (e.response) {
@@ -89,6 +91,25 @@ class Login extends Component {
         return "Medical Staff";
       default:
         return "Unknown role";
+    }
+  };
+
+  redirectUser = (role) => {
+    switch (role) {
+      case "R1":
+        this.props.navigate("/admin/user-manage");
+        break;
+      case "R2":
+        this.props.navigate("/doctor/appointment-manage");
+        break;
+      case "R3":
+        this.props.navigate("/patient/appointment-manage");
+        break;
+      case "R4":
+        this.props.navigate("/staff/patient-manage");
+        break;
+      default:
+        this.props.navigate("/");
     }
   };
 
