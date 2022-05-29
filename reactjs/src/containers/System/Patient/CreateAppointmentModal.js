@@ -5,6 +5,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { toast } from "react-toastify";
 import "../UserManage.scss";
 import "../Staff/StaffScheduleManage.scss";
+import { getAllDoctors } from "../../../services/adminService";
 import * as actions from "../../../store/actions";
 class CreateAppointmentModal extends Component {
   constructor(props) {
@@ -18,13 +19,68 @@ class CreateAppointmentModal extends Component {
       status: "S1",
       branchId: "",
       serviceId: "",
+      arrDoctors: [],
+      filteredDoctorList: [],
+      branches: [],
+      services: [],
     };
   }
 
   componentDidMount() {
     this.props.getBranchStart();
     this.props.getServiceStart();
+    this.getAllDoctorsFromDB();
+    this.getAllBranchAndService();
   }
+
+  getAllDoctorsFromDB = async () => {
+    let response = await getAllDoctors("ALL");
+    if (response && response.errCode === 0) {
+      this.setState({
+        arrDoctors: response.doctors,
+        filteredDoctorList: response.doctors,
+      });
+    }
+  };
+
+  getAllBranchAndService = () => {
+    let { branches, services } = this.props;
+    if (branches && services) {
+      this.setState({
+        branches: branches,
+        services: services,
+      });
+    }
+  };
+
+  filterDoctor = () => {
+    console.log("call filter doctor");
+    let { branchId, serviceId, arrDoctors } = this.state;
+    if (branchId && serviceId) {
+      this.setState({
+        filteredDoctorList: arrDoctors.filter((doctor) => {
+          return doctor.branchId === branchId && doctor.serviceId === serviceId;
+        }),
+      });
+    }
+    if (branchId) {
+      console.log("branch selected:", branchId);
+      this.setState({
+        filteredDoctorList: arrDoctors.filter((doctor) => {
+          return doctor.branchId === branchId;
+        }),
+      });
+    }
+    if (serviceId) {
+      console.log("service selected:", serviceId);
+      this.setState({
+        filteredDoctorList: arrDoctors.filter((doctor) => {
+          return doctor.serviceId === serviceId;
+        }),
+      });
+    }
+    return true;
+  };
 
   toggle = () => {
     this.props.toggleModalFromParent();
@@ -38,29 +94,17 @@ class CreateAppointmentModal extends Component {
         ...copyState,
       },
       () => {
-        if (id === "id") {
-          this.assignDoctorName();
+        if (id === "branchId" || id === "serviceId") {
+          this.filterDoctor();
+          console.log("filter doctors:", this.state.filteredDoctorList);
         }
       }
     );
   };
 
-  assignDoctorName = () => {
-    let doctors = this.props.doctorList;
-    if (doctors) {
-      let selectDoctor = doctors.find(({ id }) => id == this.state.id);
-      if (selectDoctor) {
-        this.setState({
-          firstName: selectDoctor.firstName,
-          lastName: selectDoctor.lastName,
-        });
-      }
-    }
-  };
-
   validateInputs = () => {
     let isValid = true;
-    let arrInputs = ["id", "gender", "firstName", "lastName", "serviceId", "branchId", "about"];
+    let arrInputs = ["patientId", "doctorId", "reason", "date", "time"];
     for (let i = 0; i < arrInputs.length; i++) {
       if (!this.state[arrInputs[i]]) {
         isValid = false;
@@ -105,7 +149,9 @@ class CreateAppointmentModal extends Component {
   };
 
   render() {
-    let unregisteredDoctors = this.props.doctorList;
+    let { branches, services, filteredDoctorList } = this.state;
+    console.log("services", services);
+    console.log("branches", branches);
     return (
       <Modal
         isOpen={this.props.isOpen}
@@ -130,7 +176,7 @@ class CreateAppointmentModal extends Component {
               <div className="col-md-6 col-sm-12">
                 <div className="input-group mb-3">
                   <label className="input-group-text" htmlFor="branchId">
-                    Branch
+                    Location
                   </label>
                   <select
                     className="form-select"
@@ -140,15 +186,15 @@ class CreateAppointmentModal extends Component {
                     }}
                     value={this.state.branchId}
                   >
-                    <option value="">Tonsley</option>
-                    {/* {unregisteredDoctors &&
-                      unregisteredDoctors.map((item, index) => {
+                    <option value="">Choose...</option>
+                    {branches &&
+                      branches.map((item, index) => {
                         return (
                           <option value={item.id} key={item.id}>
-                            ID {item.id} - {item.firstName} {item.lastName}
+                            {item.name}
                           </option>
                         );
-                      })} */}
+                      })}
                   </select>
                 </div>
               </div>
@@ -166,9 +212,16 @@ class CreateAppointmentModal extends Component {
                     }}
                     value={this.state.serviceId}
                   >
-                    <option value="">Occupational Therapy Services</option>
-                    {/* <option value="1">Male</option>
-                    <option value="0">Female</option> */}
+                    <option value="">Choose...</option>
+                    {services &&
+                      services.length > 0 &&
+                      services.map((service) => {
+                        return (
+                          <option value={service.id} key={service.id}>
+                            {service.name}
+                          </option>
+                        );
+                      })}
                   </select>
                 </div>
               </div>
@@ -189,15 +242,12 @@ class CreateAppointmentModal extends Component {
                     }}
                     value={this.state.doctorId}
                   >
-                    <option value="">Doctor Id 9 - Kai Walker</option>
-                    {/* {this.props.services &&
-                    this.props.services.map((service, index) => {
-                      return (
-                        <option value={service.id} key={service.id}>
-                          {service.name}
-                        </option>
-                      );
-                    })} */}
+                    <option value="">Choose...</option>
+                    {filteredDoctorList &&
+                      filteredDoctorList.length > 0 &&
+                      filteredDoctorList.map((doctor) => {
+                        return <option value={doctor.id} key={doctor.id}>{`Doctor Id ${doctor.id} - ${doctor.firstName} ${doctor.lastName}`}</option>;
+                      })}
                   </select>
                 </div>
               </div>

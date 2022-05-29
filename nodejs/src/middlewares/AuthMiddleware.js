@@ -11,9 +11,11 @@ let validateToken = (req, res, next) => {
     if (validToken) {
       return next();
     } else {
+      console.log("Unauthenticated action");
       return res.json({ error: "Unauthenticated action" });
     }
   } catch (e) {
+    console.log(e);
     return res.json({ error: e });
   }
 };
