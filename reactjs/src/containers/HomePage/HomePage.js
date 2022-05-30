@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import HomeHeader from "./HomeHeader";
 import Branch from "./Branch";
 import Service from "./Service";
+import Doctor from "./Doctor";
+import Footer from "./Footer";
 import { Container, UncontrolledAccordion, AccordionItem, AccordionHeader, AccordionBody } from "reactstrap";
 import * as actions from "../../store/actions";
 
@@ -14,10 +16,12 @@ class HomePage extends Component {
 
   render() {
     return (
-      <div className="mb-5">
+      <div>
         <HomeHeader />
         <Branch />
         <Service />
+        <Doctor />
+        <Footer />
       </div>
     );
   }
