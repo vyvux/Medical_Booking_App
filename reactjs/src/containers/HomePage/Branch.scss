@@ -1,9 +1,13 @@
 .branch-container {
   .section {
     font-size: 2rem;
-    background-color: #3743ab;
-    color: aliceblue;
+    font-weight: 600;
+    padding-bottom: 0%;
+    // background-color: #3743ab;
+    color: #3743ab;
     height: 3.5rem;
+    width: fit-content;
+    border-bottom: 4px solid #e89221;
   }
 
   .branch-img {
@@ -12,14 +16,23 @@
     // width: 30vw;
     height: 30vh;
   }
+  .service-img {
+    background: url("../../assets/images/doctor-img.jpg") center center no-repeat;
+    background-size: contain;
+    // width: 30vw;
+    height: 40vh;
+  }
 
   .branch-card {
-    .branch-title {
-      font-weight: 700;
-      color: #3743ab;
+    .card-body {
+      background-color: #ffffff;
+      .branch-title {
+        font-weight: 700;
+        color: #3743ab;
+      }
     }
 
-    p {
+    .paragraph {
       text-overflow: ellipsis;
       overflow: hidden;
       display: -webkit-box;
