@@ -2,13 +2,20 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import HomeHeader from "./HomeHeader";
+import Branch from "./Branch";
+import { Container, UncontrolledAccordion, AccordionItem, AccordionHeader, AccordionBody } from "reactstrap";
+import * as actions from "../../store/actions";
 
 class HomePage extends Component {
+  async componentDidMount() {
+    this.props.getServiceStart();
+  }
+
   render() {
     return (
       <div>
         <HomeHeader />
-        hello from homepage
+        <Branch />
       </div>
     );
   }
@@ -16,12 +23,12 @@ class HomePage extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    isLoggedIn: state.user.isLoggedIn,
+    services: state.clinicInfo.services,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return { getServiceStart: () => dispatch(actions.fetchServiceStart()) };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

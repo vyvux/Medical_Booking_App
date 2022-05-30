@@ -1,0 +1,30 @@
+.branch-container {
+  .section {
+    font-size: 2rem;
+    background-color: #3743ab;
+    color: aliceblue;
+    height: 3.5rem;
+  }
+
+  .branch-img {
+    background: url("../../assets/images/branch-img.jpg") center center no-repeat;
+    background-size: contain;
+    // width: 30vw;
+    height: 30vh;
+  }
+
+  .branch-card {
+    .branch-title {
+      font-weight: 700;
+      color: #3743ab;
+    }
+
+    p {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+  }
+}
